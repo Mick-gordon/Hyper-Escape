@@ -1,0 +1,65 @@
+-- Settings
+_G.ESP={
+    Enabled = true,
+    TeamCheck = true,
+    
+    AllwaysTop = "AlwaysOnTop",-- Occluded, AlwaysOnTop
+    
+    Fillcolor = Color3.fromRGB(255,0,255),
+    Transparency = 0.3,
+    
+    OutlineColor = Color3.new(255,255,255),
+    OutlineTransparency = 0.7,
+    
+}
+
+-- Variables
+local CoreGui = game:FindService("StarterGui") 
+local Players = game:FindService("Players")
+local lp = Players.LocalPlayer
+local connections = {}
+local Storage = Instance.new("Folder")
+Storage.Parent = game.StarterGui
+Storage.Name = "Esp"
+ -- ESP
+local function Highlight(plr)
+    local Highlight = Instance.new("Highlight")
+    Highlight.Parent = Storage
+    Highlight.Name = plr.Name
+    Highlight.Enabled = _G.ESP.Enabled
+    Highlight.FillColor = _G.ESP.Fillcolor
+    Highlight.DepthMode = _G.ESP.AllwaysTop
+    Highlight.FillTransparency = _G.ESP.Transparency
+    Highlight.OutlineColor = _G.ESP.OutlineColor
+    Highlight.OutlineTransparency = _G.ESP.OutlineTransparency
+
+    local plrchar = plr.Character
+    if plrchar then
+        Highlight.Adornee = plrchar
+    end
+
+    connections[plr] = plr.CharacterAdded:Connect(function(char)
+        Highlight.Adornee = char
+    end)
+end
+Players.PlayerAdded:Connect(Highlight) 
+for i,v in next, Players:GetPlayers() do
+    if _G.ESP.Enabled == true then 
+        if _G.ESP.TeamCheck == true then -- Ez Team Check
+            if v.Team ~= lp.Team then
+                Highlight(v)
+            end
+        else
+            Highlight(v)
+        end
+    end
+end
+Players.PlayerRemoving:Connect(function(plr)
+    local plrname = plr.Name
+    if Storage[plrname] then
+        Storage[plrname]:Destroy()
+    end
+    if connections[plr] then
+        connections[plr]:Disconnect()
+    end
+end)
