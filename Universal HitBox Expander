@@ -1,0 +1,361 @@
+game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Hitbox Expander", Text = "By Mick Gordon"})
+game:GetService("StarterGui"):SetCore("SendNotification", {Title = "https://discord.gg/FsApQ7YNTq", Text = "The Discord"})
+_G.HitboxExpander ={ -- 
+	Enabled = false,
+	TeamCheck = true,
+	Color = Color3.fromRGB(255, 0, 255),
+	Body_Size = 5,
+	Material = "ForceField",
+	Transparency = 0,
+}
+local HitboxExpander = Instance.new("ScreenGui")
+local Main = Instance.new("Frame")
+local TextLabel = Instance.new("TextLabel")
+local Size = Instance.new("Folder")
+local Hitboxsize_Butt = Instance.new("TextButton")
+local Hitboxsize_num = Instance.new("TextBox")
+local TextLabel_2 = Instance.new("TextLabel")
+local Enabledisable = Instance.new("TextButton")
+local TeamCheckButt = Instance.new("TextButton")
+local Color = Instance.new("Folder")
+local HitBoxColor_G = Instance.new("TextBox")
+local HitBoxColor_Butt = Instance.new("TextButton")
+local HitBoxColor_b = Instance.new("TextBox")
+local HitBoxColor_R = Instance.new("TextBox")
+local TextLabel_3 = Instance.new("TextLabel")
+local TextLabel_4 = Instance.new("TextLabel")
+local TextLabel_5 = Instance.new("TextLabel")
+local Mat = Instance.new("Folder")
+local Matt_Neon = Instance.new("TextButton")
+local Matt_ForceField = Instance.new("TextButton")
+local Matt_SmoothPlastic = Instance.new("TextButton")
+local Matt_Marble = Instance.new("TextButton")
+local Transparency = Instance.new("Folder")
+local HitboxTranspaency_Butt = Instance.new("TextButton")
+local HitboxTransparency_num = Instance.new("TextBox")
+
+HitboxExpander.Name = "HitboxExpander"
+HitboxExpander.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+HitboxExpander.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+Main.Name = "Main"
+Main.Parent = HitboxExpander
+Main.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+Main.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Main.Position = UDim2.new(0.353080571, 0, 0.381239235, 0)
+Main.Size = UDim2.new(0, 241, 0, 423)
+Main.Active = true
+Main.Draggable = true
+
+TextLabel.Parent = Main
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.0834892541, 0, -0.0236406624, 0)
+TextLabel.Size = UDim2.new(0, 200, 0, 50)
+TextLabel.Font = Enum.Font.Roboto
+TextLabel.Text = "Hyper Escape | Hit Box Expander"
+TextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.TextSize = 17.000
+
+Size.Name = "Size"
+Size.Parent = Main
+
+Hitboxsize_Butt.Name = "Hitboxsize_Butt"
+Hitboxsize_Butt.Parent = Size
+Hitboxsize_Butt.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+Hitboxsize_Butt.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Hitboxsize_Butt.Position = UDim2.new(0.241782546, 0, 0.290023625, 0)
+Hitboxsize_Butt.Size = UDim2.new(0, 122, 0, 24)
+Hitboxsize_Butt.Font = Enum.Font.Roboto
+Hitboxsize_Butt.Text = "Confirm"
+Hitboxsize_Butt.TextColor3 = Color3.fromRGB(255, 255, 255)
+Hitboxsize_Butt.TextSize = 14.000
+Hitboxsize_Butt.MouseButton1Down:connect(function()
+	_G.HitboxExpander.Body_Size = Hitboxsize_num.Text
+end)
+
+
+Hitboxsize_num.Name = "Hitboxsize_num"
+Hitboxsize_num.Parent = Size
+Hitboxsize_num.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+Hitboxsize_num.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Hitboxsize_num.Position = UDim2.new(0.241782546, 0, 0.346563101, 0)
+Hitboxsize_num.Size = UDim2.new(0, 122, 0, 23)
+Hitboxsize_num.Font = Enum.Font.Roboto
+Hitboxsize_num.Text = "5"
+Hitboxsize_num.TextColor3 = Color3.fromRGB(255, 255, 255)
+Hitboxsize_num.TextSize = 14.000
+
+TextLabel_2.Parent = Main
+TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.BackgroundTransparency = 1.000
+TextLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_2.BorderSizePixel = 0
+TextLabel_2.Position = UDim2.new(0.0784719661, 0, 0.200575948, 0)
+TextLabel_2.Size = UDim2.new(0, 200, 0, 50)
+TextLabel_2.Font = Enum.Font.Roboto
+TextLabel_2.Text = "Hit Box Size"
+TextLabel_2.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.TextSize = 15.000
+
+TeamCheckButt.Name = "Enable-disable"
+TeamCheckButt.Parent = Main
+TeamCheckButt.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+TeamCheckButt.BorderColor3 = Color3.fromRGB(255, 255, 255)
+TeamCheckButt.Position = UDim2.new(0.245931923, 0, 0.143451527, 0)
+TeamCheckButt.Size = UDim2.new(0, 122, 0, 24)
+TeamCheckButt.Font = Enum.Font.Roboto
+TeamCheckButt.Text = "Disable Team Check"
+TeamCheckButt.TextColor3 = Color3.fromRGB(255, 255, 255)
+TeamCheckButt.TextSize = 14.000
+TeamCheckButt.MouseButton1Down:connect(function()
+	if _G.HitboxExpander.TeamCheck  == true then 
+		_G.HitboxExpander.TeamCheck = false
+		TeamCheckButt.Text = "Enable Team Check"
+	else
+		_G.HitboxExpander.TeamCheck = true
+		TeamCheckButt.Text = "Disable Team Check"
+	end
+end)
+
+Enabledisable.Name = "Enable-disable"
+Enabledisable.Parent = Main
+Enabledisable.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+Enabledisable.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Enabledisable.Position = UDim2.new(0.245931923, 0, 0.08, 0)
+Enabledisable.Size = UDim2.new(0, 122, 0, 24)
+Enabledisable.Font = Enum.Font.Roboto
+Enabledisable.Text = "Enable"
+Enabledisable.TextColor3 = Color3.fromRGB(255, 255, 255)
+Enabledisable.TextSize = 14.000
+Enabledisable.MouseButton1Down:connect(function()
+	if _G.HitboxExpander.Enabled == true then 
+		_G.HitboxExpander.Enabled = false
+		Enabledisable.Text = "Enable"
+	else
+		_G.HitboxExpander.Enabled = true
+		Enabledisable.Text = "Disable"
+	end
+end)
+
+Color.Name = "Color"
+Color.Parent = Main
+
+HitBoxColor_G.Name = "HitBoxColor_G"
+HitBoxColor_G.Parent = Color
+HitBoxColor_G.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+HitBoxColor_G.BorderColor3 = Color3.fromRGB(255, 255, 255)
+HitBoxColor_G.Position = UDim2.new(0.374562621, 0, 0.585334241, 0)
+HitBoxColor_G.Size = UDim2.new(0, 58, 0, 26)
+HitBoxColor_G.Font = Enum.Font.Roboto
+HitBoxColor_G.Text = "0"
+HitBoxColor_G.TextColor3 = Color3.fromRGB(255, 255, 255)
+HitBoxColor_G.TextSize = 14.000
+
+HitBoxColor_Butt.Name = "HitBoxColor_Butt"
+HitBoxColor_Butt.Parent = Color
+HitBoxColor_Butt.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+HitBoxColor_Butt.BorderColor3 = Color3.fromRGB(255, 255, 255)
+HitBoxColor_Butt.Position = UDim2.new(0.241782546, 0, 0.526430249, 0)
+HitBoxColor_Butt.Size = UDim2.new(0, 122, 0, 24)
+HitBoxColor_Butt.Font = Enum.Font.Roboto
+HitBoxColor_Butt.Text = "Confirm"
+HitBoxColor_Butt.TextColor3 = Color3.fromRGB(255, 255, 255)
+HitBoxColor_Butt.TextSize = 14.000
+HitBoxColor_Butt.MouseButton1Down:connect(function()
+	_G.HitboxExpander.Color = Color3.fromRGB((HitBoxColor_R.Text), (HitBoxColor_G.Text), (HitBoxColor_b.Text))
+end)
+
+
+
+HitBoxColor_b.Name = "HitBoxColor_b"
+HitBoxColor_b.Parent = Color
+HitBoxColor_b.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+HitBoxColor_b.BorderColor3 = Color3.fromRGB(255, 255, 255)
+HitBoxColor_b.Position = UDim2.new(0.615226507, 0, 0.585334241, 0)
+HitBoxColor_b.Size = UDim2.new(0, 58, 0, 26)
+HitBoxColor_b.Font = Enum.Font.Roboto
+HitBoxColor_b.Text = "255"
+HitBoxColor_b.TextColor3 = Color3.fromRGB(255, 255, 255)
+HitBoxColor_b.TextSize = 14.000
+
+HitBoxColor_R.Name = "HitBoxColor_R"
+HitBoxColor_R.Parent = Color
+HitBoxColor_R.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+HitBoxColor_R.BorderColor3 = Color3.fromRGB(255, 255, 255)
+HitBoxColor_R.Position = UDim2.new(0.13389872, 0, 0.585334241, 0)
+HitBoxColor_R.Size = UDim2.new(0, 58, 0, 26)
+HitBoxColor_R.Font = Enum.Font.Roboto
+HitBoxColor_R.Text = "255"
+HitBoxColor_R.TextColor3 = Color3.fromRGB(255, 255, 255)
+HitBoxColor_R.TextSize = 14.000
+
+TextLabel_3.Parent = Main
+TextLabel_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_3.BackgroundTransparency = 1.000
+TextLabel_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_3.BorderSizePixel = 0
+TextLabel_3.Position = UDim2.new(0.0784719661, 0, 0.439346641, 0)
+TextLabel_3.Size = UDim2.new(0, 200, 0, 50)
+TextLabel_3.Font = Enum.Font.Roboto
+TextLabel_3.Text = "Hit Box Color"
+TextLabel_3.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_3.TextSize = 15.000
+
+TextLabel_4.Parent = Main
+TextLabel_4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_4.BackgroundTransparency = 1.000
+TextLabel_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_4.BorderSizePixel = 0
+TextLabel_4.Position = UDim2.new(0.0784719661, 0, 0.798684716, 0)
+TextLabel_4.Size = UDim2.new(0, 200, 0, 50)
+TextLabel_4.Font = Enum.Font.Roboto
+TextLabel_4.Text = "Hit Box Material"
+TextLabel_4.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_4.TextSize = 15.000
+
+TextLabel_5.Parent = Main
+TextLabel_5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_5.BackgroundTransparency = 1.000
+TextLabel_5.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_5.BorderSizePixel = 0
+TextLabel_5.Position = UDim2.new(0.0826213434, 0, 0.626107872, 0)
+TextLabel_5.Size = UDim2.new(0, 200, 0, 50)
+TextLabel_5.Font = Enum.Font.Roboto
+TextLabel_5.Text = "Hit Box Transparency"
+TextLabel_5.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_5.TextSize = 15.000
+
+Mat.Name = "Mat"
+Mat.Parent = Main
+
+Matt_Neon.Name = "Matt_Neon"
+Matt_Neon.Parent = Mat
+Matt_Neon.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+Matt_Neon.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Matt_Neon.Position = UDim2.new(-0.0030307374, 0, 0.942505896, 0)
+Matt_Neon.Size = UDim2.new(0, 120, 0, 24)
+Matt_Neon.Font = Enum.Font.Roboto
+Matt_Neon.Text = "Neon"
+Matt_Neon.TextColor3 = Color3.fromRGB(255, 255, 255)
+Matt_Neon.TextSize = 14.000
+Matt_Neon.MouseButton1Down:connect(function()
+	_G.HitboxExpander.Material = "Neon"
+end)
+
+Matt_ForceField.Name = "Matt_ForceField"
+Matt_ForceField.Parent = Mat
+Matt_ForceField.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+Matt_ForceField.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Matt_ForceField.Position = UDim2.new(-0.0030307374, 0, 0.885768294, 0)
+Matt_ForceField.Size = UDim2.new(0, 120, 0, 24)
+Matt_ForceField.Font = Enum.Font.Roboto
+Matt_ForceField.Text = "ForceField"
+Matt_ForceField.TextColor3 = Color3.fromRGB(255, 255, 255)
+Matt_ForceField.TextSize = 14.000
+Matt_ForceField.MouseButton1Down:connect(function()
+	_G.HitboxExpander.Material = "ForceField"
+end)
+
+
+Matt_SmoothPlastic.Name = "Matt_SmoothPlastic"
+Matt_SmoothPlastic.Parent = Mat
+Matt_SmoothPlastic.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+Matt_SmoothPlastic.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Matt_SmoothPlastic.Position = UDim2.new(0.499000013, 0, 0.885999978, 0)
+Matt_SmoothPlastic.Size = UDim2.new(0, 120, 0, 24)
+Matt_SmoothPlastic.Font = Enum.Font.Roboto
+Matt_SmoothPlastic.Text = "SmoothPlastic"
+Matt_SmoothPlastic.TextColor3 = Color3.fromRGB(255, 255, 255)
+Matt_SmoothPlastic.TextSize = 14.000
+Matt_SmoothPlastic.MouseButton1Down:connect(function()
+	_G.HitboxExpander.Material = "SmoothPlastic"
+end)
+
+Matt_Marble.Name = "Matt_Marble"
+Matt_Marble.Parent = Mat
+Matt_Marble.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+Matt_Marble.BorderColor3 = Color3.fromRGB(255, 255, 255)
+Matt_Marble.Position = UDim2.new(0.499043703, 0, 0.942505896, 0)
+Matt_Marble.Size = UDim2.new(0, 120, 0, 24)
+Matt_Marble.Font = Enum.Font.Roboto
+Matt_Marble.Text = "Marble"
+Matt_Marble.TextColor3 = Color3.fromRGB(255, 255, 255)
+Matt_Marble.TextSize = 14.000
+Matt_Marble.MouseButton1Down:connect(function()
+	_G.HitboxExpander.Material = "Marble"
+end)
+
+Transparency.Name = "Transparency"
+Transparency.Parent = Main
+
+HitboxTranspaency_Butt.Name = "HitboxTranspaency_Butt"
+HitboxTranspaency_Butt.Parent = Transparency
+HitboxTranspaency_Butt.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+HitboxTranspaency_Butt.BorderColor3 = Color3.fromRGB(255, 255, 255)
+HitboxTranspaency_Butt.Position = UDim2.new(0.245931923, 0, 0.71082741, 0)
+HitboxTranspaency_Butt.Size = UDim2.new(0, 122, 0, 24)
+HitboxTranspaency_Butt.Font = Enum.Font.Roboto
+HitboxTranspaency_Butt.Text = "Confirm"
+HitboxTranspaency_Butt.TextColor3 = Color3.fromRGB(255, 255, 255)
+HitboxTranspaency_Butt.TextSize = 14.000
+HitboxTranspaency_Butt.MouseButton1Down:connect(function()
+	_G.HitboxExpander.Transparency = HitboxTransparency_num.Text
+end)
+
+HitboxTransparency_num.Name = "HitboxTransparency_num"
+HitboxTransparency_num.Parent = Transparency
+HitboxTransparency_num.BackgroundColor3 = Color3.fromRGB(48, 48, 48)
+HitboxTransparency_num.BorderColor3 = Color3.fromRGB(255, 255, 255)
+HitboxTransparency_num.Position = UDim2.new(0.245931923, 0, 0.769730926, 0)
+HitboxTransparency_num.Size = UDim2.new(0, 122, 0, 23)
+HitboxTransparency_num.Font = Enum.Font.Roboto
+HitboxTransparency_num.Text = "0"
+HitboxTransparency_num.TextColor3 = Color3.fromRGB(255, 255, 255)
+HitboxTransparency_num.TextSize = 14.000
+
+local player = game.Players.LocalPlayer
+
+while wait(1.1) do 
+	if _G.HitboxExpander.Enabled == true then
+		for i,v in next, game:GetService('Players'):GetPlayers() do
+			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+				pcall(function()
+					if _G.HitboxExpander.TeamCheck == true then 
+						if v.Team ~= player.Team then 
+							v.Character.HumanoidRootPart.Size = Vector3.new(_G.HitboxExpander.Body_Size,_G.HitboxExpander.Body_Size,_G.HitboxExpander.Body_Size)
+							v.Character.HumanoidRootPart.Transparency = _G.HitboxExpander.Transparency
+							v.Character.HumanoidRootPart.Color = _G.HitboxExpander.Color
+							v.Character.HumanoidRootPart.Material = _G.HitboxExpander.Material
+							v.Character.HumanoidRootPart.CanCollide = false
+						elseif v.Team == player.Team then
+							v.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+							v.Character.HumanoidRootPart.Transparency = 1
+							v.Character.HumanoidRootPart.Color = Color3.fromRGB(255, 255, 255)
+						end
+					else
+						v.Character.HumanoidRootPart.Size = Vector3.new(_G.HitboxExpander.Body_Size,_G.HitboxExpander.Body_Size,_G.HitboxExpander.Body_Size)
+						v.Character.HumanoidRootPart.Transparency = _G.HitboxExpander.Transparency
+						v.Character.HumanoidRootPart.Color = _G.HitboxExpander.Color
+						v.Character.HumanoidRootPart.Material = _G.HitboxExpander.Material
+						v.Character.HumanoidRootPart.CanCollide = false
+					end
+				end)
+			end
+		end
+	else
+		for i,v in next, game:GetService('Players'):GetPlayers() do
+			if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+				pcall(function()
+					v.Character.HumanoidRootPart.Size = Vector3.new(2, 2, 1)
+					v.Character.HumanoidRootPart.Transparency = 1
+					v.Character.HumanoidRootPart.Color = Color3.fromRGB(255, 255, 255)
+				end)
+			end
+		end
+	end
+end
+
+
