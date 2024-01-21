@@ -1,11 +1,21 @@
 
 local HEAimbot= { -- the only things you need to change is here
-	Enable_cham = true;
+	Enable = true;
 	Teamcheck = true;
 	WallCheck = true;
+	
+	Smoothness = 2; -- Sensitivity basicly. Less = more robot aim / more less robot aim. 
+	FOV = 150; -- size of fov.
+	
 	ShowFov = true;
-	Smoothness = 2;
-	FOV = 150;
+	
+	FillFovTransparency = 1; -- fill fov transparency
+	OutlineFovTransparency = 0; -- outline fov transparency
+	
+	OutlineFovThickness = 1; -- outline fov Thickness
+	
+	FovFillcolor = Color3.fromRGB(0,100,100);-- Fill color
+	FovOutlineColor = Color3.fromRGB(100,0,100);-- outline Color
 }
 --[[
 Common (may affect up to 1 in 10 people)
@@ -164,7 +174,7 @@ end-- [[Made by m1ckgordon]]
 
 UIS.InputBegan:Connect(function(inp)
 	if inp.UserInputType == Enum.UserInputType.MouseButton2 then
-		aiming = true
+		aiming = true  -- hello ? are you on ?
 	end
 end)
 
@@ -176,7 +186,7 @@ end)
 -- [[Made by m1ckgordon]]
 
 game:GetService('RunService').RenderStepped:connect(function()
-	if aiming == true and HEAimbot.Enable_cham == true then
+	if aiming == true and HEAimbot.Enable == true then
 		local TARGET = getPlayerClosestToMouse()
 		if (TARGET ~= nil) then
 			local targetPos = TARGET.Position
@@ -184,13 +194,16 @@ game:GetService('RunService').RenderStepped:connect(function()
 			camera.CFrame = CFrame.lookAt(camera.CFrame.Position, LookAt) -- took me way to long to find out how to make this. but I have made it and I am happy. 
 		end
 	end-- [[Made by m1ckgordon]]
-	local pos = UIS:GetMouseLocation()
+	local pos = UIS:GetMouseLocation() -- this was suppost to be in a ui but I couldent get the fov and shit to work. so you will have to suffer for now lol. 
 	local acc = HEAimbot.FOV / 2 -- to get a accurate fov. lol 
 	Frame.Position = UDim2.new(0, pos.X, 0, pos.Y - 36)
-	Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-	Frame.BackgroundTransparency = 1
+	Frame.BackgroundColor3 = HEAimbot.FovFillcolor
+	Frame.BackgroundTransparency = HEAimbot.FillFovTransparency
 	Frame.Size = UDim2.new(0, HEAimbot.FOV + acc, 0, HEAimbot.FOV + acc)
 	Frame.Visible = HEAimbot.ShowFov -- I love you synapse fov
+	UIStroke.Color = HEAimbot.FovOutlineColor
+	UIStroke.Thickness = HEAimbot.OutlineFovThickness
+	UIStroke.Transparency = HEAimbot.OutlineFovTransparency
 end)
 
 -- cant wait for Sysguard so i can fucking put this in a nice ui without crying bout TO MANY CHARACTERS.
