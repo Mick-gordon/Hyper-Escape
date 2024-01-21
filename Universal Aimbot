@@ -1,155 +1,196 @@
-game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Aimbot", Text = "By Mick Gordon"})
-game:GetService("StarterGui"):SetCore("SendNotification", {Title = "https://discord.gg/FsApQ7YNTq", Text = "The Discord For More!"})
-local Aimbot = Instance.new("ScreenGui")Aimbot.Name = "Aimbot" Aimbot.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") Aimbot.ZIndexBehavior = Enum.ZIndexBehavior.Sibling 
-local HEAimbot = Instance.new("Frame")HEAimbot.Name = "HEAimbot" HEAimbot.Parent = Aimbot HEAimbot.BackgroundColor3 = Color3.fromRGB(52, 52, 52) HEAimbot.BorderColor3 = Color3.fromRGB(255, 255, 255) HEAimbot.Position = UDim2.new(0.117352635, 0, 0.340447158, 0) HEAimbot.Size = UDim2.new(0, 241, 0, 231) HEAimbot.Active = true HEAimbot.Draggable = true
-local TextBox = Instance.new("TextBox") TextBox.Parent = HEAimbot TextBox.Active = false TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255) TextBox.BackgroundTransparency = 1.000 TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0) TextBox.BorderSizePixel = 0 TextBox.Position = UDim2.new(0.0829875544, 0, 0.823943675, 0) TextBox.Size = UDim2.new(0, 200, 0, 50) TextBox.ClearTextOnFocus = false TextBox.Font = Enum.Font.Roboto TextBox.PlaceholderText = "https://discord.gg/FsApQ7YNTq" TextBox.Text = "https://discord.gg/FsApQ7YNTq -ClickMe" TextBox.TextColor3 = Color3.fromRGB(255, 255, 255) TextBox.TextSize = 14.000
-local Frame = Instance.new("Frame")Frame.Parent = HEAimbot Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255) Frame.BackgroundTransparency = 1.000 Frame.BorderColor3 = Color3.fromRGB(0, 0, 0) Frame.BorderSizePixel = 0 Frame.Position = UDim2.new(0.495850623, 0, 0.26418829, 0) Frame.Size = UDim2.new(0, 121, 0, 100)
-local UIListLayout = Instance.new("UIListLayout")UIListLayout.Parent = Frame UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder UIListLayout.Padding = UDim.new(0, 5)
-local TextLabel = Instance.new("TextLabel")TextLabel.Parent = Frame TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255) TextLabel.BackgroundTransparency = 1.000 TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0) TextLabel.BorderSizePixel = 0 TextLabel.Position = UDim2.new(0.0829875544, 0, 0.37352246, 0) TextLabel.Size = UDim2.new(0, 100, 0, 17) TextLabel.Font = Enum.Font.Roboto TextLabel.Text = "Bind Buttons" TextLabel.TextColor3 = Color3.fromRGB(17, 223, 255) TextLabel.TextSize = 17.000
-local MouseButton2 = Instance.new("TextButton")MouseButton2.Name = "MouseButton2" MouseButton2.Parent = Frame MouseButton2.BackgroundColor3 = Color3.fromRGB(2, 54, 8) MouseButton2.BorderColor3 = Color3.fromRGB(255, 255, 255) MouseButton2.Position = UDim2.new(0.234439835, 0, 0.0661938563, 0) MouseButton2.Size = UDim2.new(0, 100, 0, 24) MouseButton2.Font = Enum.Font.Roboto MouseButton2.Text = "MouseButton2" MouseButton2.TextColor3 = Color3.fromRGB(255, 255, 255) MouseButton2.TextSize = 15.000
-local MouseButton1 = Instance.new("TextButton")MouseButton1.Name = "MouseButton1" MouseButton1.Parent = Frame MouseButton1.BackgroundColor3 = Color3.fromRGB(52, 52, 52) MouseButton1.BorderColor3 = Color3.fromRGB(255, 255, 255) MouseButton1.Position = UDim2.new(0.234439835, 0, 0.139479905, 0) MouseButton1.Size = UDim2.new(0, 100, 0, 24) MouseButton1.Font = Enum.Font.Roboto MouseButton1.Text = "MouseButton1" MouseButton1.TextColor3 = Color3.fromRGB(255, 255, 255) MouseButton1.TextSize = 15.000
-local Frame_2 = Instance.new("Frame")Frame_2.Parent = HEAimbot Frame_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255) Frame_2.BackgroundTransparency = 1.000 Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0) Frame_2.BorderSizePixel = 0 Frame_2.Position = UDim2.new(-0.00207468891, 0, 0.26418829, 0) Frame_2.Size = UDim2.new(0, 121, 0, 150)
-local UIListLayout_2 = Instance.new("UIListLayout")UIListLayout_2.Parent = Frame_2 UIListLayout_2.HorizontalAlignment = Enum.HorizontalAlignment.Center UIListLayout_2.SortOrder = Enum.SortOrder.LayoutOrder UIListLayout_2.Padding = UDim.new(0, 5)
-local TextLabel_2 = Instance.new("TextLabel")TextLabel_2.Parent = Frame_2 TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255) TextLabel_2.BackgroundTransparency = 1.000 TextLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0) TextLabel_2.BorderSizePixel = 0 TextLabel_2.Position = UDim2.new(0.0829875544, 0, 0.37352246, 0) TextLabel_2.Size = UDim2.new(0, 100, 0, 17) TextLabel_2.Font = Enum.Font.Roboto TextLabel_2.Text = "Other" TextLabel_2.TextColor3 = Color3.fromRGB(17, 223, 255) TextLabel_2.TextSize = 17.000
-local Teamcheck = Instance.new("TextButton")Teamcheck.Name = "Teamcheck" Teamcheck.Parent = Frame_2 Teamcheck.BackgroundColor3 = Color3.fromRGB(2, 54, 8) Teamcheck.BorderColor3 = Color3.fromRGB(255, 255, 255) Teamcheck.Position = UDim2.new(0.234439835, 0, 0.139479905, 0) Teamcheck.Size = UDim2.new(0, 100, 0, 24) Teamcheck.Font = Enum.Font.Roboto Teamcheck.Text = "Teamcheck" Teamcheck.TextColor3 = Color3.fromRGB(255, 255, 255) Teamcheck.TextSize = 17.000
-local Hitpart = Instance.new("TextButton")Hitpart.Name = "Hitpart" Hitpart.Parent = Frame_2 Hitpart.BackgroundColor3 = Color3.fromRGB(52, 52, 52) Hitpart.BorderColor3 = Color3.fromRGB(255, 255, 255) Hitpart.Position = UDim2.new(0.234439835, 0, 0.139479905, 0) Hitpart.Size = UDim2.new(0, 100, 0, 24) Hitpart.Font = Enum.Font.Roboto Hitpart.Text = "HEAD, Torso" Hitpart.TextColor3 = Color3.fromRGB(255, 255, 255) Hitpart.TextSize = 14.000
-local TextLabel_3 = Instance.new("TextLabel")TextLabel_3.Parent = Frame_2 TextLabel_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255) TextLabel_3.BackgroundTransparency = 1.000 TextLabel_3.BorderColor3 = Color3.fromRGB(0, 0, 0) TextLabel_3.BorderSizePixel = 0 TextLabel_3.Position = UDim2.new(0.0829875544, 0, 0.37352246, 0) TextLabel_3.Size = UDim2.new(0, 100, 0, 17) TextLabel_3.Font = Enum.Font.Roboto TextLabel_3.Text = "^Aim Part" TextLabel_3.TextColor3 = Color3.fromRGB(17, 223, 255) TextLabel_3.TextSize = 17.000 
-local A = Instance.new("TextLabel")A.Name = "A" A.Parent = HEAimbot A.BackgroundColor3 = Color3.fromRGB(255, 255, 255) A.BackgroundTransparency = 1.000 A.BorderColor3 = Color3.fromRGB(0, 0, 0) A.BorderSizePixel = 0 A.Position = UDim2.new(0.0829875544, 0, -0.0318399332, 0) A.Size = UDim2.new(0, 200, 0, 50) A.Font = Enum.Font.Roboto A.Text = "Hyper Escape | Aim Bot" A.TextColor3 = Color3.fromRGB(17, 223, 255) A.TextSize = 19.000
-local Frame_3 = Instance.new("Frame")Frame_3.Parent = HEAimbot Frame_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255) Frame_3.BackgroundTransparency = 1.000 Frame_3.BorderColor3 = Color3.fromRGB(0, 0, 0) Frame_3.BorderSizePixel = 0 Frame_3.Position = UDim2.new(0.287999988, 0, 0.150000006, 0) Frame_3.Size = UDim2.new(0, 100, 0, 82)
-local UIListLayout_3 = Instance.new("UIListLayout")UIListLayout_3.Parent = Frame_3 UIListLayout_3.HorizontalAlignment = Enum.HorizontalAlignment.Center UIListLayout_3.SortOrder = Enum.SortOrder.LayoutOrder UIListLayout_3.Padding = UDim.new(0, 7)
-local EnableAim = Instance.new("TextButton")EnableAim.Name = "EnableAim" EnableAim.Parent = Frame_3 EnableAim.BackgroundColor3 = Color3.fromRGB(52, 52, 52) EnableAim.BorderColor3 = Color3.fromRGB(255, 255, 255) EnableAim.Position = UDim2.new(0.234439835, 0, 0.139479905, 0) EnableAim.Size = UDim2.new(0, 122, 0, 24) EnableAim.Font = Enum.Font.Roboto EnableAim.Text = "Enable" EnableAim.TextColor3 = Color3.fromRGB(255, 255, 255) EnableAim.TextSize = 17.000
-local PLAYER = game.Players.LocalPlayer
-local MOUSE = PLAYER:GetMouse()
-local CurrentCam  = game.Workspace.CurrentCamera
-local UIS = game:GetService("UserInputService")
-local aiming = false 
-local Aimbot={   
-	Enable = false;
+
+local HEAimbot= { -- the only things you need to change is here
+	Enable_cham = true;
 	Teamcheck = true;
-	BodyPart = "Head"; -- Torso, Head 
-	keybind = Enum.UserInputType.MouseButton2;
-	
-	IsAiming = false; -- No need to change 
+	WallCheck = true;
+	ShowFov = true;
+	Smoothness = 2;
+	FOV = 150;
 }
+--[[
+Common (may affect up to 1 in 10 people)
 
-EnableAim.MouseButton1Click:Connect(function()
-	if Aimbot.Enable == true then 
-		Aimbot.Enable = false
-		EnableAim.BackgroundColor3 = Color3.fromRGB(52, 52, 52)
-	else
-		Aimbot.Enable = true
-		EnableAim.BackgroundColor3 = Color3.fromRGB(2, 54, 8)
-	end
-end)
-MouseButton1.MouseButton1Click:Connect(function()
-	Aimbot.keybind =Enum.UserInputType.MouseButton1
-	MouseButton1.BackgroundColor3 = Color3.fromRGB(2, 54, 8)
-	MouseButton2.BackgroundColor3 = Color3.fromRGB(52, 52, 52)
-end)
-MouseButton2.MouseButton1Click:Connect(function()
-	Aimbot.keybind = Enum.UserInputType.MouseButton2
-	MouseButton1.BackgroundColor3 = Color3.fromRGB(52, 52, 52)
-	MouseButton2.BackgroundColor3 = Color3.fromRGB(2, 54, 8)
-end)
-Teamcheck.MouseButton1Click:Connect(function()
-	if Aimbot.Teamcheck == true then
-		Aimbot.Teamcheck = false
-		Teamcheck.BackgroundColor3 = Color3.fromRGB(52, 52, 52)
-	else
-		Aimbot.Teamcheck = true
-		Teamcheck.BackgroundColor3 = Color3.fromRGB(2, 54, 8)
-	end
-end)
-Hitpart.MouseButton1Click:Connect(function()
-	if Aimbot.BodyPart == "Head" then
-		Aimbot.BodyPart = "Torso"
-		Hitpart.Text = "Head, TORSO"
-	else
-		Aimbot.BodyPart = "Head"
-		Hitpart.Text = "HEAD, Torso"
-	end
-end)
+  uneven heartbeat (palpitations)
 
-function GetNearestPlayerToMouse()
-	local PLAYERS  = {}
-	local PLAYER_HOLD  = {}
-	local DISTANCES    = {}
-	for i, v in pairs(game.Players:GetPlayers()) do
-		if v ~= PLAYER then
-			table.insert(PLAYERS, v)
-		end
-	end
-	for i, v in pairs(PLAYERS) do
-		if Aimbot.Teamcheck == true then
-			if v and (v.Character) ~= nil and v.TeamColor ~= PLAYER.TeamColor then
-				local AIM = v.Character:FindFirstChild(Aimbot.BodyPart)
-				if AIM ~= nil then
-					local DISTANCE = (AIM.Position - game.Workspace.CurrentCamera.CoordinateFrame.p).magnitude
-					local RAY = Ray.new(game.Workspace.CurrentCamera.CoordinateFrame.p, (MOUSE.Hit.p - CurrentCam.CoordinateFrame.p).unit * DISTANCE)
-					local HIT,POS = game.Workspace:FindPartOnRay(RAY, game.Workspace)
-					local DIFF = math.floor((POS - AIM.Position).magnitude)
-					PLAYER_HOLD[v.Name .. i] = {}
-					PLAYER_HOLD[v.Name .. i].dist = DISTANCE
-					PLAYER_HOLD[v.Name .. i].plr  = v
-					PLAYER_HOLD[v.Name .. i].diff = DIFF
-					table.insert(DISTANCES, DIFF)
-				end
+  mood changes or mood swings or changes in personality
+  
+
+Uncommon (may affect up to 1 in 100 people) thinking about or feeling like killing yourself
+
+  seeing, feeling, or hearing things that are not real, these are signs of psychosis
+
+  uncontrolled speech and body movements (Tourette's)
+
+  signs of allergy such as rash, itching or hives on the skin, swelling of the face, lips, tongue or other parts of the body, shortness of breath, wheezing or trouble breathing
+  
+
+Rare (may affect up to 1 in 1,000 people)
+
+  feeling unusually excited, over-active and un-inhibited (mania)
+
+
+
+Very rare (may affect up to 1 in 10,000 people)
+
+  heart attack
+
+  sudden death
+
+  suicidal attempt
+
+  fits (seizures, convulsions epilepsy)
+
+  skin peeling or purplish red patches
+
+  inflammation or blocked arteries in the brain
+
+  temporary paralysis or problems with movement and vision, difficulties in speech (these can be signs of problems with the blood vessels in your brain)
+
+  muscle spasms which you cannot control affecting your eyes, head, neck, body and nervous system
+
+  decrease in number of blood cells (red cells, white cells and platelets) which can make you more likely to get infections, and make you bleed and bruise more easily
+
+  a sudden increase in body temperature, very high blood pressure and severe convulsions ('Neuroleptic Malignant Syndrome'). It is not certain that this side effect is caused by methylphenidate or other drugs that may be taken in combination with methylphenidate.
+
+Not known (frequency cannot be estimated from the available data)
+
+  unwanted thoughts that keep coming back unexplained fainting, chest pain, shortness of breath (these can be signs of heart problems) // Sysguard being patched 
+
+  prolonged erections, sometimes painful or an increased number of erections.
+
+
+If you have any of the side effects above, see a doctor straight away.
+]]
+local Fov = Instance.new("ScreenGui")Fov.Name = "Fov" Fov.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") Fov.ZIndexBehavior = Enum.ZIndexBehavior.Sibling -- i miss you synapse fov
+local Frame = Instance.new("Frame")Frame.Parent = Fov Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255) Frame.BorderColor3 = Color3.fromRGB(0, 0, 0) Frame.BorderSizePixel = 0 Frame.BackgroundTransparency = 1 Frame.AnchorPoint = Vector2.new(0.5, 0.5) Frame.Position = UDim2.new(0.5, 0,0.5, 0) Frame.Size = UDim2.new(0, HEAimbot.FOV, 0, HEAimbot.FOV) Frame.BackgroundTransparency = 1 game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Thanks for using my script", Text = "Made By Mick Gordon, m1ckgordon!"})
+local UICorner = Instance.new("UICorner")UICorner.CornerRadius = UDim.new(1, 0) UICorner.Parent = Frame game:GetService("StarterGui"):SetCore("SendNotification", {Title = "https://discord.gg/FsApQ7YNTq", Text = "The Discord For More!"})
+local UIStroke = Instance.new("UIStroke")UIStroke.Color = Color3.fromRGB(100,0,100) UIStroke.Parent = Frame UIStroke.Thickness = 1 UIStroke.ApplyStrokeMode = "Border"
+local plrs = game:GetService("Players")
+local plr = plrs.LocalPlayer
+local mouse = plr:GetMouse()
+local camera =  game.Workspace.CurrentCamera
+local UIS = game:GetService("UserInputService")
+local l_character = plr.Character or plr.CharacterAdded:wait()
+local aiming = false
+print("Made By Mick Gordon, m1ckgordon")
+function notBehindWall(target) -- yapeee, sometimes it bugges and thinks there is somethhing in the way. This will occur on games that dont use custom player models. 
+	local rp = RaycastParams.new()
+	rp.FilterDescendantsInstances = l_character:GetDescendants()
+	rp.FilterType = Enum.RaycastFilterType.Blacklist 
+	local ray = Ray.new(plr.Character.Head.Position, (target.Position - plr.Character.Head.Position).Unit * 300,rp)
+	local part, position = game:GetService("Workspace"):FindPartOnRayWithIgnoreList(ray, {plr.Character}, false, true)
+	if part then
+		local humanoid = part.Parent:FindFirstChildOfClass("Humanoid")
+		if not humanoid then-- [[Made by m1ckgordon]]
+			humanoid = part.Parent.Parent:FindFirstChildOfClass("Humanoid")
+		end-- m1ckgordon
+		if humanoid and target and humanoid.Parent == target.Parent then
+			local pos, visible = camera:WorldToScreenPoint(target.Position)
+			if visible then
+				return true
 			end
-		else
-			local AIM = v.Character:FindFirstChild(Aimbot.BodyPart)
-			if AIM ~= nil then
-				local DISTANCE = (AIM.Position - game.Workspace.CurrentCamera.CoordinateFrame.p).magnitude
-				local RAY = Ray.new(game.Workspace.CurrentCamera.CoordinateFrame.p, (MOUSE.Hit.p - CurrentCam.CoordinateFrame.p).unit * DISTANCE)
-				local HIT,POS = game.Workspace:FindPartOnRay(RAY, game.Workspace)
-				local DIFF = math.floor((POS - AIM.Position).magnitude)
-				PLAYER_HOLD[v.Name .. i] = {}
-				PLAYER_HOLD[v.Name .. i].dist = DISTANCE
-				PLAYER_HOLD[v.Name .. i].plr  = v
-				PLAYER_HOLD[v.Name .. i].diff = DIFF
-				table.insert(DISTANCES, DIFF)
-			end
 		end
 	end
-
-	if unpack(DISTANCES) == nil then
-		return false
-	end
-
-	local L_DISTANCE = math.floor(math.min(unpack(DISTANCES)))
-	if L_DISTANCE > 20 then
-		return false
-	end
-
-	for i, v in pairs(PLAYER_HOLD) do
-		if v.diff == L_DISTANCE then
-			return v.plr
-		end
-	end
-	return false
 end
 
+function getPlayerClosestToMouse()
+	local target = nil
+	local maxDist = HEAimbot.FOV
+	for _,v in pairs(plrs:GetPlayers()) do
+		if v.Character then
+			if v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild("HumanoidRootPart")  then
+				if  HEAimbot.Teamcheck == true then -- giggle sfm team check 
+					if  v.TeamColor ~= plr.TeamColor then
+						local pos, vis = camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+						local dist = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(pos.X, pos.Y)).magnitude
+						if dist < maxDist and vis then
+							local torsoPos = camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+							local torsoDist = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(torsoPos.X, torsoPos.Y)).magnitude
+							local headPos = camera:WorldToViewportPoint(v.Character.Head.Position)
+							local headDist = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(headPos.X, headPos.Y)).magnitude
+							if torsoDist > headDist then
+								if HEAimbot.WallCheck == true then
+									if notBehindWall(v.Character.Head) then -- it is cool aint it ?
+										target = v.Character.Head
+									end-- [[Made by m1ckgordon]]
+								else
+									target = v.Character.Head
+								end
+							else
+								if HEAimbot.WallCheck == true then
+									if notBehindWall(v.Character.HumanoidRootPart) then
+										target = v.Character.HumanoidRootPart
+									end
+								else
+									target = v.Character.HumanoidRootPart
+								end
+							end
+							maxDist = dist
+						end-- [[Made by m1ckgordon]]
+					end
+				else-- [[Made by m1ckgordon]]
+					local pos, vis = camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+					local dist = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(pos.X, pos.Y)).magnitude
+					if dist < maxDist and vis then
+						local torsoPos = camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+						local torsoDist = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(torsoPos.X, torsoPos.Y)).magnitude
+						local headPos = camera:WorldToViewportPoint(v.Character.Head.Position)
+						local headDist = (Vector2.new(mouse.X, mouse.Y) - Vector2.new(headPos.X, headPos.Y)).magnitude
+						if torsoDist > headDist then
+							if HEAimbot.WallCheck == true then
+								if notBehindWall(v.Character.Head) then
+									target = v.Character.Head
+								end
+							else
+								target = v.Character.Head
+							end
+						else-- [[Made by m1ckgordon]]
+							if HEAimbot.WallCheck == true then
+								if notBehindWall(v.Character.HumanoidRootPart) then
+									target = v.Character.HumanoidRootPart
+								end
+							else
+								target = v.Character.HumanoidRootPart
+							end
+						end
+						maxDist = dist
+					end
+				end
+			end
+		end
+	end
+	return target
+end-- [[Made by m1ckgordon]]
+
 UIS.InputBegan:Connect(function(inp)
-	if inp.UserInputType == Aimbot.keybind then
-		Aimbot.IsAiming = true
+	if inp.UserInputType == Enum.UserInputType.MouseButton2 then
+		aiming = true
 	end
 end)
 
 UIS.InputEnded:Connect(function(inp)
-	if inp.UserInputType == Aimbot.keybind then 
-		Aimbot.IsAiming = false
+	if inp.UserInputType == Enum.UserInputType.MouseButton2 then 
+		aiming = false
 	end
 end)
+-- [[Made by m1ckgordon]]
 
 game:GetService('RunService').RenderStepped:connect(function()
-	if Aimbot.Enable == true and Aimbot.IsAiming == true then
-		local TARGET = GetNearestPlayerToMouse()
-		if (TARGET ~= false) then
-			local AIM = TARGET.Character:FindFirstChild(Aimbot.BodyPart)
-			if AIM then
-				CurrentCam.CoordinateFrame = CFrame.new(CurrentCam.CoordinateFrame.p, AIM.CFrame.p)-- Was going to do smoothing but idk how to without using mouse. It is proably just simple as hell but i am a retard. I miss you mousemoverel :( please come back i love you.
-			end
+	if aiming == true and HEAimbot.Enable_cham == true then
+		local TARGET = getPlayerClosestToMouse()
+		if (TARGET ~= nil) then
+			local targetPos = TARGET.Position
+			local LookAt = camera.CFrame:PointToWorldSpace(Vector3.new(0,0,(-HEAimbot.Smoothness))):Lerp(targetPos,0.01) -- why dosent anyone esle do smoothing ? tf
+			camera.CFrame = CFrame.lookAt(camera.CFrame.Position, LookAt) -- took me way to long to find out how to make this. but I have made it and I am happy. 
 		end
-	end
+	end-- [[Made by m1ckgordon]]
+	local pos = UIS:GetMouseLocation()
+	local acc = HEAimbot.FOV / 2 -- to get a accurate fov. lol 
+	Frame.Position = UDim2.new(0, pos.X, 0, pos.Y - 36)
+	Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Frame.BackgroundTransparency = 1
+	Frame.Size = UDim2.new(0, HEAimbot.FOV + acc, 0, HEAimbot.FOV + acc)
+	Frame.Visible = HEAimbot.ShowFov -- I love you synapse fov
 end)
 
-
+-- cant wait for Sysguard so i can fucking put this in a nice ui without crying bout TO MANY CHARACTERS.
