@@ -4,7 +4,7 @@ local HEAimbot= { -- the only things you need to change is here
 	Teamcheck = true;
 	WallCheck = true;
 	
-	Smoothness = 2; -- Sensitivity basicly. Less = more robot aim / more less robot aim. 
+	Smoothness = 0; -- Sensitivity basicly. Less = more robot aim / more less robot aim. 
 	FOV = 150; -- size of fov.
 	
 	ShowFov = true;
