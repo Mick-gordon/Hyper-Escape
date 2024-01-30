@@ -81,7 +81,7 @@ local function cast_rayBoxHand(body_part)
 		return false
 	end
 end
-game.RunService.RenderStepped:Connect(function()
+game:GetService("RunService").RenderStepped:Connect(function()
 	local function create_espBoxHand(c_model)
 		if not c_model.Character then
 			return
