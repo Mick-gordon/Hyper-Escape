@@ -72,7 +72,7 @@ end
 local function cast_rayBoxHand(body_part)
 	local rp = RaycastParams.new()
 	rp.FilterDescendantsInstances = l_character:GetDescendants()
-	rp.FilterType = Enum.RaycastFilterType.Blacklist
+	rp.FilterType = Enum.RaycastFilterType.Exclude
 
 	local rcr = workspace:Raycast(camera.CFrame.Position, (body_part.Position - camera.CFrame.Position).Unit * 15000,rp)
 	if rcr and rcr.Instance:IsDescendantOf(body_part.Parent) then
