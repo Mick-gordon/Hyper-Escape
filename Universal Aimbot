@@ -11,7 +11,7 @@ local HyperEscapeAimbot = {
 	Fov = 200;
 
 	ShowFov = false;
-------------------------------------------------------------------------------------------------------------------------------------
+	------------------------------------------------------------------------------------------------------------------------------------
 	Thickness = 1;
 
 	FovFillColor = Color3.fromRGB(100,0,100);
@@ -152,6 +152,14 @@ local function aimAt(pos, smooth)
 	local AimPart = pos.Character:FindFirstChild(HyperEscapeAimbot.AimPart)
 	if AimPart then
 		local LookAt = CurrentCam.CFrame:PointToWorldSpace(Vector3.new(0,0,-smooth)):Lerp(AimPart.Position,.01) -- No one esle do camera smoothing ? tf 
+		local Distance = math.floor(0.5+(PLAYER.Character:FindFirstChild"HumanoidRootPart".Position - pos.Character:FindFirstChild"HumanoidRootPart".Position).magnitude)
+		if Distance > 100  then
+			local distChangeBig = Distance / 10
+			LookAt = CurrentCam.CFrame:PointToWorldSpace(Vector3.new(0,0,-smooth * distChangeBig)):Lerp(AimPart.Position,.01) -- No one esle do camera smoothing ? tf
+		else
+			local distChangeSmall = Distance / 10
+			LookAt = CurrentCam.CFrame:PointToWorldSpace(Vector3.new(0,0,-smooth * distChangeSmall)):Lerp(AimPart.Position,.01) -- No one esle do camera smoothing ? tf
+		end
 		CurrentCam.CFrame = CFrame.lookAt(CurrentCam.CFrame.Position, LookAt)
 	end
 end
@@ -165,7 +173,7 @@ game:GetService('RunService').RenderStepped:connect(function()
 			end
 		end
 	end 
-	
+
 	if not (FovNumb.Text == "") then
 		HyperEscapeAimbot.Fov = tonumber(FovNumb.Text)
 	end
