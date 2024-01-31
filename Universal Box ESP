@@ -27,7 +27,7 @@ local cheats = {
 	Showdistance = false;
 	Showname = false; 
 	Showhealth = false;
-	b_ht = "Text"; 
+	b_ht = "Box"; 
 	EnablTeamCheck = false; 
 	UseTeamColor = false; 
 	HealthType = false; 
@@ -115,7 +115,7 @@ function addEsp(player)
 
 	local co = coroutine.create(function()
 		while wait(0.1) do
-			if (player.Character and player.Character:FindFirstChild"HumanoidRootPart") then
+			if (player.Character and player.Character:FindFirstChild"HumanoidRootPart" and player.Character.Humanoid.Health > 0) then
 				bbg.Adornee = player.Character.HumanoidRootPart
 				info.Adornee = player.Character.HumanoidRootPart
 				forhealth.Adornee = player.Character.HumanoidRootPart
@@ -193,6 +193,8 @@ function addEsp(player)
 					distancel.TextColor3 = Color3.fromRGB(255,255,255)
 					namelabel.TextColor3 = Color3.fromRGB(255,255,255)
 				end
+			else
+				bbg.Enabled = false
 			end
 			if not (game:GetService"Players":FindFirstChild(player.Name)) then
 				espf:FindFirstChild(player.Name):Destroy()
@@ -246,6 +248,7 @@ do
 			if not (v.Name == localplayer.Name) then
 				if not (espf:FindFirstChild(v.Name)) then
 					addEsp(v)
+					
 				end
 			end
 		end
