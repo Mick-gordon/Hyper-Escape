@@ -1,6 +1,6 @@
 game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Box ESP", Text = "By Mick Gordon"})
 game:GetService("StarterGui"):SetCore("SendNotification", {Title = "https://discord.gg/FsApQ7YNTq", Text = "The Discord"})
-local HEBOXESP = Instance.new("ScreenGui") HEBOXESP.Name = "HEBOXESP" HEBOXESP.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") HEBOXESP.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+local HEBOXESP = Instance.new("ScreenGui") HEBOXESP.Name = "HEBOXESP" HEBOXESP.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui") HEBOXESP.ZIndexBehavior = Enum.ZIndexBehavior.Sibling HEBOXESP.ResetOnSpawn = false
 local HEBoxes = Instance.new("Frame")HEBoxes.Name = "HEBoxes" HEBoxes.Parent = HEBOXESP HEBoxes.BackgroundColor3 = Color3.fromRGB(52, 52, 52) HEBoxes.BorderColor3 = Color3.fromRGB(255, 255, 255) HEBoxes.Position = UDim2.new(0.117352635, 0, 0.340447158, 0) HEBoxes.Size = UDim2.new(0, 241, 0, 231) HEBoxes.Active = true HEBoxes.Draggable = true
 local TextBox = Instance.new("TextBox")TextBox.Parent = HEBoxes TextBox.Active = false TextBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255) TextBox.BackgroundTransparency = 1.000 TextBox.BorderColor3 = Color3.fromRGB(0, 0, 0) TextBox.BorderSizePixel = 0 TextBox.Position = UDim2.new(0.0829875544, 0, 0.823943675, 0) TextBox.Size = UDim2.new(0, 200, 0, 50) TextBox.ClearTextOnFocus = false TextBox.Font = Enum.Font.Roboto TextBox.PlaceholderText = "https://discord.gg/FsApQ7YNTq" TextBox.Text = "https://discord.gg/FsApQ7YNTq -ClickMe" TextBox.TextColor3 = Color3.fromRGB(255, 255, 255) TextBox.TextSize = 14.000
 local Frame = Instance.new("Frame")Frame.Parent = HEBoxes Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255) Frame.BackgroundTransparency = 1.000 Frame.BorderColor3 = Color3.fromRGB(0, 0, 0) Frame.BorderSizePixel = 0 Frame.Position = UDim2.new(0.495850623, 0, 0.26418829, 0) Frame.Size = UDim2.new(0, 121, 0, 100)
@@ -27,7 +27,7 @@ local cheats = {
 	Showdistance = false;
 	Showname = false; 
 	Showhealth = false;
-	b_ht = "Box"; 
+	b_ht = "Bar"; 
 	EnablTeamCheck = false; 
 	UseTeamColor = false; 
 	HealthType = false; 
@@ -36,7 +36,7 @@ local cheats = {
 local cheatsf = Instance.new("Folder", game.Workspace) cheatsf.Name = "cheats"
 local espf = Instance.new("Folder", cheatsf) espf.Name = "esp"
 
-function addEsp(player)
+function AddBox(player)
 	local bbg = Instance.new("BillboardGui", espf)
 	bbg.Name = player.Name
 	bbg.AlwaysOnTop = true
@@ -195,6 +195,12 @@ function addEsp(player)
 				end
 			else
 				bbg.Enabled = false
+				info.Enabled = false
+				forhealth.Enabled = false
+				
+				bbg.Adornee = nil
+				info.Adornee = nil
+				forhealth.Adornee = nil
 			end
 			if not (game:GetService"Players":FindFirstChild(player.Name)) then
 				espf:FindFirstChild(player.Name):Destroy()
@@ -207,7 +213,7 @@ end
 
 do
 	wait(2)
-	
+
 	for _,button in pairs(HEBOXESP:GetDescendants()) do
 		if button:IsA"TextButton" then
 			button.MouseButton1Click:connect(function()
@@ -234,24 +240,17 @@ do
 			end)
 		end
 	end
+end
 
-	for _,v in pairs(game:GetService("Players"):GetChildren()) do
-		if not (v.Name == localplayer.Name) then
-			if not (espf:FindFirstChild(v.Name)) then
-				addEsp(v)
-			end
-		end
-	end
-
-	while wait(10) do
-		for _,v in pairs(game:GetService("Players"):GetChildren()) do
-			if not (v.Name == localplayer.Name) then
-				if not (espf:FindFirstChild(v.Name)) then
-					addEsp(v)
-					
-				end
-			end
-		end
+for i,plr in pairs(game.Players:GetChildren()) do
+	if plr ~= localplayer then
+		AddBox(plr)
 	end
 end
+
+game.Players.PlayerAdded:Connect(function(plr)
+	if plr ~= localplayer then
+		AddBox(plr)
+	end
+end)
 
