@@ -1453,6 +1453,7 @@ Open.Position = UDim2.new(0.5, 0, 0.0199999996, 0)
 Open.Size = UDim2.new(0, 150, 0, 50)
 Open.ZIndex = 10
 Open.Draggable = true
+Open.Active = true
 
 TextButton.Parent = Open
 TextButton.BackgroundColor3 = Color3.fromRGB(49, 49, 49)
@@ -1507,7 +1508,7 @@ end)
 Allways_Show.MouseButton1Click:Connect(function()
 	if DeleteMob.Aimbot.AimPart == "Head" then
 		Allways_Show.Text = "head, TORSO"
-		DeleteMob.Aimbot.AimPart = "UpperTorso"
+		DeleteMob.Aimbot.AimPart = "HumanoidRootPart"
 	else
 		Allways_Show.Text = "HEAD, torso"
 		DeleteMob.Aimbot.AimPart = "Head"
@@ -1637,8 +1638,12 @@ end)
 TextButton.MouseButton1Click:Connect(function()
 	if DeleteMobF.Visible == true then
 		DeleteMobF.Visible = false
+		TextButton.Modal = false
+		game:GetService("UserInputService").MouseIconEnabled = false
 	else
 		DeleteMobF.Visible = true
+		TextButton.Modal = true
+		game:GetService("UserInputService").MouseIconEnabled = true
 	end
 end)
 
