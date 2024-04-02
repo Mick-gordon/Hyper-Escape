@@ -383,12 +383,12 @@ local function AddTracers(Player) -- Tracers Without Lib OMG !!!!, Needs Some Ad
 	coroutine.resume(co)-- Made By Mick Gordon
 end
 
-
-
 function isVisible(p, ...)
+	
 	if not (DeleteMob.Aimbot.WallCheck == true) then
 		return true
-	end 
+	end
+	
 	return #CurrentCam:GetPartsObscuringTarget({ p }, { CurrentCam, PLAYER.Character, ... }) == 0 
 end-- Made By Mick Gordon
 
@@ -1638,12 +1638,8 @@ end)
 TextButton.MouseButton1Click:Connect(function()
 	if DeleteMobF.Visible == true then
 		DeleteMobF.Visible = false
-		TextButton.Modal = false
-		game:GetService("UserInputService").MouseIconEnabled = false
 	else
 		DeleteMobF.Visible = true
-		TextButton.Modal = true
-		game:GetService("UserInputService").MouseIconEnabled = true
 	end
 end)
 
