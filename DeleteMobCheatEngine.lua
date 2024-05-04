@@ -1,3 +1,4 @@
+-- Yes, I know This Is Shit.
 local PLAYER = game.Players.LocalPlayer
 local CurrentCam  = game.Workspace.CurrentCamera
 local UIS = game:GetService("UserInputService")-- Made By Mick Gordon
@@ -7,32 +8,31 @@ local mouseLocation = UIS.GetMouseLocation
 game:GetService("StarterGui"):SetCore("SendNotification", {Title = "Made By Mick Gordon", Text = "Enjoy !"})
 
 local DeleteMob ={
+    GUi = {
+        OpenNCloseButton = true; -- Have A Button For It
+        KeybindEnable = false; -- If You Want A Bind For The Menu
+        Keybind = "z"; -- Menu Key Bind
+    };
 	Aimbot= {
-		Enabled = false;
-		TeamCheck = false;-- Made By Mick Gordon
+        Keybind = "MouseButton2"; -- Change Aim Bot Key Bind Here !!! No Capitals, Unless it is MouseButton1 or MouseButton2
+------------------------------------------------------------------------------------------
+		Enabled = false; -- No Need To Change Anything Here As It Is On The GUI
+		TeamCheck = false;
 		WallCheck = false;
-
 		ShowFov = false;
 		Fov = 0;
-
 		Smoothing = 0;
-
 		AimPart = "Head";
-		-- Made By Mick Gordon
-		Keybind = "MouseButton2";
-
-
 		Thickness = 1;
-
 		FovFillColor = Color3.fromRGB(100,0,100);
 		FovColor = Color3.fromRGB(100,0,100);
-
 		FovFillTransparency = 1;
 		FovTransparenct = 0;
+        IsAimKeyDown = false;
 	};
 	ESP ={
 		Box = {
-			Box = false;-- Made By Mick Gordon
+			Box = false;
 			Name = false;
 			Distance = false;
 			Health = false;
@@ -130,7 +130,7 @@ local function AddHighlight(plr)
 	coroutine.resume(co)
 end
 -- Made By Mick Gordon
-local function AddBox(player)
+local function AddBox(player) -- Saves FPS 
 	local bbg = Instance.new("BillboardGui", BoxC)
 	bbg.Name = player.Name
 	bbg.AlwaysOnTop = true
@@ -312,8 +312,8 @@ local function AddBox(player)
 end
 
 
-local function AddTracers(Player) -- Tracers Without Lib OMG !!!!, Needs Some Adjustments To The End Pos
-	local tracer = Instance.new("Frame")
+local function AddTracers(Player) -- Tracers Without Lib OMG !!!!
+	local tracer = Instance.new("Frame") -- Idk What I Was Smoking When Making This Scrip Hub, It Is Shit And I Will Remake Later 
 	tracer.Parent = TracersG
 	tracer.Name = Player.Name
 	tracer.Active = false
@@ -1452,6 +1452,7 @@ Open.BorderColor3 = Color3.fromRGB(255, 255, 255)
 Open.Position = UDim2.new(0.5, 0, 0.0199999996, 0)
 Open.Size = UDim2.new(0, 150, 0, 50)
 Open.ZIndex = 10
+Open.Visible = DeleteMob.GUi.OpenNCloseButton
 Open.Draggable = true
 Open.Active = true
 
@@ -1464,6 +1465,46 @@ TextButton.Font = Enum.Font.Gotham
 TextButton.Text = "open / Close"
 TextButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 TextButton.TextSize = 14.000
+
+PLAYER:GetMouse().KeyDown:Connect(function(KeyPressed) -- What The Fuck
+	if KeyPressed == (DeleteMob.GUi.Keybind) and DeleteMob.GUi.KeybindEnable then
+        if DeleteMobF.Visible == true then
+            DeleteMobF.Visible = false
+        else
+            DeleteMobF.Visible = true
+        end
+    end
+    if KeyPressed == (DeleteMob.Aimbot.Keybind) and DeleteMob.Aimbot.Enabled then
+        DeleteMob.Aimbot.IsAimKeyDown = true
+    end
+end)
+PLAYER:GetMouse().KeyUp:Connect(function(KeyPressed) 
+    if KeyPressed == (DeleteMob.Aimbot.Keybind) and DeleteMob.Aimbot.Enabled then
+        DeleteMob.Aimbot.IsAimKeyDown = false
+    end
+end)
+
+PLAYER:GetMouse().Button1Down:Connect(function()
+    if DeleteMob.Aimbot.Keybind == "MouseButton1" and DeleteMob.Aimbot.Enabled then
+        DeleteMob.Aimbot.IsAimKeyDown = true
+    end
+end)
+PLAYER:GetMouse().Button1Up:Connect(function()
+    if DeleteMob.Aimbot.Keybind == "MouseButton1" and DeleteMob.Aimbot.Enabled then
+        DeleteMob.Aimbot.IsAimKeyDown = false
+    end
+end)
+PLAYER:GetMouse().Button2Down:Connect(function()
+    if DeleteMob.Aimbot.Keybind == "MouseButton2" and DeleteMob.Aimbot.Enabled then
+        DeleteMob.Aimbot.IsAimKeyDown = true
+    end
+end)
+PLAYER:GetMouse().Button2Up:Connect(function()
+    if DeleteMob.Aimbot.Keybind == "MouseButton2" and DeleteMob.Aimbot.Enabled then
+        DeleteMob.Aimbot.IsAimKeyDown = false
+    end
+end)
+
 -- Made By Mick Gordon
 ABE.MouseButton1Click:Connect(function()
 	if ABE.BackgroundColor3 == Color3.fromRGB(52, 52, 52) then
@@ -1855,14 +1896,12 @@ coroutine.wrap(MMUKLB_fake_script)()
 game:GetService('RunService').RenderStepped:connect(function()
 
 	-- Aimbot Check
-	if DeleteMob.Aimbot.Enabled == true then 
-		if UIS:IsMouseButtonPressed(Enum.UserInputType[DeleteMob.Aimbot.Keybind]) then
-			local _pos = CameraGetClosestToMouse(DeleteMob.Aimbot.Fov)
-			if _pos then
-				aimAt(_pos, DeleteMob.Aimbot.Smoothing)
-			end
-		end
-	end 
+	if DeleteMob.Aimbot.IsAimKeyDown then
+        local _pos = CameraGetClosestToMouse(DeleteMob.Aimbot.Fov)
+        if _pos then
+            aimAt(_pos, DeleteMob.Aimbot.Smoothing)
+        end
+    end
 
 	-- Fov
 	local acc = DeleteMob.Aimbot.Smoothing / 2	
