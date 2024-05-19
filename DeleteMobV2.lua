@@ -1045,7 +1045,7 @@ local MainSector = AimBotTab:CreateSector("Main", "Left");
 MainSector:CreateToggle("Enable", false, function(AE) HyperEscape.AimBot.Enabled = AE; end);
 MainSector:CreateToggle("Team Check", false, function(ATC) HyperEscape.AimBot.TeamCheck = ATC; end);
 MainSector:CreateToggle("Wall Check", false, function(AWC) HyperEscape.AimBot.WallCheck = AWC ;end);
-MainSector:CreateDropDown("Hit Scan", {"Head", "Torso"}, "Head", false, function(AHS) HyperEscape.AimBot.AimPart = AHS; end);
+MainSector:CreateDropDown("Hit Scan", {"Head", "HumanoidRootPart"}, "Head", false, function(AHS) HyperEscape.AimBot.AimPart = AHS; end);
 
 local FovSecor = AimBotTab:CreateSector("FOV Cirlce", "Left");
 FovSecor:CreateToggle("Show Fov", false, function(AFE) HyperEscape.AimBot.ShowFov = AFE; end);
@@ -1522,7 +1522,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
 		UIStroke.Enabled = false;
 	end
 
-	if HyperEscape.AimBot.Enabled then 
+	if HyperEscape.AimBot.Enabled then -- I Am Pretty Happy With This Legit Bot. Best One I Have Made So Far.
 		if HyperEscape.AimBot.IsAimKeyDown then
 			if HyperEscape.AimBot.StickyAim then
 				if HyperEscape.AimBot.Target ~= nil then
