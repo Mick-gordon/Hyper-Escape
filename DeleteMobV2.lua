@@ -1018,7 +1018,7 @@ function library()
 				return Sector;
 			end
 			
-			function tab:CreateConfig() -- Maybe in V2.1 or V2.2
+			function tab:CreateConfig(Side) -- Maybe in V2.1 or V2.2
 				local ConfigSection = { };
 				
 				
@@ -1105,7 +1105,7 @@ local function IsAlive(Player)
 end
 
 local function GetTeam(Player)
-	if localPlayer:FindFirstChild("Team")~= nil then
+	if not game.Players.LocalPlayer.Neutral then
 		return game.Teams[Player.Team.Name];
 	end
 	return true;
@@ -1548,3 +1548,5 @@ game:GetService("RunService").RenderStepped:Connect(function()
 		end
 	end
 end)
+
+
