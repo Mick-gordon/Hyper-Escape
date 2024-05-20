@@ -152,7 +152,7 @@ function library()
 		window.Title = Instance.new("TextLabel", window.Main);
 		window.Title.Position = UDim2.fromScale(0.016, 0.016);
 		window.Title.Size = UDim2.fromOffset(123, 34);
-		window.Title.Text = "DeleteMob V2.1";
+		window.Title.Text = "DeleteMob V2.2";
 		window.Title.Font = library.theme.Font;
 		window.Title.TextSize = 19;
 		window.Title.BackgroundTransparency = 1;
@@ -1018,11 +1018,8 @@ function library()
 				return Sector;
 			end
 			
-			function tab:CreateConfig(Side) -- Maybe in V2.1 or V2.2
-				local ConfigSection = { };
+			function tab:CreateConfig(side) -- Maybe in V2.1 or V2.2
 				
-				
-				return ConfigSection;
 			end
 			
 			table.insert(window.Tabs, tab)
@@ -1054,7 +1051,7 @@ FovSecor:CreateSlider("Cirlce Radius", 0, 360, 1500, 1, function(FCR) HyperEscap
 local OtherSector = AimBotTab:CreateSector("Other", "Right");
 OtherSector:CreateToggle("Prediction", false, function(APE) HyperEscape.AimBot.Prediction = APE; end);
 OtherSector:CreateToggle("Sticky Aim", false, function(ASAE) HyperEscape.AimBot.StickyAim = ASAE; end);
-OtherSector:CreateSlider("Smoothing", 2, 10, 50, 1, function(AS) HyperEscape.AimBot.Smoothing = AS / 100; end);
+OtherSector:CreateSlider("Smoothing", 3, 10, 50, 1, function(AS) HyperEscape.AimBot.Smoothing = AS / 100; end);
 OtherSector:CreateKeyBind("Key Bind", Enum.KeyCode.E, function(AK) HyperEscape.AimBot.Keybind = AK; end);
 OtherSector:CreateToggle("Use Mouse", true, function(AUM) HyperEscape.AimBot.UseMouse = AUM; end);
 OtherSector:CreateDropDown("Mouse Bind", {"MouseButton1", "MouseButton2"}, "MouseButton2", false, function(AMB) HyperEscape.AimBot.MouseBind = AMB; end);
@@ -1519,7 +1516,7 @@ localPlayer:GetMouse().Button2Up:Connect(function(Key)
 	end
 end)
 
-game:GetService("RunService").RenderStepped:Connect(function() 
+game:GetService("RunService").Heartbeat:Connect(function() 
 
 	if HyperEscape.AimBot.Enabled and HyperEscape.AimBot.ShowFov then
 		UIStroke.Enabled = true;
