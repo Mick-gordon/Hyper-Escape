@@ -152,7 +152,7 @@ function library()
 		window.Title = Instance.new("TextLabel", window.Main);
 		window.Title.Position = UDim2.fromScale(0.016, 0.016);
 		window.Title.Size = UDim2.fromOffset(123, 34);
-		window.Title.Text = "DeleteMob V2";
+		window.Title.Text = "DeleteMob V2.1";
 		window.Title.Font = library.theme.Font;
 		window.Title.TextSize = 19;
 		window.Title.BackgroundTransparency = 1;
