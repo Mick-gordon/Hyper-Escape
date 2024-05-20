@@ -1095,10 +1095,14 @@ local Fov = Instance.new("ScreenGui",(CoreGui or localPlayer.PlayerGui))Fov.Name
 local FOVFFrame = Instance.new("Frame")FOVFFrame.Parent = Fov FOVFFrame.Name = "FOVFFrame" FOVFFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255) FOVFFrame.BorderColor3 = Color3.fromRGB(0, 0, 0) FOVFFrame.BorderSizePixel = 0 FOVFFrame.BackgroundTransparency = 1 FOVFFrame.AnchorPoint = Vector2.new(0.5, 0.5) FOVFFrame.Position = UDim2.new(0.5, 0,0.5, 0) FOVFFrame.Size = UDim2.new(0, HyperEscape.AimBot.Fov, 0, HyperEscape.AimBot.Fov) FOVFFrame.BackgroundTransparency = 1;
 local UICorner = Instance.new("UICorner")UICorner.CornerRadius = UDim.new(1, 0) UICorner.Parent = FOVFFrame;
 local UIStroke = Instance.new("UIStroke")UIStroke.Color = Color3.fromRGB(100,0,100) UIStroke.Parent = FOVFFrame UIStroke.Thickness = 1 UIStroke.ApplyStrokeMode = "Border"; game:GetService("StarterGui"):SetCore("SendNotification", {Title = "https://discord.gg/FsApQ7YNTq", Text = "The Discord For More!"});
+local IsArsenal = false;
 
+if game.PlaceId == 286090429 then
+	IsArsenal = true;
+end
 
 local function IsAlive(Player)
-	if Player and Player.Character and Player.Character.FindFirstChild(Player.Character, "Humanoid") ~= nil and (game.PlaceId == 286090429 and players[Player.Character.Name].NRPBS["Health"].Value > 0 or Player.Character.Humanoid.Health > 0) then
+	if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") ~= nil and (IsArsenal and players[Player.Character.Name].NRPBS["Health"].Value > 0 or Player.Character.Humanoid.Health > 0) then
 		return true
 	end
 	return false
@@ -1231,7 +1235,7 @@ local function LoadESP(Player) -- I Thought It Would Be Harder To Make, Idk Why
 	local Health = Instance.new("TextLabel", BoxHolder);
 	Health.BackgroundTransparency = 1;
 	if IsAlive(Player) then
-		Health.Text = (game.PlaceId == 286090429 and players[Player.Character.Name].NRPBS["Health"].Value or Player.Character.Humanoid.Health);
+		Health.Text = (IsArsenal and players[Player.Character.Name].NRPBS["Health"].Value or Player.Character.Humanoid.Health);
 	end
 	Health.Visible = false;
 	Health.AnchorPoint = Vector2.new(0.5, 0.5);
@@ -1272,8 +1276,8 @@ local function LoadESP(Player) -- I Thought It Would Be Harder To Make, Idk Why
 
 					if HyperEscape.esp.Box.TeamCheck ~= true or GetTeam(Player) ~= GetTeam(localPlayer) then
 
-						local health = (game.PlaceId == 286090429 and players[Player.Character.Name].NRPBS["Health"].Value or Player.Character.Humanoid.Health);
-						local healthScale = (game.PlaceId == 286090429 and health / players[Player.Character.Name].NRPBS["MaxHealth"].Value or health / Player.Character.Humanoid.MaxHealth);
+						local health = (IsArsenal and players[Player.Character.Name].NRPBS["Health"].Value or Player.Character.Humanoid.Health);
+						local healthScale = (IsArsenal and health / players[Player.Character.Name].NRPBS["MaxHealth"].Value or health / Player.Character.Humanoid.MaxHealth);
 						local healthSizeY = size.Y * healthScale;
 
 						LeftOutline.Visible = HyperEscape.esp.Box.Box and HyperEscape.esp.Box.Outline;
@@ -1336,7 +1340,7 @@ local function LoadESP(Player) -- I Thought It Would Be Harder To Make, Idk Why
 						
 						Distance.Text = math.floor(0.5+(CurrentCamera.CFrame.Position - Player.Character.HumanoidRootPart.Position).magnitude);
 						Name.Text = (HyperEscape.esp.Box.Name and HyperEscape.esp.Box.Distance and Player.Name .. " (" .. math.floor(0.5+(CurrentCamera.CFrame.Position - Player.Character.HumanoidRootPart.Position).magnitude) .. ")" or Player.Name);
-						Health.Text = (game.PlaceId == 286090429 and math.floor(players[Player.Character.Name].NRPBS["Health"].Value) or math.floor(Player.Character.Humanoid.Health));
+						Health.Text = (IsArsenal and math.floor(players[Player.Character.Name].NRPBS["Health"].Value) or math.floor(Player.Character.Humanoid.Health));
 					else
 						LeftOutline.Visible = false;
 						RightOutline.Visible =  false;
