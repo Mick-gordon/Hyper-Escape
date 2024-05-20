@@ -1054,7 +1054,7 @@ FovSecor:CreateSlider("Cirlce Radius", 0, 360, 1500, 1, function(FCR) HyperEscap
 local OtherSector = AimBotTab:CreateSector("Other", "Right");
 OtherSector:CreateToggle("Prediction", false, function(APE) HyperEscape.AimBot.Prediction = APE; end);
 OtherSector:CreateToggle("Sticky Aim", false, function(ASAE) HyperEscape.AimBot.StickyAim = ASAE; end);
-OtherSector:CreateSlider("Smoothing", 0, 10, 50, 1, function(AS) HyperEscape.AimBot.Smoothing = AS / 100; end);
+OtherSector:CreateSlider("Smoothing", 2, 10, 50, 1, function(AS) HyperEscape.AimBot.Smoothing = AS / 100; end);
 OtherSector:CreateKeyBind("Key Bind", Enum.KeyCode.E, function(AK) HyperEscape.AimBot.Keybind = AK; end);
 OtherSector:CreateToggle("Use Mouse", true, function(AUM) HyperEscape.AimBot.UseMouse = AUM; end);
 OtherSector:CreateDropDown("Mouse Bind", {"MouseButton1", "MouseButton2"}, "MouseButton2", false, function(AMB) HyperEscape.AimBot.MouseBind = AMB; end);
@@ -1090,7 +1090,6 @@ SettingsSettings:CreateToggle("UI Toggle Button", true, function(GUITB) HyperEsc
 SettingsSettings:CreateKeyBind("UI Key Bind", Enum.KeyCode.RightShift, function(SUITK) HyperEscape.GUI.GUIToggleKey = SUITK; Window:UpdateKeyBind(SUITK); end);
 
 
-
 local ESPHolder = Instance.new("Folder", (CoreGui or localPlayer.PlayerGui)); 
 local Fov = Instance.new("ScreenGui",(CoreGui or localPlayer.PlayerGui))Fov.Name = "Fov" Fov.ZIndexBehavior = Enum.ZIndexBehavior.Sibling Fov.ResetOnSpawn = false; -- Yapee
 local FOVFFrame = Instance.new("Frame")FOVFFrame.Parent = Fov FOVFFrame.Name = "FOVFFrame" FOVFFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255) FOVFFrame.BorderColor3 = Color3.fromRGB(0, 0, 0) FOVFFrame.BorderSizePixel = 0 FOVFFrame.BackgroundTransparency = 1 FOVFFrame.AnchorPoint = Vector2.new(0.5, 0.5) FOVFFrame.Position = UDim2.new(0.5, 0,0.5, 0) FOVFFrame.Size = UDim2.new(0, HyperEscape.AimBot.Fov, 0, HyperEscape.AimBot.Fov) FOVFFrame.BackgroundTransparency = 1;
@@ -1106,43 +1105,46 @@ local function IsAlive(Player)
 end
 
 local function GetTeam(Player)
-	return game.Teams[Player.Team.Name]
+	if localPlayer:FindFirstChild("Team")~= nil then
+		return game.Teams[Player.Team.Name];
+	end
+	return true;
 end
 
 function isVisible(p, ...)
 
 	if not (HyperEscape.AimBot.WallCheck == true) then
-		return true
+		return true;
 	end
 
-	return #CurrentCamera:GetPartsObscuringTarget({ p }, { CurrentCamera, localPlayer.Character, ... }) == 0 
+	return #CurrentCamera:GetPartsObscuringTarget({ p }, { CurrentCamera, localPlayer.Character, ... }) == 0;
 end
 
 function CameraGetClosestToMouse()
-	local AimFov = HyperEscape.AimBot.Fov
-	local targetPos = nil
+	local AimFov = HyperEscape.AimBot.Fov;
+	local targetPos = nil;
 
 	for i,v in pairs (game:GetService("Players"):GetPlayers()) do
 		if v ~= localPlayer then
-			if HyperEscape.AimBot.TeamCheck ~= true or GetTeam(v) ~= GetTeam(localPlayer) then
+			if HyperEscape.AimBot.TeamCheck ~= true or GetTeam(v) ~= GetTeam(localPlayer) then 
 				if IsAlive(v) then
 					local screen_pos, on_screen = CurrentCamera:WorldToViewportPoint(v.Character[HyperEscape.AimBot.AimPart].Position)
 					local screen_pos_2D = Vector2.new(screen_pos.X, screen_pos.Y)
 					local new_magnitude = (screen_pos_2D - mouseLocation(UIS)).Magnitude
 					if on_screen and new_magnitude < AimFov and isVisible(v.Character[HyperEscape.AimBot.AimPart].Position, v.Character.Head.Parent) then
-						AimFov = new_magnitude
-						targetPos = v
+						AimFov = new_magnitude;
+						targetPos = v;
 					end
 				end
 			end
 		end
 	end
-	return targetPos
+	return targetPos;
 end
 
 local function LoadESP(Player) -- I Thought It Would Be Harder To Make, Idk Why
 	local PlayerESP = Instance.new("Folder", ESPHolder);
-	PlayerESP.Name = Player.Name .. "ESP"
+	PlayerESP.Name = Player.Name .. "ESP";
 	-- Box
 	local BoxHolder = Instance.new("ScreenGui", PlayerESP);
 	BoxHolder.Name = "Box";
@@ -1268,7 +1270,7 @@ local function LoadESP(Player) -- I Thought It Would Be Harder To Make, Idk Why
 				if onScreen then	
 					-- Box
 
-					if HyperEscape.esp.Box.TeamCheck ~= true and (HyperEscape.esp.Box.Box or HyperEscape.esp.Box.HealthBar or HyperEscape.esp.Box.Health or HyperEscape.esp.Box.Name or HyperEscape.esp.Box.Distance) or GetTeam(Player) ~= GetTeam(localPlayer) and (HyperEscape.esp.Box.Box or HyperEscape.esp.Box.HealthBar or HyperEscape.esp.Box.Health or HyperEscape.esp.Box.Name or HyperEscape.esp.Box.Distance) then
+					if HyperEscape.esp.Box.TeamCheck ~= true or GetTeam(Player) ~= GetTeam(localPlayer) then
 
 						local health = (game.PlaceId == 286090429 and players[Player.Character.Name].NRPBS["Health"].Value or Player.Character.Humanoid.Health);
 						local healthScale = (game.PlaceId == 286090429 and health / players[Player.Character.Name].NRPBS["MaxHealth"].Value or health / Player.Character.Humanoid.MaxHealth);
@@ -1353,7 +1355,7 @@ local function LoadESP(Player) -- I Thought It Would Be Harder To Make, Idk Why
 
 					-- Tracer
 
-					if HyperEscape.esp.Tracer.TeamCheck ~= true and HyperEscape.esp.Tracer.Tracer or GetTeam(Player) ~= GetTeam(localPlayer) and HyperEscape.esp.Tracer.Tracer then
+					if HyperEscape.esp.Tracer.TeamCheck ~= true or GetTeam(Player) ~= GetTeam(localPlayer) then
 
 						local ScreenVec2 = Vector2.new(screen.X, screen.Y + size.Y / 2 + size.Y / 20);
 						local Origin = Vector2.new(CurrentCamera.ViewportSize.X/2, CurrentCamera.ViewportSize.Y - 1);
@@ -1379,7 +1381,7 @@ local function LoadESP(Player) -- I Thought It Would Be Harder To Make, Idk Why
 
 					-- Hilight 
 
-					if HyperEscape.esp.Hilights.TeamCheck ~= true and HyperEscape.esp.Hilights.Hilights or GetTeam(Player) ~= GetTeam(localPlayer) and HyperEscape.esp.Hilights.Hilights then
+					if HyperEscape.esp.Hilights.TeamCheck ~= true or GetTeam(Player) ~= GetTeam(localPlayer) then
 
 						Hilight.Enabled = HyperEscape.esp.Hilights.Hilights;
 						Hilight.Adornee = Player.Character;
@@ -1443,24 +1445,28 @@ end
 
 
 for i,plr in pairs(players:GetChildren()) do
-	LoadESP(plr);
+	if plr ~= localPlayer then
+		LoadESP(plr);
+	end
 end
 
 players.PlayerAdded:Connect(function(plr)
-	LoadESP(plr);
+	if plr ~= localPlayer then
+		LoadESP(plr);
+	end
 end)
 
 
 	
 
 UIS.InputBegan:Connect(function(Key)
-	if Key.KeyCode == HyperEscape.AimBot.Keybind then
+	if Key.KeyCode == HyperEscape.AimBot.Keybind and not HyperEscape.AimBot.UseMouse then
 		HyperEscape.AimBot.Target = CameraGetClosestToMouse();
 		HyperEscape.AimBot.IsAimKeyDown = true;
 	end
 end)
 UIS.InputEnded:Connect(function(Key)
-	if Key.KeyCode == HyperEscape.AimBot.Keybind then
+	if Key.KeyCode == HyperEscape.AimBot.Keybind and not HyperEscape.AimBot.UseMouse then
 		HyperEscape.AimBot.Target = CameraGetClosestToMouse();
 		HyperEscape.AimBot.IsAimKeyDown = false;
 		if HyperEscape.AimBot.CameraTween ~= nil then
