@@ -897,6 +897,7 @@ function library:CreateWindow(Keybind, Name)
 				CoppyText.TextLabel.TextXAlignment = Enum.TextXAlignment.Center;
 
 				Sector:FixSize();
+				table.insert(library.items, CoppyText);
 				return CoppyText;
 			end
 
@@ -923,6 +924,7 @@ function library:CreateWindow(Keybind, Name)
 				Lable.TextLabel.TextXAlignment = Enum.TextXAlignment.Center;
 
 				Sector:FixSize();
+				table.insert(library.items, Lable);
 				return Lable;
 			end
 
