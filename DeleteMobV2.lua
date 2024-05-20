@@ -15,8 +15,8 @@ local HyperEscape = { -- fuck Off I Like It, Even Tho It Is Anoying.
 		Prediction = false; -- I Will Make Ajustable When People Complain About It.
 		
 		UseMouse = false;
-		MouseBind = "MouseButton2";
-		Keybind = Enum.UserInputType.MouseButton2; 
+		MouseBind = Enum.UserInputType.MouseButton2;
+		Keybind = Enum.KeyCode.E;  
 
 		ShowFov = false;
 		Fov = 360;
@@ -1102,7 +1102,7 @@ if game.PlaceId == 286090429 then
 end
 
 local function IsAlive(Player)
-	if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") ~= nil and (IsArsenal and players[Player.Character.Name].NRPBS["Health"].Value > 0 or Player.Character.Humanoid.Health > 0) then
+	if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") ~= nil and (IsArsenal and players[Player.Character.Name].NRPBS["Health"].Value > 0 or not IsArsenal and Player.Character.Humanoid.Health > 0) then
 		return true
 	end
 	return false
@@ -1536,13 +1536,20 @@ game:GetService("RunService").RenderStepped:Connect(function()
 		if HyperEscape.AimBot.IsAimKeyDown then
 			if HyperEscape.AimBot.StickyAim then
 				if HyperEscape.AimBot.Target ~= nil then
-					HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * 1.15) or Vector3.new()))})
-					HyperEscape.AimBot.CameraTween:Play()
+					
+					if not IsAlive(HyperEscape.AimBot.Target) then
+						local target = CameraGetClosestToMouse()
+						HyperEscape.AimBot.Target = target;
+						HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * 1.15) or Vector3.new()))});
+						HyperEscape.AimBot.CameraTween:Play();
+					end
+					HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * 1.15) or Vector3.new()))});
+					HyperEscape.AimBot.CameraTween:Play();
 				end
 			else
-				local target = CameraGetClosestToMouse()
+				local target = CameraGetClosestToMouse();
 				if target ~= nil then
-					HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position,  target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * 1.15) or Vector3.new()))})
+					HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position,  target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * 1.15) or Vector3.new()))});
 					HyperEscape.AimBot.CameraTween:Play();
 
 				elseif HyperEscape.AimBot.CameraTween ~= nil then
