@@ -15,7 +15,7 @@ local HyperEscape = { -- fuck Off I Like It, Even Tho It Is Anoying.
 		Prediction = false; -- I Will Make Ajustable When People Complain About It.
 		
 		UseMouse = false;
-		MouseBind = Enum.UserInputType.MouseButton2;
+		MouseBind = "MouseButton2";
 		Keybind = Enum.KeyCode.E;  
 
 		ShowFov = false;
@@ -111,9 +111,10 @@ function library()
 		TextColor = Color3.fromRGB(255, 255, 255);
 	};
 
-	function library:CreateWindow(Keybind)
+	function library:CreateWindow(Keybind, Name)
 		local window = { };
 		window.keybind = Keybind or Enum.KeyCode.RightShift;
+		window.name = Name or "DeleteMob";
 
 		window.ScreenGui = Instance.new("ScreenGui");
 		window.ScreenGui.Parent = (CoreGui or StarterGUI);
@@ -152,7 +153,7 @@ function library()
 		window.Title = Instance.new("TextLabel", window.Main);
 		window.Title.Position = UDim2.fromScale(0.016, 0.016);
 		window.Title.Size = UDim2.fromOffset(123, 34);
-		window.Title.Text = "DeleteMob V2.2";
+		window.Title.Text = window.name;
 		window.Title.Font = library.theme.Font;
 		window.Title.TextSize = 19;
 		window.Title.BackgroundTransparency = 1;
@@ -986,6 +987,7 @@ function library()
 					CoppyText.TextLabel.TextXAlignment = Enum.TextXAlignment.Center;
 					
 					Sector:FixSize();
+					table.insert(library.items, CoppyText);
 					return CoppyText;
 				end
 				
@@ -1012,6 +1014,7 @@ function library()
 					Lable.TextLabel.TextXAlignment = Enum.TextXAlignment.Center;
 					
 					Sector:FixSize();
+					table.insert(library.items, Lable);
 					return Lable;
 				end
 				
@@ -1032,6 +1035,7 @@ function library()
 	return library;
 end
 
+
 local DeleteMobLib = library();
 
 local Window = DeleteMobLib:CreateWindow(HyperEscape.GUI.GUIToggleKey);
@@ -1039,43 +1043,43 @@ local UIToggle = Window:CreateToggleButton()
 
 local AimBotTab = Window:CreateTab("Aim Bot");
 local MainSector = AimBotTab:CreateSector("Main", "Left");
-MainSector:CreateToggle("Enable", false, function(AE) HyperEscape.AimBot.Enabled = AE; end);
-MainSector:CreateToggle("Team Check", false, function(ATC) HyperEscape.AimBot.TeamCheck = ATC; end);
-MainSector:CreateToggle("Wall Check", false, function(AWC) HyperEscape.AimBot.WallCheck = AWC ;end);
-MainSector:CreateDropDown("Hit Scan", {"Head", "HumanoidRootPart"}, "Head", false, function(AHS) HyperEscape.AimBot.AimPart = AHS; end);
+MainSector:CreateToggle("Enable", HyperEscape.AimBot.Enabled, function(AE) HyperEscape.AimBot.Enabled = AE; end);
+MainSector:CreateToggle("Team Check", HyperEscape.AimBot.TeamCheck, function(ATC) HyperEscape.AimBot.TeamCheck = ATC; end);
+MainSector:CreateToggle("Wall Check", HyperEscape.AimBot.WallCheck, function(AWC) HyperEscape.AimBot.WallCheck = AWC ;end);
+MainSector:CreateDropDown("Hit Scan", {"Head", "HumanoidRootPart"}, HyperEscape.AimBot.AimPart, false, function(AHS) HyperEscape.AimBot.AimPart = AHS; end);
 
 local FovSecor = AimBotTab:CreateSector("FOV Cirlce", "Left");
-FovSecor:CreateToggle("Show Fov", false, function(AFE) HyperEscape.AimBot.ShowFov = AFE; end);
-FovSecor:CreateSlider("Cirlce Radius", 0, 360, 1500, 1, function(FCR) HyperEscape.AimBot.Fov = FCR; end);
+FovSecor:CreateToggle("Show Fov", HyperEscape.AimBot.ShowFov, function(AFE) HyperEscape.AimBot.ShowFov = AFE; end);
+FovSecor:CreateSlider("Cirlce Radius", 0, HyperEscape.AimBot.Fov, 1500, 1, function(FCR) HyperEscape.AimBot.Fov = FCR; end);
 
 local OtherSector = AimBotTab:CreateSector("Other", "Right");
-OtherSector:CreateToggle("Prediction", false, function(APE) HyperEscape.AimBot.Prediction = APE; end);
-OtherSector:CreateToggle("Sticky Aim", false, function(ASAE) HyperEscape.AimBot.StickyAim = ASAE; end);
-OtherSector:CreateSlider("Smoothing", 3, 10, 50, 1, function(AS) HyperEscape.AimBot.Smoothing = AS / 100; end);
-OtherSector:CreateKeyBind("Key Bind", Enum.KeyCode.E, function(AK) HyperEscape.AimBot.Keybind = AK; end);
-OtherSector:CreateToggle("Use Mouse", true, function(AUM) HyperEscape.AimBot.UseMouse = AUM; end);
-OtherSector:CreateDropDown("Mouse Bind", {"MouseButton1", "MouseButton2"}, "MouseButton2", false, function(AMB) HyperEscape.AimBot.MouseBind = AMB; end);
+OtherSector:CreateToggle("Prediction", HyperEscape.AimBot.Prediction, function(APE) HyperEscape.AimBot.Prediction = APE; end);
+OtherSector:CreateToggle("Sticky Aim", HyperEscape.AimBot.StickyAim, function(ASAE) HyperEscape.AimBot.StickyAim = ASAE; end);
+OtherSector:CreateSlider("Smoothing", 3, HyperEscape.AimBot.Smoothing * 100, 50, 1, function(AS) HyperEscape.AimBot.Smoothing = AS / 100; end);
+OtherSector:CreateKeyBind("Key Bind", HyperEscape.AimBot.Keybind, function(AK) HyperEscape.AimBot.Keybind = AK; end);
+OtherSector:CreateToggle("Use Mouse", HyperEscape.AimBot.UseMouse, function(AUM) HyperEscape.AimBot.UseMouse = AUM; end);
+OtherSector:CreateDropDown("Mouse Bind", {"MouseButton1", "MouseButton2"}, HyperEscape.AimBot.MouseBind, false, function(AMB) HyperEscape.AimBot.MouseBind = AMB; end);
 
 local ESPTab = Window:CreateTab("ESP");
 local EnableSector = ESPTab:CreateSector("ESP", "Left");
-EnableSector:CreateToggle("Team Check", false, function(ETC) HyperEscape.esp.Box.TeamCheck = ETC; HyperEscape.esp.Tracer.TeamCheck = ETC; HyperEscape.esp.Hilights.TeamCheck = ETC end);
-EnableSector:CreateToggle("Box", false, function(EB) HyperEscape.esp.Box.Box = EB; end);
-EnableSector:CreateToggle("Tracer", false, function(ET) HyperEscape.esp.Tracer.Tracer = ET; end);
-EnableSector:CreateToggle("Health", false, function(EH) HyperEscape.esp.Box.Health = EH; end);
-EnableSector:CreateToggle("Name", false, function(EN) HyperEscape.esp.Box.Name = EN; end);
-EnableSector:CreateToggle("Distance", false, function(ED) HyperEscape.esp.Box.Distance = ED; end);
-EnableSector:CreateToggle("Health Bar", false, function(EHB) HyperEscape.esp.Box.HealthBar = EHB; end);
-EnableSector:CreateToggle("Hilights", false, function(EHi) HyperEscape.esp.Hilights.Hilights = EHi; end);
-EnableSector:CreateToggle("Show Hilight Through Walls", false, function(ESHTW) HyperEscape.esp.Hilights.AllWaysVisible = ESHTW; end);
+EnableSector:CreateToggle("Team Check", HyperEscape.esp.Box.TeamCheck, function(ETC) HyperEscape.esp.Box.TeamCheck = ETC; HyperEscape.esp.Tracer.TeamCheck = ETC; HyperEscape.esp.Hilights.TeamCheck = ETC end);
+EnableSector:CreateToggle("Box", HyperEscape.esp.Box.Box, function(EB) HyperEscape.esp.Box.Box = EB; end);
+EnableSector:CreateToggle("Tracer", HyperEscape.esp.Tracer.Tracer, function(ET) HyperEscape.esp.Tracer.Tracer = ET; end);
+EnableSector:CreateToggle("Health", HyperEscape.esp.Box.Health, function(EH) HyperEscape.esp.Box.Health = EH; end);
+EnableSector:CreateToggle("Name", HyperEscape.esp.Box.Name, function(EN) HyperEscape.esp.Box.Name = EN; end);
+EnableSector:CreateToggle("Distance", HyperEscape.esp.Box.Distance, function(ED) HyperEscape.esp.Box.Distance = ED; end);
+EnableSector:CreateToggle("Health Bar", HyperEscape.esp.Box.HealthBar, function(EHB) HyperEscape.esp.Box.HealthBar = EHB; end);
+EnableSector:CreateToggle("Hilights", HyperEscape.esp.Hilights.Hilights, function(EHi) HyperEscape.esp.Hilights.Hilights = EHi; end);
+EnableSector:CreateToggle("Show Hilight Through Walls", HyperEscape.esp.Hilights.AllWaysVisible, function(ESHTW) HyperEscape.esp.Hilights.AllWaysVisible = ESHTW; end);
 
 local ESPSettingsSecor = ESPTab:CreateSector("Settings", "Right");
-ESPSettingsSecor:CreateToggle("Outlines", true, function(ESO) HyperEscape.esp.Box.Outline = ESO; HyperEscape.esp.Tracer.Outline = ESO; end);
-ESPSettingsSecor:CreateColorPicker("Outline Color", Color3.fromRGB(0, 0, 0), function(EOC) HyperEscape.esp.Box.OutlineColor = EOC; HyperEscape.esp.Tracer.OutlineColor = EOC; end);
-ESPSettingsSecor:CreateColorPicker("ESP Color", Color3.fromRGB(255, 255, 255), function(EEC) HyperEscape.esp.Box.Color = EEC; HyperEscape.esp.Tracer.Color = EEC; end);
-ESPSettingsSecor:CreateColorPicker("Hilight Outline", Color3.fromRGB(255, 0, 0), function(EOCC) HyperEscape.esp.Hilights.OutlineColor = EOCC; end);
-ESPSettingsSecor:CreateColorPicker("Hilight Fill", Color3.fromRGB(100, 0, 255), function(EFCC) HyperEscape.esp.Hilights.FillColor = EFCC; end);
-ESPSettingsSecor:CreateSlider("Hilight Outline", 0, 50, 100, 1, function(EHOT) HyperEscape.esp.Hilights.OutlineTransparency = EHOT / 100; end);
-ESPSettingsSecor:CreateSlider("Hilight Fill", 0, 0, 100, 1, function(EHFT) HyperEscape.esp.Hilights.FillTransparency = EHFT / 100; end);
+ESPSettingsSecor:CreateToggle("Outlines", HyperEscape.esp.Box.Outline, function(ESO) HyperEscape.esp.Box.Outline = ESO; HyperEscape.esp.Tracer.Outline = ESO; end);
+ESPSettingsSecor:CreateColorPicker("Outline Color", HyperEscape.esp.Box.OutlineColor, function(EOC) HyperEscape.esp.Box.OutlineColor = EOC; HyperEscape.esp.Tracer.OutlineColor = EOC; end);
+ESPSettingsSecor:CreateColorPicker("ESP Color", HyperEscape.esp.Box.Color, function(EEC) HyperEscape.esp.Box.Color = EEC; HyperEscape.esp.Tracer.Color = EEC; end);
+ESPSettingsSecor:CreateColorPicker("Hilight Outline", HyperEscape.esp.Hilights.OutlineColor, function(EOCC) HyperEscape.esp.Hilights.OutlineColor = EOCC; end);
+ESPSettingsSecor:CreateColorPicker("Hilight Fill", HyperEscape.esp.Hilights.FillColor, function(EFCC) HyperEscape.esp.Hilights.FillColor = EFCC; end);
+ESPSettingsSecor:CreateSlider("Hilight Outline", 0, HyperEscape.esp.Hilights.OutlineTransparency * 100, 100, 1, function(EHOT) HyperEscape.esp.Hilights.OutlineTransparency = EHOT / 100; end);
+ESPSettingsSecor:CreateSlider("Hilight Fill", 0, HyperEscape.esp.Hilights.FillTransparency * 100, 100, 1, function(EHFT) HyperEscape.esp.Hilights.FillTransparency = EHFT / 100; end);
 
 local SettingsTab = Window:CreateTab("Settings");
 local SettingsInfoSector = SettingsTab:CreateSector("Info", "Left");
@@ -1083,8 +1087,8 @@ SettingsInfoSector:CreateCoppyText("Made By m1ckgordon");
 SettingsInfoSector:CreateCoppyText("https://discord.gg/jNRKdtH3 - Click Me");
 
 local SettingsSettings = SettingsTab:CreateSector("GUI Settigns", "Right");
-SettingsSettings:CreateToggle("UI Toggle Button", true, function(GUITB) HyperEscape.GUI.GUIButton = GUITB; UIToggle:Update(GUITB); end);
-SettingsSettings:CreateKeyBind("UI Key Bind", Enum.KeyCode.RightShift, function(SUITK) HyperEscape.GUI.GUIToggleKey = SUITK; Window:UpdateKeyBind(SUITK); end);
+SettingsSettings:CreateToggle("UI Toggle Button", HyperEscape.GUI.GUIButton, function(GUITB) HyperEscape.GUI.GUIButton = GUITB; UIToggle:Update(GUITB); end);
+SettingsSettings:CreateKeyBind("UI Key Bind", HyperEscape.GUI.GUIToggleKey, function(SUITK) HyperEscape.GUI.GUIToggleKey = SUITK; Window:UpdateKeyBind(SUITK); end);
 
 
 local ESPHolder = Instance.new("Folder", (CoreGui or localPlayer.PlayerGui)); 
