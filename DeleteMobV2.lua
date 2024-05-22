@@ -96,6 +96,7 @@ function library()
 	local StarterGUI = game.Players.LocalPlayer.PlayerGui;
 	local CoreGui = game:FindFirstChild("CoreGui");
 	local textservice = game:GetService("TextService");
+	local httpservice = game:GetService("HttpService");
 
 	library.theme = {
 		BackGround = Color3.fromRGB(30, 30, 30);
@@ -1004,25 +1005,251 @@ function library()
 					Lable.UICorner.CornerRadius = UDim.new(0,8);
 
 					Lable.TextLabel = Instance.new("TextLabel", Lable.MainBack);
-					Lable.TextLabel.Text = Text;
+					Lable.TextLabel.Text = Lable.text;
 					Lable.TextLabel.BackgroundTransparency = 1;
 					Lable.TextLabel.TextColor3 = library.theme.TextColor;
 					Lable.TextLabel.TextSize = library.theme.TextSize;
 					Lable.TextLabel.Font = library.theme.Font;
-					Lable.TextLabel.Size = UDim2.fromOffset(240, 35);
-					Lable.TextLabel.Position = UDim2.fromScale(0, 0);
-					Lable.TextLabel.TextXAlignment = Enum.TextXAlignment.Center;
+					Lable.TextLabel.Size = UDim2.fromOffset(125, 35);
+					Lable.TextLabel.Position = UDim2.fromScale(0.046, 0);
+					Lable.TextLabel.TextXAlignment = Enum.TextXAlignment.Left;
 					
 					Sector:FixSize();
 					table.insert(library.items, Lable);
 					return Lable;
 				end
 				
+				function Sector:CreateTextBox(Text, Default, Callback, Flag)
+					local TextBox = { };
+					TextBox.text = Text or "";
+					TextBox.callback = Callback or function() end;
+					TextBox.default = Default;
+					TextBox.value = "";
+					TextBox.flag = Flag or Text or "";
+
+					TextBox.MainBack = Instance.new("TextButton", Sector.Items);
+					TextBox.MainBack.BackgroundColor3 = library.theme.BackGround;
+					TextBox.MainBack.AutoButtonColor = false;
+					TextBox.MainBack.Size = UDim2.fromOffset(240, 35);
+					TextBox.MainBack.Text = "";
+
+					TextBox.UICorner = Instance.new("UICorner", TextBox.MainBack);
+					TextBox.UICorner.CornerRadius = UDim.new(0,8);
+
+					TextBox.TextLabel = Instance.new("TextLabel", TextBox.MainBack);
+					TextBox.TextLabel.Text = TextBox.text;
+					TextBox.TextLabel.BackgroundTransparency = 1;
+					TextBox.TextLabel.TextColor3 = library.theme.TextColor;
+					TextBox.TextLabel.TextSize = library.theme.TextSize;
+					TextBox.TextLabel.Font = library.theme.Font;
+					TextBox.TextLabel.Size = UDim2.fromOffset(125, 35);
+					TextBox.TextLabel.Position = UDim2.fromScale(0.046, 0);
+					TextBox.TextLabel.TextXAlignment = Enum.TextXAlignment.Left;
+					
+					TextBox.Main = Instance.new("TextBox", TextBox.MainBack);
+					TextBox.Main.Position = UDim2.fromScale(0.496, 0.229);
+					TextBox.Main.Size = UDim2.fromOffset(109, 18);
+					TextBox.Main.BackgroundColor3 = library.theme.Toggle;
+					TextBox.Main.BorderSizePixel = 0;
+					TextBox.Main.Text = "";
+					TextBox.Main.TextColor3 = library.theme.TextColor;
+					TextBox.Main.Font = library.theme.Font;
+					TextBox.Main.TextSize = library.theme.TextSize;
+					TextBox.Main.ClearTextOnFocus = false;
+					
+					if TextBox.flag and TextBox.flag ~= "" then
+						library.flags[TextBox.flag] = TextBox.default or ""
+					end
+
+					function TextBox:Set(text)
+						TextBox.value = text
+						TextBox.Main.Text = text
+						if TextBox.flag and TextBox.flag ~= "" then
+							library.flags[TextBox.flag] = text
+						end
+						pcall(TextBox.callback, text)
+					end
+
+					function TextBox:Get()
+						return TextBox.value
+					end
+
+					if TextBox.default then 
+						TextBox:Set(TextBox.default)
+					end
+
+					TextBox.Main.FocusLost:Connect(function()
+						TextBox:Set(TextBox.Main.Text)
+					end)
+					
+					Sector:FixSize();
+					table.insert(library.items, TextBox);
+					return TextBox;
+				end
+				
+				function Sector:CreateButton(Text, Callback)
+					local Button = { };
+					Button.text = Text or ""
+					Button.callback = Callback or function() end
+					
+					Button.MainBack = Instance.new("TextButton", Sector.Items);
+					Button.MainBack.BackgroundColor3 = library.theme.BackGround;
+					Button.MainBack.AutoButtonColor = false;
+					Button.MainBack.Size = UDim2.fromOffset(240, 35);
+					Button.MainBack.Text = "";
+					Button.MainBack.Text = Button.text;
+					Button.MainBack.Font = library.theme.Font;
+					Button.MainBack.TextColor3 = library.theme.TextColor;
+					Button.MainBack.TextSize = library.theme.TextSize;
+					Button.MainBack.MouseButton1Click:Connect(Button.callback);
+
+					Button.UICorner = Instance.new("UICorner", Button.MainBack);
+					Button.UICorner.CornerRadius = UDim.new(0,8);
+					
+					Sector:FixSize();
+					return Button;
+				end
+				
 				return Sector;
 			end
 			
-			function tab:CreateConfig(side) -- Maybe in V2.1 or V2.2
+			function tab:CreateConfig(side) 
+				local ConfigSystem = { };
+
+				ConfigSystem.configFolder = window.name .. "/" .. tostring(game.PlaceId);
 				
+				if isfolder and makefolder and listfiles and writefile and readfile and delfile then
+					if (not isfolder(window.name)) then
+						makefolder(window.name);
+					end
+
+					if (not isfolder(ConfigSystem.configFolder)) then
+						makefolder(ConfigSystem.configFolder);
+					end
+
+					ConfigSystem.sector = tab:CreateSector("Configs", side or "left");
+
+					local ConfigName = ConfigSystem.sector:CreateTextBox("Config Name", "", ConfigName, function() end, "");
+					local default = tostring(listfiles(ConfigSystem.configFolder)[1] or ""):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", "");
+					local Config = ConfigSystem.sector:CreateDropDown("Configs", {}, default, false, function() end, "");
+					for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
+						if v:find(".txt") then
+							Config:Add(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+						end
+					end
+
+					ConfigSystem.Create = ConfigSystem.sector:CreateButton("Create", function()
+						for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
+							Config:Remove(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+						end
+
+						if ConfigName:Get() and ConfigName:Get() ~= "" then
+							local config = {};
+
+							for i,v in pairs(library.flags) do
+								if (v ~= nil and v ~= "") then
+									if (typeof(v) == "Color3") then
+										config[i] = { v.R, v.G, v.B };
+									elseif (tostring(v):find("Enum.KeyCode")) then
+										config[i] = v.Name
+									elseif (typeof(v) == "table") then
+										config[i] = { v };
+									else
+										config[i] = v;
+									end
+								end
+							end
+
+							writefile(ConfigSystem.configFolder .. "/" .. ConfigName:Get() .. ".txt", httpservice:JSONEncode(config));
+
+							for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
+								if v:find(".txt") then
+									Config:Add(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+								end
+							end
+						end
+					end)
+
+					ConfigSystem.Save = ConfigSystem.sector:CreateButton("Save", function()
+						local config = {}
+						if Config:Get() and Config:Get() ~= "" then
+							for i,v in pairs(library.flags) do
+								if (v ~= nil and v ~= "") then
+									if (typeof(v) == "Color3") then
+										config[i] = { v.R, v.G, v.B };
+									elseif (tostring(v):find("Enum.KeyCode")) then
+										config[i] = "Enum.KeyCode." .. v.Name;
+									elseif (typeof(v) == "table") then
+										config[i] = { v };
+									else
+										config[i] = v;
+									end
+								end
+							end
+
+							writefile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt", httpservice:JSONEncode(config));
+						end
+					end)
+
+					ConfigSystem.Load = ConfigSystem.sector:CreateButton("Load", function()
+						local Success = pcall(readfile, ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt");
+						if (Success) then
+							pcall(function() 
+								local ReadConfig = httpservice:JSONDecode(readfile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt"));
+								local NewConfig = {};
+
+								for i,v in pairs(ReadConfig) do
+									if (typeof(v) == "table") then
+										if (typeof(v[1]) == "number") then
+											NewConfig[i] = Color3.new(v[1], v[2], v[3]);
+										elseif (typeof(v[1]) == "table") then
+											NewConfig[i] = v[1];
+										end
+									elseif (tostring(v):find("Enum.KeyCode.")) then
+										NewConfig[i] = Enum.KeyCode[tostring(v):gsub("Enum.KeyCode.", "")];
+									else
+										NewConfig[i] = v;
+									end
+								end
+
+								library.flags = NewConfig;
+
+								for i,v in pairs(library.flags) do
+									for i2,v2 in pairs(library.items) do
+										if (i ~= nil and i ~= "" and i ~= "Configs_Name" and i ~= "Configs" and v2.flag ~= nil) then
+											if (v2.flag == i) then
+												pcall(function() 
+													v2:Set(v);
+												end)
+											end
+										end
+									end
+								end
+							end)
+						end
+					end)
+
+					ConfigSystem.Delete = ConfigSystem.sector:CreateButton("Delete", function()
+						for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
+							Config:Remove(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+						end
+
+						if (not Config:Get() or Config:Get() == "") then return end
+						if (not isfile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt")) then return; end;
+						delfile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt");
+
+						for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
+							if v:find(".txt") then
+								Config:Add(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+							end;
+						end;
+					end);
+				else
+					ConfigSystem.sector = tab:CreateSector("Configs", side or "left");
+					ConfigSystem.sector:CreateLable("Your Executor Is Not Supported");
+				end
+
+				return ConfigSystem;
 			end
 			
 			table.insert(window.Tabs, tab)
@@ -1086,7 +1313,9 @@ local SettingsInfoSector = SettingsTab:CreateSector("Info", "Left");
 SettingsInfoSector:CreateCoppyText("Made By m1ckgordon");
 SettingsInfoSector:CreateCoppyText("https://discord.gg/jNRKdtH3 - Click Me");
 
-local SettingsSettings = SettingsTab:CreateSector("GUI Settigns", "Right");
+SettingsTab:CreateConfig("Right");
+
+local SettingsSettings = SettingsTab:CreateSector("GUI Settigns", "Left");
 SettingsSettings:CreateToggle("UI Toggle Button", HyperEscape.GUI.GUIButton, function(GUITB) HyperEscape.GUI.GUIButton = GUITB; UIToggle:Update(GUITB); end);
 SettingsSettings:CreateKeyBind("UI Key Bind", HyperEscape.GUI.GUIToggleKey, function(SUITK) HyperEscape.GUI.GUIToggleKey = SUITK; Window:UpdateKeyBind(SUITK); end);
 
