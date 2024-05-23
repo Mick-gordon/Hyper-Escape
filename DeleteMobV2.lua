@@ -13,15 +13,16 @@ local HyperEscape = { -- fuck Off I Like It, Even Tho It Is Anoying.
 		-- NEW
 		StickyAim = false; -- This Will Stick To The Same Target.
 		Prediction = false; -- I Will Make Ajustable When People Complain About It.
+		PredictionAmmount = 1;
 		
-		UseMouse = false;
+		UseMouse = true;
 		MouseBind = "MouseButton2";
 		Keybind = Enum.KeyCode.E;  
 
 		ShowFov = false;
 		Fov = 360;
 
-		Smoothing = 0.1;
+		Smoothing = 0.3;
 
 		AimPart = "Head";
 
@@ -78,7 +79,8 @@ local HyperEscape = { -- fuck Off I Like It, Even Tho It Is Anoying.
 			FillColor = Color3.fromRGB(255, 255, 255);
 		};
 	};
-}
+};
+
 local players = game.Players;
 local localPlayer = players.LocalPlayer;
 local CurrentCamera = game.Workspace.CurrentCamera;
@@ -1116,7 +1118,7 @@ function library()
 			function tab:CreateConfig(side) 
 				local ConfigSystem = { };
 
-				ConfigSystem.configFolder = window.name .. "/" .. tostring(game.PlaceId);
+				ConfigSystem.configFolder = window.name;
 				
 				if isfolder and makefolder and listfiles and writefile and readfile and delfile then
 					if (not isfolder(window.name)) then
@@ -1265,7 +1267,7 @@ end
 
 local DeleteMobLib = library();
 
-local Window = DeleteMobLib:CreateWindow(HyperEscape.GUI.GUIToggleKey, "DeleteMob V2.3");
+local Window = DeleteMobLib:CreateWindow(HyperEscape.GUI.GUIToggleKey, "DeleteMob");
 local UIToggle = Window:CreateToggleButton()
 
 local AimBotTab = Window:CreateTab("Aim Bot");
@@ -1281,6 +1283,7 @@ FovSecor:CreateSlider("Cirlce Radius", 0, HyperEscape.AimBot.Fov, 1500, 1, funct
 
 local OtherSector = AimBotTab:CreateSector("Other", "Right");
 OtherSector:CreateToggle("Prediction", HyperEscape.AimBot.Prediction, function(APE) HyperEscape.AimBot.Prediction = APE; end);
+OtherSector:CreateSlider("Prediction Ammount", 100, HyperEscape.AimBot.PredictionAmmount * 100, 1000, 1, function(APA) HyperEscape.AimBot.PredictionAmmount = APA / 100; end);
 OtherSector:CreateToggle("Sticky Aim", HyperEscape.AimBot.StickyAim, function(ASAE) HyperEscape.AimBot.StickyAim = ASAE; end);
 OtherSector:CreateSlider("Smoothing", 3, HyperEscape.AimBot.Smoothing * 100, 50, 1, function(AS) HyperEscape.AimBot.Smoothing = AS / 100; end);
 OtherSector:CreateKeyBind("Key Bind", HyperEscape.AimBot.Keybind, function(AK) HyperEscape.AimBot.Keybind = AK; end);
@@ -1770,16 +1773,16 @@ game:GetService("RunService").Heartbeat:Connect(function()
 					if not IsAlive(HyperEscape.AimBot.Target) then
 						local target = CameraGetClosestToMouse()
 						HyperEscape.AimBot.Target = target;
-						HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * 1.15) or Vector3.new()))});
+						HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * HyperEscape.AimBot.PredictionAmmount) or Vector3.new()))});
 						HyperEscape.AimBot.CameraTween:Play();
 					end
-					HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * 1.15) or Vector3.new()))});
+					HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * HyperEscape.AimBot.PredictionAmmount) or Vector3.new()))});
 					HyperEscape.AimBot.CameraTween:Play();
 				end
 			else
 				local target = CameraGetClosestToMouse();
 				if target ~= nil then
-					HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position,  target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * 1.15) or Vector3.new()))});
+					HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position,  target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * HyperEscape.AimBot.PredictionAmmount) or Vector3.new()))});
 					HyperEscape.AimBot.CameraTween:Play();
 
 				elseif HyperEscape.AimBot.CameraTween ~= nil then
