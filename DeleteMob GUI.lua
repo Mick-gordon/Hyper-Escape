@@ -31,14 +31,45 @@ local library = {
 		window.ScreenGui.Parent = (CoreGui or StarterGUI);
 		window.ScreenGui.ResetOnSpawn = false;
 		window.ScreenGui.DisplayOrder = 10;
+		
+		local dragging, dragInput, dragStart, startPos
+		game:GetService("UserInputService").InputChanged:Connect(function(input)
+			if input == dragInput and dragging then
+				local delta = input.Position - dragStart
+				window.Main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+			end
+		end)
 
-		window.Main = Instance.new("Frame", window.ScreenGui);
+		local dragstart = function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+				dragging = true
+				dragStart = input.Position
+				startPos = window.Main.Position
+
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragging = false
+					end
+				end)
+			end
+		end
+
+		local dragend = function(input)
+			if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+				dragInput = input
+			end
+		end
+
+		window.Main = Instance.new("TextButton", window.ScreenGui);
 		window.Main.Size = UDim2.fromOffset(800, 450);
 		window.Main.BackgroundColor3 = library.theme.BackGround;
 		window.Main.BorderSizePixel = 1;
 		window.Main.BorderColor3 = library.theme.Border;
 		window.Main.Active = true;
-		window.Main.Draggable = true; -- Fuck You I Am Not Making It Myself When Roblox Has This Shit.
+		window.Main.AutoButtonColor = false;
+		window.Main.Text = "";
+		window.Main.InputBegan:Connect(dragstart)
+		window.Main.InputChanged:Connect(dragend)
 
 		window.RightSide = Instance.new("Frame", window.Main);
 		window.RightSide.BackgroundColor3 = library.theme.BackGround2;
@@ -137,16 +168,17 @@ local library = {
 			tab.Button.TextSize = library.theme.TextSize;
 			tab.Button.BorderSizePixel = 0;
 			
-			tab.Window = Instance.new("Frame", window.Main);
+			tab.Window = Instance.new("ScrollingFrame", window.Main);
 			tab.Window.Name = Name .. "Tab";
 			tab.Window.BackgroundTransparency = 1;
 			tab.Window.Visible = false;
 			tab.Window.Size = UDim2.fromOffset(650, 450);
 			tab.Window.Position = UDim2.fromScale(0.188, 0);
+			tab.Window.ScrollBarThickness = 0;
 			
 			tab.Left = Instance.new("Frame", tab.Window);
 			tab.Left.Size = UDim2.fromOffset(100, 428);
-			tab.Left.Position = UDim2.fromScale(0.185, 0.047);
+			tab.Left.Position = UDim2.fromScale(0.185, 0.02);
 			tab.Left.BackgroundTransparency = 1;
 			
 			tab.UiListLayout = Instance.new("UIListLayout", tab.Left);
@@ -156,7 +188,7 @@ local library = {
 			
 			tab.Right = Instance.new("Frame", tab.Window);
 			tab.Right.Size = UDim2.fromOffset(100, 428);
-			tab.Right.Position = UDim2.fromScale(0.662, 0.047);
+			tab.Right.Position = UDim2.fromScale(0.662, 0.02);
 			tab.Right.BackgroundTransparency = 1;
 			
 			tab.UiListLayout1 = Instance.new("UIListLayout", tab.Right);
@@ -1023,10 +1055,11 @@ local library = {
 				return Sector;
 			end
 			
+			
 			function tab:CreateConfig(side) 
 				local ConfigSystem = { };
 
-				ConfigSystem.configFolder = window.name .. "/" .. tostring(game.PlaceId);
+				ConfigSystem.configFolder = window.name;
 				
 				if isfolder and makefolder and listfiles and writefile and readfile and delfile then
 					if (not isfolder(window.name)) then
