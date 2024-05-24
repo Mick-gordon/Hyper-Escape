@@ -83,7 +83,7 @@ SilentAimSection:CreateToggle("Wall Check", false, function(EWC) HyperEscape.Sil
 SilentAimSection:CreateSlider("Hit Chance", 0, 50, 100, 1, function(EHC) HyperEscape.SilentAim.HitChance = EHC; end);
 SilentAimSection:CreateDropDown("Hit Scan", {"Head", "Torso"}, {"Head"}, true, function(SHD) HyperEscape.SilentAim.AimPart = SHD; end);
 if mouse1press and mouse1release then
-	SilentAimSection:CreateToggle("Aouto Shoot", false, function(SAOS) HyperEscape.SilentAim.AoutoShoot = SAOS; end);
+	SilentAimSection:CreateToggle("Auto Shoot", false, function(SAOS) HyperEscape.SilentAim.AoutoShoot = SAOS; end);
 end
 
 local FOVSection = SilentAimTab:CreateSector("Fov", "Right");
