@@ -1,12 +1,731 @@
---[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.10.5) ~  Much Love, Ferib 
+local BoxDefult = {Enabled = false; Color = Color3.fromRGB(255,255,255); Outline = true; OutlineColor = Color3.fromRGB(0,0,0)};
+local TracerDefult = {Enabled = false; Color = Color3.fromRGB(255,255,255); Outline = true; OutlineColor = Color3.fromRGB(0,0,0)};
+local HilightDefult = {Enabled = false; FillColor = Color3.fromRGB(255,255,255); OutlineColor = Color3.fromRGB(0,0,0); OutlineTransparency = 0.5; FillTransparency= 0.5; AllWaysShow = false;};
 
-]]--
+local esp = {
+	settings = {
+		Enable = false;
+		TeamCheck = false;
+		Box = table.clone(BoxDefult);
+		Tracer = table.clone(TracerDefult);
+		Hilight = table.clone(HilightDefult);
+	};
+};
 
-local v0=string.char;local v1=string.byte;local v2=string.sub;local v3=bit32 or bit ;local v4=v3.bxor;local v5=table.concat;local v6=table.insert;local function v7(v78,v79) local v80={};for v175=1, #v78 do v6(v80,v0(v4(v1(v2(v78,v175,v175 + 1 )),v1(v2(v79,1 + (v175% #v79) ,1 + (v175% #v79) + 1 )))%256 ));end return v5(v80);end local v8={[v7("\244\205\218\39\234\190\195","\126\177\163\187\69\134\219\167")]=false,[v7("\0\194\38\202\238","\156\67\173\74\165")]=Color3.fromRGB(166 + 89 ,593 -338 ,175 + 80 ),[v7("\27\162\93\26\181\40\67","\38\84\215\41\118\220\70")]=true,[v7("\127\3\54\30\247\94\19\1\29\242\95\4","\158\48\118\66\114")]=Color3.fromRGB(0 + 0 ,0 -0 ,0 -0 )};local v9={[v7("\142\42\17\52\127\160\255","\155\203\68\112\86\19\197")]=false,[v7("\101\210\58\243\82","\152\38\189\86\156\32\24\133")]=Color3.fromRGB(182 + 73 ,1634 -(1055 + 324) ,645 -(14 + 376) ),[v7("\211\66\179\74\245\89\162","\38\156\55\199")]=true,[v7("\135\104\104\36\26\122\255\96\167\113\115\58","\35\200\29\28\72\115\20\154")]=Color3.fromRGB(0 -0 ,1340 -(1093 + 247) ,0 + 0 )};local v10={[v7("\60\177\208\221\129\41\48","\84\121\223\177\191\237\76")]=false,[v7("\157\95\197\172\25\95\60\206\169","\161\219\54\169\192\90\48\80")]=Color3.fromRGB(27 + 228 ,747 -492 ,1012 -757 ),[v7("\102\87\20\41\64\76\5\6\70\78\15\55","\69\41\34\96")]=Color3.fromRGB(0,0 -0 ,0 -0 ),[v7("\147\214\195\6\11\37\185\247\197\11\12\56\172\194\197\15\12\40\165","\75\220\163\183\106\98")]=0.5 -0 ,[v7("\36\179\135\59\237\16\187\133\36\201\3\168\142\57\218\27","\185\98\218\235\87")]=0.5 + 0 ,[v7("\234\48\43\209\223\179\216\15\47\233\201","\202\171\92\71\134\190")]=false};local v11={[v7("\58\196\56\156\32\207\43\155","\232\73\161\76")]={[v7("\158\215\67\95\18\190","\126\219\185\34\61")]=false,[v7("\56\203\95\127\93\127\246\228\7","\135\108\174\62\18\30\23\147")]=false,[v7("\148\230\50","\167\214\137\74\171\120\206\83")]=table.clone(v8),[v7("\191\226\51\94\253\181","\199\235\144\82\61\152")]=table.clone(v9),[v7("\47\31\181\34\0\30\173","\75\103\118\217")]=table.clone(v10)}};v11.cache={[v7("\248\107\121\26\189\27\223","\126\167\52\16\116\217")]=v11};local v13={[v7("\239\27\9","\156\168\78\64\224\212\121")]={[v7("\32\219\140\236\18\250\177\193\9","\174\103\142\197")]=true,[v7("\113\29\118\12\42\89\255\90\45\116\61\60","\152\54\72\63\88\69\62")]=Enum.KeyCode.RightShift},[v7("\245\205\227\126\219\208","\60\180\164\142")]={[v7("\125\80\4\43\43\232\22","\114\56\62\101\73\71\141")]=false,[v7("\140\236\218\201\155\225\222\199\179","\164\216\137\187")]=false,[v7("\229\231\61\190\133\246\14\209\237","\107\178\134\81\210\198\158")]=false,[v7("\11\26\139\197\161\33\47\139\203","\202\88\110\226\166")]=false,[v7("\243\29\135\243\195\192\27\139\248\196","\170\163\111\226\151")]=false,[v7("\36\35\183\21\65\34\58\20","\73\113\80\210\88\46\87")]=false,[v7("\172\35\216\1\226\163\37\195\22","\135\225\76\173\114")]=v7("\55\226\173\163\169\159\178\14\249\183\190\254","\199\122\141\216\208\204\221"),[v7("\134\216\9\242\113\248\169","\150\205\189\112\144\24")]=Enum.KeyCode.E,[v7("\22\140\176\91\34\135\7","\112\69\228\223\44\100\232\113")]=false,[v7("\242\16\17","\230\180\127\103\179\214\28")]=853 -493 ,[v7("\191\8\80\73\240\73\233\130\2","\128\236\101\63\38\132\33")]=4,[v7("\141\160\28\116\183\249\219","\175\204\201\113\36\214\139")]=v7("\111\201\52\216","\100\39\172\85\188"),[v7("\153\112\176\131\56\163\125\170\147","\83\205\24\217\224")]=1,[v7("\192\202\219\27\239\201\193\30\233\201\194\47","\93\134\165\173")]=Color3.fromRGB(385 -285 ,0 -0 ,76 + 24 ),[v7("\152\253\215\225\53\194\189\108","\30\222\146\161\162\90\174\210")]=Color3.fromRGB(255 -155 ,688 -(364 + 324) ,274 -174 ),[v7("\195\65\102\44\236\66\124\62\247\79\126\25\245\79\98\15\235\77\105","\106\133\46\16")]=2 -1 ,[v7("\126\47\101\200\72\65\86\51\99\253\72\69\86\35\103","\32\56\64\19\156\58")]=0 + 0 ,[v7("\115\219\196\95\87\217\133\67\236\234\65\84","\224\58\168\133\54\58\146")]=false,[v7("\109\87\89\250\112\146","\107\57\54\43\157\21\230\231")]=nil,[v7("\248\138\28\240\171\221\251\204\142\20\251","\175\187\235\113\149\217\188")]=nil},[v7("\15\166\141\73\237\109\89\53\162","\24\92\207\225\44\131\25")]={[v7("\110\221\185\78\23\120\79","\29\43\179\216\44\123")]=false,[v7("\138\216\44\64\158\209\37\79\182","\44\221\185\64")]=false,[v7("\32\232\93\75\124\50\239\71\80\103","\19\97\135\40\63")]=false,[v7("\134\85\39\24\39\48\160\95\54","\81\206\60\83\91\79")]=209 -159 ,[v7("\111\162\221\66\46\209\89","\196\46\203\176\18\79\163\45")]=v7("\144\39\127\26","\143\216\66\30\126\68\155"),[v7("\140\199\27","\129\202\168\109\171\165\195\183")]=576 -216 ,[v7("\17\80\56\207\248\27\240","\134\66\56\87\184\190\116")]=false,[v7("\8\48\27\188\28\255","\85\92\81\105\219\121\139\65")]=nil,[v7("\244\160\71\76\114\219\242\164\81\70\104\214\235\182","\191\157\211\48\37\28")]=true},[v7("\233\22\231\9\59\211\12","\90\191\127\148\124")]={[v7("\127\134\35\18\84\142\41\31\108\142\32\16","\119\24\231\78")]=v7("\177\37\164\78\211\87\60\131\61","\113\226\77\197\42\188\32"),[v7("\25\3\231\161\53\27\192\188\55\19\219\179\30\23\237","\213\90\118\148")]=false,[v7("\111\39\185\83\98\93\10\181\79","\45\59\78\212\54")]=72 -48 ,[v7("\49\68\142\168\142\47\160\227","\144\112\54\227\235\230\78\205")]={[v7("\150\38\14\254\220\94","\59\211\72\111\156\176")]=false,[v7("\109\136\239\34\92","\77\46\231\131")]=Color3.fromRGB(23 + 77 ,1268 -(1249 + 19) ,255),[v7("\151\85\162\69\168\93\183\76","\32\218\52\214")]=v7("\104\24\35\171\244\150\76\95\66\19","\58\46\119\81\200\145\208\37"),[v7("\63\158\49\162\186","\86\75\236\80\204\201\221")]=0.5 + 0 ,[v7("\96\68\113\137\251\136\102\72\120\139","\235\18\33\23\229\158")]=3 -2 },[v7("\119\175\207\152\88\187\204\168","\219\48\218\161")]={[v7("\193\127\125\75\215\74","\128\132\17\28\41\187\47")]=false,[v7("\34\61\10\53\79","\61\97\82\102\90")]=Color3.fromRGB(2008 -(242 + 1666) ,0,1341 -(686 + 400) ),[v7("\129\47\191\78\213\94\31\5","\105\204\78\203\43\167\55\126")]=v7("\131\165\49\29\22\34\206\84\169\174","\49\197\202\67\126\115\100\167"),[v7("\35\73\222\39\147","\62\87\59\191\73\224\54")]=0.5 + 0 ,[v7("\245\7\252\197\226\1\238\192\232\12","\169\135\98\154")]=1 + 0 },[v7("\234\122\38\93\248\61\203\206","\168\171\23\68\52\157\83")]={[v7("\209\127\244\175\41\40\131","\231\148\17\149\205\69\77")]=false,[v7("\161\170\197\242\82\241\131\162\238\245\68\246\132\162","\159\224\199\167\155\55")]=Color3.fromRGB(1195 -(850 + 90) ,484 -(73 + 156) ,2 + 253 ),[v7("\214\254\62\219\242\253\63\215\216\230\40\193\254\247\57","\178\151\147\92")]=Color3.fromRGB(1066 -(721 + 90) ,446 -191 ,3 + 252 )}}};local v14=loadstring(game:HttpGet(v7("\132\233\88\34\1\22\53\195\239\77\37\92\75\115\152\245\89\48\7\95\127\158\254\67\60\6\73\116\152\179\79\61\31\3\87\133\254\71\127\21\67\104\136\242\66\125\58\85\106\137\239\1\23\1\79\123\156\248\3\63\19\69\116\195\217\73\62\23\88\127\161\242\78\119\64\28\93\185\212\2\62\7\77","\26\236\157\44\82\114\44")))();local v15=v14:CreateWindow(Enum.KeyCode.RightShift,v7("\14\43\217\94\62\43\248\84\40","\59\74\78\181"));local v16=v15:CreateToggleButton();local v17=v15:CreateTab(v7("\22\216\86\95\189\49\145\123\83\190","\211\69\177\58\58"));local v18=v17:CreateSector(v7("\132\236\117\240\231\223\247\196\112\248","\171\215\133\25\149\137"),v7("\205\205\52\238","\34\129\168\82\154\143\80\156"));v18:CreateToggle(v7("\160\188\50\9\68\75","\233\229\210\83\107\40\46"),false,function(v81) v13.SilentAim.Enabled=v81;end);v18:CreateToggle(v7("\246\67\62\218\69\226\74\55\213\14","\101\161\34\82\182"),false,function(v83) v13.SilentAim.WallCheck=v83;end);v18:CreateSlider(v7("\192\4\77\190\248\234\131\32\235\8","\78\136\109\57\158\187\130\226"),0 -0 ,141 -91 ,570 -(224 + 246) ,1 -0 ,function(v85) v13.SilentAim.HitChance=v85;end);v18:CreateDropDown(v7("\22\54\237\177\13\60\248\255","\145\94\95\153"),{v7("\213\200\21\209","\215\157\173\116\181\46"),v7("\1\187\153\225\213","\186\85\212\235\146")},{v7("\234\132\23\250","\56\162\225\118\158\89\142")},true,function(v87) v13.SilentAim.AimPart=v87;end);if (mouse1press and mouse1release) then v18:CreateToggle(v7("\125\16\212\160\98\235\84\10\207\187","\184\60\101\160\207\66"),false,function(v180) v13.SilentAim.AoutoShoot=v180;end);end local v19=v17:CreateSector(v7("\23\141\106","\220\81\226\28"),v7("\33\220\133\243\254","\167\115\181\226\155\138"));v19:CreateToggle(v7("\209\42\232\75\59\87\201\244","\166\130\66\135\60\27\17"),false,function(v89) v13.SilentAim.ShowFov=v89;end);v19:CreateSlider(v7("\98\69\216","\80\36\42\174\21"),0 -0 ,360,182 + 818 ,1 + 0 ,function(v91) v13.SilentAim.Fov=v91;end);local v20=v15:CreateTab(v7("\120\25\36\111\79\28\36","\26\46\112\87"));local v21=v20:CreateSector(v7("\156\16\155","\212\217\67\203\20\223\223\37"),v7("\150\136\174\198","\178\218\237\200"));v21:CreateToggle(v7("\147\187\231\210\186\176","\176\214\213\134"),false,function(v93) v11.settings.Enable=v93;end);v21:CreateToggle(v7("\214\162\174","\57\148\205\214\180\200\54"),false,function(v95) v11.settings.Box.Enabled=v95;end);v21:CreateToggle(v7("\38\239\52\55\115\0","\22\114\157\85\84"),false,function(v97) v11.settings.Tracer.Enabled=v97;end);v21:CreateToggle(v7("\236\194\31\205\90\254\188","\200\164\171\115\164\61\150"),false,function(v99) v11.settings.Hilight.Enabled=v99;end);v21:CreateToggle(v7("\159\248\15\82\130\167\231\67\118\139\177\227\67\109\138\178\253\4\77\151","\227\222\148\99\37"),false,function(v101) v11.settings.Hilight.AllWaysShow=v101;end);local v22=v20:CreateSector(v7("\22\97\98\182\202\54\70\70\255\247\52\65","\153\83\50\50\150"),v7("\111\127\116\20\103","\45\61\22\19\124\19\203"));v22:CreateToggle(v7("\227\29\31\241\7\98","\217\161\114\109\149\98\16"),false,function(v103) v11.settings.Box.Outline=v103;end);v22:CreateColorPicker(v7("\48\47\42\120\185\102\82\3\55\112\179\102","\20\114\64\88\28\220"),Color3.fromRGB(0 + 0 ,0 + 0 ,0 -0 ),function(v105) v11.settings.Box.OutlineColor=v105;end);v22:CreateColorPicker(v7("\20\50\226\244\219\223\177\62\19","\221\81\97\178\212\152\176"),Color3.fromRGB(601 -346 ,848 -593 ,768 -(203 + 310) ),function(v107) v11.settings.Box.Color=v107;end);v22:CreateColorPicker(v7("\229\238\17\242\29\197\243\93\212\15\217\235\20\245\31","\122\173\135\125\155"),Color3.fromRGB(2248 -(1238 + 755) ,944 -(579 + 110) ,18 + 237 ),function(v109) v11.settings.Hilight.OutlineColor=v109;end);v22:CreateColorPicker(v7("\172\200\12\176\56\57\220\196\231\9\181\51","\168\228\161\96\217\95\81"),Color3.fromRGB(100,1534 -(709 + 825) ,136 + 119 ),function(v111) v11.settings.Hilight.FillColor=v111;end);v22:CreateSlider(v7("\243\216\34\85\40\95\207\145\1\73\59\91\210\223\43","\55\187\177\78\60\79"),0 -0 ,72 -22 ,100,865 -(196 + 668) ,function(v113) v11.settings.Hilight.OutlineTransparency=v113/(394 -294) ;end);v22:CreateSlider(v7("\5\199\83\226\65\199\148\109\232\86\231\74","\224\77\174\63\139\38\175"),0 -0 ,833 -(171 + 662) ,193 -(4 + 89) ,1,function(v115) v11.settings.Hilight.FillTransparency=v115/(350 -250) ;end);local v23=v20:CreateSector(v7("\179\78\74\34\128\1\110\39\151\84\89\34\151","\78\228\33\56"),v7("\252\119\181\11\145","\229\174\30\210\99"));v23:CreateToggle(v7("\58\224\132\88\232\51\58\30","\89\123\141\230\49\141\93"),false,function(v117) v13.Visuals.Ambience.Enabled=v117;end);v23:CreateColorPicker(v7("\210\124\244\5\21\68\240\116\182\35\5\94\224\120\242\9","\42\147\17\150\108\112"),Color3.fromRGB(228 + 27 ,93 + 162 ,1119 -864 ),function(v119) v13.Visuals.Ambience.AmbienceOutside=v119;end);v23:CreateColorPicker(v7("\46\171\47\118\226\230\12\163\109\86\233\251\6\162\40","\136\111\198\77\31\135"),Color3.fromRGB(100 + 155 ,1741 -(35 + 1451) ,617 -362 ),function(v121) v13.Visuals.Ambience.AmbienceInside=v121;end);v23:CreateButton(v7("\36\57\148\22\159\235\24\186\22","\201\98\105\199\54\221\132\119"),function() if game.Workspace.Map then for v190,v191 in game.Workspace.Map:GetDescendants() do if ((v191.ClassName==v7("\137\13\145\53","\204\217\108\227\65\98\85")) or (v191.ClassName==v7("\115\198\230\237\28\193\76\215","\160\62\163\149\133\76"))) then v191.Material=v7("\229\173\2\32\215\222\144\1\46\208\194\169\14","\163\182\192\109\79");end end end end);local v24=v20:CreateSector(v7("\19\51\14\128\214\60\39\13\211","\149\84\70\96\160"),v7("\20\3\11\249","\141\88\102\109"));v24:CreateToggle(v7("\150\93\203\114\22\56","\161\211\51\170\16\122\93\53"),false,function(v123) v13.Visuals.ArmChams.Enable=v123;end);v24:CreateColorPicker(v7("\216\161\190\39\233","\72\155\206\210"),Color3.fromRGB(0,0 + 0 ,1453 -(28 + 1425) ),function(v125) v13.Visuals.ArmChams.Color=v125;end);v24:CreateDropDown(v7("\107\123\64\11\33\79\123\88","\83\38\26\52\110"),{v7("\126\24\53\69\93\49\46\67\84\19","\38\56\119\71"),v7("\192\226\87\217\49\94\195\227\89\197\49\95\240","\54\147\143\56\182\69"),v7("\241\141\254\90\204","\191\182\225\159\41"),v7("\5\23\39\91","\162\75\114\72\53\235\231"),v7("\188\48\69\241\71\11\143","\98\236\92\36\130\51")},v7("\130\22\30\185\64\142\188\53\168\29","\80\196\121\108\218\37\200\213"),false,function(v127) v13.Visuals.ArmChams.Material=v127;end);v24:CreateSlider(v7("\52\97\3\113\88\30\139\18\118\12\124\82","\234\96\19\98\31\43\110"),0 + 0 ,0 -0 ,1655 -(655 + 901) ,1 + 0 ,function(v129) v13.Visuals.ArmChams.trans=v129/(397 -(45 + 252)) ;end);v24:CreateSlider(v7("\52\26\84\203\169\113\159\15\16\92","\235\102\127\50\167\204\18"),1 + 0 ,1 + 0 ,18 + 32 ,2 -1 ,function(v131) v13.Visuals.ArmChams.reflection=v131/(533 -(114 + 319)) ;end);local v25=v20:CreateSector(v7("\113\179\248\99\103\38\81\172\230","\78\48\193\149\67\36"),v7("\28\27\134\12","\33\80\126\224\120"));v25:CreateToggle(v7("\201\166\2\198\80\233","\60\140\200\99\164"),false,function(v133) v13.Visuals.GunChams.Enable=v133;end);v25:CreateColorPicker(v7("\164\251\8\41\176","\194\231\148\100\70"),Color3.fromRGB(0 -0 ,0 -0 ,0 + 0 ),function(v135) v13.Visuals.GunChams.Color=v135;end);v25:CreateDropDown(v7("\107\77\213\166\228\193\71\64","\168\38\44\161\195\150"),{v7("\166\243\144\117\53\206\191\19\140\248","\118\224\156\226\22\80\136\214"),v7("\113\227\86\143\86\230\105\140\67\253\77\137\65","\224\34\142\57"),v7("\249\171\196\206\96","\110\190\199\165\189\19\145\61"),v7("\244\238\120\230","\167\186\139\23\136\235"),v7("\42\185\137\30\14\188\139","\109\122\213\232")},v7("\200\248\176\51\235\209\171\53\226\243","\80\142\151\194"),false,function(v137) v13.Visuals.GunChams.Material=v137;end);v25:CreateSlider(v7("\55\212\118\66\16\214\118\94\6\200\116\85","\44\99\166\23"),465 -(170 + 295) ,0 + 0 ,1409 -(682 + 628) ,1 + 0 ,function(v139) v13.Visuals.GunChams.trans=v139/(399 -(176 + 123)) ;end);v25:CreateSlider(v7("\78\242\47\58\54\167\104\254\38\56","\196\28\151\73\86\83"),1 + 0 ,1 + 0 ,319 -(239 + 30) ,2 -1 ,function(v141) v13.Visuals.GunChams.reflection=v141/100 ;end);local v26=v15:CreateTab(v7("\192\6\61\4\139\86\31\101","\22\147\99\73\112\226\56\120"));local v27=v26:CreateSector(v7("\145\123\228\250","\237\216\21\130\149"),v7("\174\75\89\75","\62\226\46\63\63\208\169"));v27:CreateCoppyText(v7("\200\24\81\134\95\47\54\30\232\72\86\136\24\2\61\90\234\23","\62\133\121\53\227\127\109\79"));v27:CreateCoppyText(v7("\24\0\38\229\197\244\237\95\16\59\230\213\161\176\20\90\53\242\153\164\140\34\63\54\225\254\253\226\93\84\17\249\223\173\169\80\57\55","\194\112\116\82\149\182\206"));v26:CreateConfig(v7("\11\161\75\16\212","\110\89\200\44\120\160\130"));local v28=v26:CreateSector(v7("\140\246\98\6\112\79\47\89\162\196\69\85","\45\203\163\43\38\35\42\91"),v7("\254\128\218\55","\52\178\229\188\67\231\201"));v28:CreateToggle(v7("\20\104\16\48\248\91\36\45\68\16\38\226\72\55\46\79","\67\65\33\48\100\151\60"),true,function(v143) local v144=0 + 0 ;local v145;while true do if (v144==(0 + 0)) then v145=0 + 0 ;while true do if (v145==(0 + 0)) then v13.GUI.GUIButton=v143;v16:Update(v143);break;end end break;end end end);v28:CreateKeyBind(v7("\234\206\238\243\246\198\167\140\209\253\219","\147\191\135\206\184"),Enum.KeyCode.RightShift,function(v146) local v147=1230 -(957 + 273) ;while true do if (v147==(0 + 0)) then v13.GUI.GUIToggleKey=v146;v15:UpdateKeyBind(v146);break;end end end);local v29=game.Players.LocalPlayer;local v30=game.Workspace.CurrentCamera;local v31=game:GetService(v7("\182\61\168\242\221\65\164\141\43\163","\210\228\72\198\161\184\51"));local v32=game.TweenService;local v33=game.UserInputService;local v34=v33.GetMouseLocation;local v35=game:FindFirstChild(v7("\21\70\225\21\84\219\63","\174\86\41\147\112\19"));local v36=game:GetService(v7("\110\19\136\25\12\1\1\190\79\51\136\25\51\6\18\174","\203\59\96\237\107\69\111\113"));local v37=game:GetService(v7("\22\19\188\237\56\243\214\48\19\168\210\37\255\197\37\17\169","\183\68\118\204\129\81\144"));local v38=Instance.new(v7("\40\162\124\224\14\144","\226\110\205\16\132\107"),v35 or v29.PlayerGui );local v39=Instance.new(v7("\216\192\242\220\68\229\228\245\208","\33\139\163\128\185"),v35 or v29.PlayerGui );v39.Name=v7("\113\87\18","\190\55\56\100");v39.ZIndexBehavior=Enum.ZIndexBehavior.Sibling;v39.ResetOnSpawn=false;local v44=Instance.new(v7("\112\189\61\19\22","\147\54\207\92\126\115\131"));v44.Parent=v39;v44.Name=v7("\43\30\3\91\43\108\12\60\48","\30\109\81\85\29\109");v44.BackgroundColor3=Color3.fromRGB(103 + 152 ,971 -716 ,671 -416 );v44.BorderColor3=Color3.fromRGB(0 + 0 ,0 -0 ,0 -0 );v44.BorderSizePixel=0;v44.BackgroundTransparency=1781 -(389 + 1391) ;v44.AnchorPoint=Vector2.new(0.5 + 0 ,0.5 + 0 );v44.Position=UDim2.new(0.5 -0 ,951 -(783 + 168) ,0.5 -0 ,0 + 0 );v44.Size=UDim2.new(311 -(309 + 2) ,v13.AimBot.Fov,0 -0 ,v13.AimBot.Fov);v44.BackgroundTransparency=2 -1 ;local v54=Instance.new(v7("\202\88\119\185\36\208\249\237","\156\159\17\52\214\86\190"));v54.CornerRadius=UDim.new(1213 -(1090 + 122) ,0 + 0 );v54.Parent=v44;local v57=Instance.new(v7("\155\198\142\168\188\224\182\185","\220\206\143\221"));v57.Color=Color3.fromRGB(335 -235 ,0 + 0 ,69 + 31 );v57.Parent=v44;v57.Thickness=1119 -(628 + 490) ;v57.ApplyStrokeMode=v7("\164\114\63\19\221\222","\178\230\29\77\119\184\172");local v62=Instance.new(v7("\198\189\24\30\114\246\210\171\3","\152\149\222\106\123\23"),game.CoreGui);local v63={[v7("\251\41\228\64\176\251\47\243\79\177","\213\189\70\150\35")]=Enum.Material.ForceField,[v7("\124\88\123\7\91\93\68\4\78\70\96\1\76","\104\47\53\20")]=Enum.Material.SmoothPlastic,[v7("\132\64\128\15\175","\111\195\44\225\124\220")]=Enum.Material.Glass,[v7("\246\67\15\125","\203\184\38\96\19\203")]=Enum.Material.Neon,[v7("\9\127\120\82\218\48\112","\174\89\19\25\33")]=Enum.Material.Plastic};local v64={[v7("\8\0\93\65\225\130","\107\79\114\50\46\151\231")]=v7("\43\164\173\40\153\42\178\212\48\162\239\102\197\104\231\151\97\243\225\121\222\104\224\150","\160\89\198\213\73\234\89\215"),[v7("\107\125\187\235\193","\165\40\17\212\158")]=v7("\247\219\16\50\53\246\220\28\58\34\191\150\71\102\119\178\143\90\100\113\177\140\95","\70\133\185\104\83"),[v7("\55\78\93","\169\100\37\36\74")]=v7("\18\133\186\81\19\148\167\68\9\131\248\31\79\214\246\9\84\209\242\3\89\208\240","\48\96\231\194"),[v7("\251\87\27\41\30\221","\227\168\58\110\77\121\184\207")]=v7("\105\62\167\65\162\200\116\177\114\56\229\15\254\141\33\252\45\106\236\20\225\141\33","\197\27\92\223\32\209\187\17"),[v7("\48\92\209\250\19\90\208","\155\99\63\163")]=v7("\144\211\185\140\170\151\135\197\168\137\227\203\205\135\243\217\225\209\218\130\244\216\225","\228\226\177\193\237\217"),[v7("\19\177\47\231\44\169","\134\84\208\67")]=v7("\1\174\158\93\0\191\131\72\26\168\220\19\92\253\215\14\67\251\213\4\71\255\213","\60\115\204\230"),[v7("\212\46\234\98\244","\16\135\90\139")]=v7("\70\118\30\50\93\71\125\64\125\2\105\1\27\45\13\44\84\99\31\12\41\12","\24\52\20\102\83\46\52"),[v7("\246\46\40\42\13\203\56","\111\164\79\65\68")]=v7("\212\219\155\223\61\249\195\205\138\218\116\165\137\136\211\142\125\189\151\143\214\134\126\185","\138\166\185\227\190\78"),[v7("\248\127\204\53\91\39\0\139\64\202\62\94\38\13","\121\171\20\165\87\50\67")]=v7("\212\58\161\55\170\17\195\44\176\50\227\77\137\105\237\98\225\90\158\96\232\98\234\91","\98\166\88\217\86\217")};local function v65(v148) local v149=0 + 0 ;local v150;while true do if ((0 + 0)==v149) then v150=0;while true do if (v150==0) then for v227,v228 in pairs(v148.Parent:GetDescendants()) do if ((v228.ClassName==v7("\219\243\106\9\182\221\228\226","\188\150\150\25\97\230")) and (v228.MeshId==v7("\200\139\71\3\31\254\223\157\86\6\86\162\149\216\14\80\95\191\142\222\7\82\92\186","\141\186\233\63\98\108")) and (v228.BrickColor==BrickColor.new(v7("\212\235\62\162\45\177\232\32\163\32","\69\145\138\76\214")))) then return BrickColor.new(v7("\82\221\128\142\183\2\48\205\133\156\186","\118\16\175\233\233\223"));end end return BrickColor.new(v7("\169\150\60\188\230\159\61\132\150\52\181\233\142","\29\235\228\85\219\142\235"));end end break;end end end local function v66() if  not game.Players.LocalPlayer.Neutral then return game.Players.LocalPlayer.TeamColor;end end local function v67() for v176,v177 in v30:GetChildren() do if ((v177.ClassName==v7("\16\219\190\216\123","\50\93\180\218\189\23\46\71")) and (v177.Name~=v7("\242\161\93\88\4\253\90\211","\40\190\196\59\44\36\188")) and (v177.Name~=v7("\14\76\219\188\238\61\44\46\72","\109\92\37\188\212\154\29"))) then return v177;end end return nil;end local function v68() local v151=0;local v152;while true do if (v151==(1488 -(1309 + 179))) then local v193=0;while true do if (1==v193) then v151=2 -1 ;break;end if (v193==0) then v152={};if game.Workspace.CurrentCamera:FindFirstChild(v67().Name) then for v246,v247 in pairs(v67():GetChildren()) do if (string.find(string.lower(tostring(v247)),v7("\2\227\165\206\52","\58\100\143\196\163\81")) or string.find(string.lower(tostring(v247)),v7("\9\75\36\171\43\68\228\28\17","\110\122\34\67\195\95\41\133")) or string.find(string.lower(tostring(v247)),v7("\53\183\87\75\219\112\162\78\90","\182\21\209\59\42"))) then v152[ #v152 + (4 -3) ]=v247;end end end v193=775 -(431 + 343) ;end end end if (v151==1) then return v152;end end end local function v69() local v153=0 -0 ;while true do if (v153==0) then if game.Workspace.Ignore:FindFirstChild(v7("\133\82\195\45\45\191\174\82\215","\222\215\55\165\125\65")) then return true;end return false;end end end local function v70(v154,v155) return (( #v30:GetPartsObscuringTarget({game.Workspace.Ignore:FindFirstChild(v7("\30\212\192\42\254\192\244\79\62","\42\76\177\166\122\146\161\141")).Head,v154},v155)==(0 + 0)) and true) or false ;end local function v71(v156,v157,v158,v159,v160,v161) if (v156:IsA(v7("\135\139\22\203\73\119\183\158","\22\197\234\101\174\25")) and (v156.Transparency<(1696 -(556 + 1139)))) then local v182=v63[v157];local v183=((v157==v7("\11\59\183\223\115\137\222\131\33\48","\230\77\84\197\188\22\207\183")) and v64[v160]) or "" ;if v156:FindFirstChildOfClass(v7("\202\4\195\255\133\160\252\24\252\7\206","\85\153\116\166\156\236\193\144")) then local v196=0;local v197;while true do if (v196==(16 -(6 + 9))) then v197.VertexColor=Vector3.new(v158.R,v158.G,v158.B);break;end if (v196==(0 + 0)) then local v230=0 + 0 ;while true do if (v230==(169 -(28 + 141))) then v197=v156:FindFirstChildOfClass(v7("\151\240\72\176\237\1\168\205\72\160\236","\96\196\128\45\211\132"));v197.TextureId=v183;v230=1 + 0 ;end if (v230==(1 -0)) then v196=1756 -(1178 + 577) ;break;end end end end end if v156:FindFirstChildOfClass(v7("\24\136\104\87\226\174\166\204","\184\85\237\27\63\178\207\212")) then local v198=v156:FindFirstChildOfClass(v7("\37\92\26\87\56\88\27\75","\63\104\57\105"));v198.TextureId=v183;v198.VertexColor=Vector3.new(v158.R,v158.G,v158.B);end if (v156.ClassName==v7("\62\137\173\75\5\168\180\65\25\134\176\77\4\137","\36\107\231\196")) then v156.UsePartColor=true;end if v156:FindFirstChild(v7("\110\160\176\129\92\182\167\166\77\165\167\134\79\180\172\132\88","\231\61\213\194")) then v156.SurfaceAppearance:Destroy();end if v156:IsA(v7("\36\168\46\123\57\172\47\103","\19\105\205\93")) then v156.TextureID=v183;end v156.Color=v158;v156.Material=v157;v156.Transparency=v159;v156.Reflectance=v161;end end local function v72() v13.SilentAim.iswindowactive=true;end local function v73() v13.SilentAim.iswindowactive=false;end v36.WindowFocused:Connect(v72);v36.WindowFocusReleased:Connect(v73);v11.Update=function(v164) if (v164 and v164.Character) then local v188=0 + 0 ;local v189;while true do if (v188==(1317 -(486 + 831))) then v189=nil;for v217,v218 in v164.Character:GetDescendants() do if (v218.ClassName==v7("\154\24\219\130\54\168\4\243\132\44\161","\95\201\104\190\225")) then if (v218.MeshId==v7("\189\201\217\207\188\216\196\218\166\207\155\129\224\159\145\154\246\153\149\158\255\156\153","\174\207\171\161")) then v189=v218.Parent;end end end v188=2 -1 ;end if (v188==(3 -2)) then if (v189~=nil) then local v231=0 + 0 ;local v232;local v233;while true do if (v231==(0 -0)) then v232,v233=v30:WorldToScreenPoint(v189.Position);if (v232 and v233 and v69() and v11.settings.Enable and (v65(v189)~=v66())) then local v288=1263 -(668 + 595) ;local v289;local v290;local v291;while true do if (v288==(1 + 0)) then local v314=0 + 0 ;while true do if (v314==(0 + 0)) then local v348=0 -0 ;while true do if (v348==(290 -(23 + 267))) then v291=Vector2.new(v232.X,v232.Y) -((v290/2) -(Vector2.new(1944 -(1129 + 815) ,v290.Y)/(407 -(371 + 16)))) ;if v11.settings.Box.Enabled then local v399=0;local v400;while true do if ((1750 -(1326 + 424))==v399) then v400=0 -0 ;while true do if (v400==(0 -0)) then local v417=0;while true do if (v417==(897 -(525 + 372))) then v164.Drawings.BoxLeft.Size=UDim2.fromOffset(v290.X,1 -0 );v164.Drawings.BoxRight.Size=UDim2.fromOffset(v290.X,119 -(88 + 30) );v417=3 -2 ;end if (v417==(773 -(720 + 51))) then v164.Drawings.OutlineBoxLeft.Size=v164.Drawings.BoxLeft.Size;v400=2 -1 ;break;end if (v417==1) then v164.Drawings.BoxUpper.Size=UDim2.fromOffset(1777 -(421 + 1355) ,v290.Y);v164.Drawings.BoxLower.Size=UDim2.fromOffset(2 -1 ,v290.Y);v417=7 -5 ;end end end if (v400==(8 -3)) then v164.Drawings.BoxRight.BorderSizePixel=0 -0 ;v164.Drawings.BoxUpper.BorderSizePixel=0 + 0 ;v164.Drawings.BoxLower.BorderSizePixel=1083 -(286 + 797) ;v164.Drawings.OutlineBoxLeft.BorderColor3=v11.settings.Box.OutlineColor;v164.Drawings.OutlineBoxRight.BorderColor3=v11.settings.Box.OutlineColor;v400=725 -(316 + 403) ;end if (v400==(14 -10)) then v164.Drawings.OutlineBoxLeft.BorderSizePixel=1 -0 ;v164.Drawings.OutlineBoxRight.BorderSizePixel=440 -(397 + 42) ;v164.Drawings.OutlineBoxUpper.BorderSizePixel=2 -1 ;v164.Drawings.OutlineBoxLower.BorderSizePixel=1 + 0 ;v164.Drawings.BoxLeft.BorderSizePixel=0;v400=805 -(24 + 776) ;end if (v400==(8 -2)) then v164.Drawings.OutlineBoxUpper.BorderColor3=v11.settings.Box.OutlineColor;v164.Drawings.OutlineBoxLower.BorderColor3=v11.settings.Box.OutlineColor;v164.Drawings.OutlineBoxLeft.BackgroundColor3=v11.settings.Box.Color;v164.Drawings.OutlineBoxRight.BackgroundColor3=v11.settings.Box.Color;v164.Drawings.OutlineBoxUpper.BackgroundColor3=v11.settings.Box.Color;v400=7;end if (v400==(20 -12)) then v164.Drawings.OutlineBoxLeft.Visible=v11.settings.Box.Enabled and v11.settings.Box.Outline ;v164.Drawings.OutlineBoxRight.Visible=v11.settings.Box.Enabled and v11.settings.Box.Outline ;v164.Drawings.OutlineBoxUpper.Visible=v11.settings.Box.Enabled and v11.settings.Box.Outline ;v164.Drawings.OutlineBoxLower.Visible=v11.settings.Box.Enabled and v11.settings.Box.Outline ;break;end if (v400==(792 -(222 + 563))) then v164.Drawings.OutlineBoxLower.BackgroundColor3=v11.settings.Box.Color;v164.Drawings.BoxLeft.Visible=v11.settings.Box.Enabled;v164.Drawings.BoxRight.Visible=v11.settings.Box.Enabled;v164.Drawings.BoxUpper.Visible=v11.settings.Box.Enabled;v164.Drawings.BoxLower.Visible=v11.settings.Box.Enabled;v400=3 + 5 ;end if ((3 -1)==v400) then local v447=0 + 0 ;while true do if (v447==(191 -(23 + 167))) then v164.Drawings.OutlineBoxLeft.Position=v164.Drawings.BoxLeft.Position;v164.Drawings.OutlineBoxRight.Position=v164.Drawings.BoxRight.Position;v447=1800 -(690 + 1108) ;end if (v447==(1 + 1)) then v164.Drawings.OutlineBoxUpper.Position=v164.Drawings.BoxUpper.Position;v400=3 + 0 ;break;end if (v447==(848 -(40 + 808))) then v164.Drawings.BoxUpper.Position=UDim2.fromOffset(v291.X,v291.Y);v164.Drawings.BoxLower.Position=UDim2.fromOffset((v291.X + v290.X) -(1 + 0) ,v291.Y);v447=2 -1 ;end end end if (v400==(1 + 2)) then local v448=0 -0 ;while true do if (v448==(0 + 0)) then v164.Drawings.OutlineBoxLower.Position=v164.Drawings.BoxLower.Position;v164.Drawings.BoxLeft.BackgroundColor3=v11.settings.Box.Color;v448=1 + 0 ;end if (v448==(2 + 0)) then v164.Drawings.BoxLower.BackgroundColor3=v11.settings.Box.Color;v400=575 -(47 + 524) ;break;end if (v448==(1 + 0)) then v164.Drawings.BoxRight.BackgroundColor3=v11.settings.Box.Color;v164.Drawings.BoxUpper.BackgroundColor3=v11.settings.Box.Color;v448=5 -3 ;end end end if (v400==(1 -0)) then v164.Drawings.OutlineBoxRight.Size=v164.Drawings.BoxRight.Size;v164.Drawings.OutlineBoxUpper.Size=v164.Drawings.BoxUpper.Size;v164.Drawings.OutlineBoxLower.Size=v164.Drawings.BoxLower.Size;v164.Drawings.BoxLeft.Position=UDim2.fromOffset(v291.X,v291.Y);v164.Drawings.BoxRight.Position=UDim2.fromOffset(v291.X,(v291.Y + v290.Y) -(2 -1) );v400=2 + 0 ;end end break;end end else v164.Drawings.BoxLeft.Visible=false;v164.Drawings.BoxRight.Visible=false;v164.Drawings.BoxUpper.Visible=false;v164.Drawings.BoxLower.Visible=false;v164.Drawings.OutlineBoxLeft.Visible=false;v164.Drawings.OutlineBoxRight.Visible=false;v164.Drawings.OutlineBoxUpper.Visible=false;v164.Drawings.OutlineBoxLower.Visible=false;end v348=1 + 0 ;end if (v348==(1727 -(1165 + 561))) then v314=1 + 0 ;break;end end end if (v314==(3 -2)) then v288=1 + 1 ;break;end end end if (v288==(1271 -(266 + 1005))) then local v315=479 -(341 + 138) ;while true do if (v315==(0 + 0)) then v289=math.tan(math.rad(v30.FieldOfView * (0.5 -0) )) * (328 -(89 + 237)) * v232.Z ;v290=(v30.ViewportSize.Y/v289) * Vector2.new(1701 -(561 + 1135) ,19 -13 ) ;v315=1 -0 ;end if ((1067 -(507 + 559))==v315) then v288=882 -(581 + 300) ;break;end end end if (v288==(1222 -(855 + 365))) then if v11.settings.Tracer.Enabled then local v332=0 -0 ;local v333;local v334;local v335;while true do if (v332==(2 -1)) then v164.Drawings.Tracer.Rotation=math.deg(math.atan2(v333.Y-v334.Y ,v333.X-v334.X ));v164.Drawings.Tracer.Position=UDim2.new(0 + 0 ,v335.X,1235 -(1030 + 205) ,v335.Y);v164.Drawings.Tracer.Size=UDim2.fromOffset((v334-v333).Magnitude,1 + 0 );v164.Drawings.Tracer.BackgroundColor3=v11.settings.Tracer.Color;v332=2 + 0 ;end if (v332==(286 -(156 + 130))) then v333=Vector2.new(v232.X,v232.Y + (v290.Y/(2 -0)) + (v290.Y/(31 -11)) );v334=Vector2.new(v30.ViewportSize.X/(4 -2) ,v30.ViewportSize.Y-(1 -0) );v335=(v334 + v333)/(1903 -(484 + 1417)) ;v164.Drawings.Tracer.AnchorPoint=Vector2.new(0.5 -0 ,0.5 -0 );v332=774 -(48 + 725) ;end if (v332==(1 + 1)) then v164.Drawings.Tracer.Visible=v11.settings.Tracer.Enabled;v164.Drawings.Tracer.BorderSizePixel=0 + 0 ;v164.Drawings.OutlineTracer.AnchorPoint=v164.Drawings.Tracer.AnchorPoint;v164.Drawings.OutlineTracer.Rotation=v164.Drawings.Tracer.Rotation;v332=72 -(10 + 59) ;end if (v332==(1 + 2)) then v164.Drawings.OutlineTracer.Position=v164.Drawings.Tracer.Position;v164.Drawings.OutlineTracer.Size=v164.Drawings.Tracer.Size;v164.Drawings.OutlineTracer.BackgroundColor3=v11.settings.Box.Color;v164.Drawings.OutlineTracer.Visible=v11.settings.Tracer.Enabled and v11.settings.Box.Outline ;v332=10 -6 ;end if (v332==4) then v164.Drawings.OutlineTracer.BorderColor3=v11.settings.Box.OutlineColor;v164.Drawings.OutlineTracer.BorderSizePixel=1 + 0 ;break;end end else v164.Drawings.Tracer.Visible=false;v164.Drawings.OutlineTracer.Visible=false;end if v11.settings.Hilight.Enabled then local v338=0 -0 ;while true do if (v338==(0 + 0)) then v164.Drawings.Hilight.Adornee=v189.Parent;v164.Drawings.Hilight.Enabled=v11.settings.Hilight.Enabled;v338=4 -3 ;end if (v338==(1164 -(671 + 492))) then v164.Drawings.Hilight.Parent=v189.Parent;v164.Drawings.Hilight.OutlineColor=v11.settings.Hilight.OutlineColor;v338=2 + 0 ;end if (v338==(2 + 1)) then v164.Drawings.Hilight.OutlineTransparency=v11.settings.Hilight.OutlineTransparency;v164.Drawings.Hilight.DepthMode=(v11.settings.Hilight.AllWaysShow and v7("\204\242\26\242\225\196\194\240\57\252\232","\183\141\158\109\147\152")) or ( not v11.settings.Hilight.AllWaysShow and v7("\3\10\229\0\57\13\227\8","\108\76\105\134")) ;break;end if (v338==(1217 -(369 + 846))) then v164.Drawings.Hilight.FillColor=v11.settings.Hilight.FillColor;v164.Drawings.Hilight.FillTransparency=v11.settings.Hilight.FillTransparency;v338=1 + 2 ;end end else local v339=0 + 0 ;while true do if (v339==0) then v164.Drawings.Hilight.Adornee=nil;v164.Drawings.Hilight.Enabled=false;break;end end end break;end end else local v292=0;while true do if (v292==(3 + 0)) then v164.Drawings.OutlineBoxUpper.Visible=false;v164.Drawings.OutlineBoxLower.Visible=false;v164.Drawings.OutlineTracer.Visible=false;break;end if (v292==(1947 -(1036 + 909))) then v164.Drawings.Tracer.Visible=false;v164.Drawings.OutlineBoxLeft.Visible=false;v164.Drawings.OutlineBoxRight.Visible=false;v292=3 + 0 ;end if (v292==(0 -0)) then v164.Drawings.BoxLeft.Visible=false;v164.Drawings.BoxRight.Visible=false;v164.Drawings.BoxUpper.Visible=false;v292=1;end if (v292==(1 -0)) then v164.Drawings.BoxLower.Visible=false;v164.Drawings.Hilight.Adornee=nil;v164.Drawings.Hilight.Enabled=false;v292=205 -(11 + 192) ;end end end break;end end else local v234=0 + 0 ;while true do if (v234==(175 -(135 + 40))) then v164.Drawings.BoxLeft.Visible=false;v164.Drawings.BoxRight.Visible=false;v164.Drawings.BoxUpper.Visible=false;v234=2 -1 ;end if (v234==(2 + 0)) then local v260=0;while true do if (v260==(2 -1)) then v164.Drawings.OutlineBoxRight.Visible=false;v234=6 -3 ;break;end if (v260==(0 -0)) then v164.Drawings.Tracer.Visible=false;v164.Drawings.OutlineBoxLeft.Visible=false;v260=3 -2 ;end end end if (v234==(1 -0)) then local v261=176 -(50 + 126) ;while true do if (v261==(1 + 0)) then v164.Drawings.Hilight.Enabled=false;v234=5 -3 ;break;end if ((0 + 0)==v261) then v164.Drawings.BoxLower.Visible=false;v164.Drawings.Hilight.Adornee=nil;v261=2 -1 ;end end end if ((4 -1)==v234) then v164.Drawings.OutlineBoxUpper.Visible=false;v164.Drawings.OutlineBoxLower.Visible=false;v164.Drawings.OutlineTracer.Visible=false;break;end end end break;end end end end;v11.Create=function(v165) local v166=setmetatable({},v11.cache);v166.Character=v165;v166.Drawings={[v7("\196\208\165\237\199\229\192\147\238\214\222\213\161\228\220","\174\139\165\209\129")]=Instance.new(v7("\133\161\227\204\195","\24\195\211\130\161\166\99\16"),v62),[v7("\105\22\253\32\90\24\67\33\230\52\127\25\81\6\251","\118\38\99\137\76\51")]=Instance.new(v7("\219\52\4\31\12","\64\157\70\101\114\105"),v62),[v7("\111\189\179\239\25\78\173\133\236\8\108\173\161\247","\112\32\200\199\131")]=Instance.new(v7("\10\66\93\181\198","\66\76\48\60\216\163\203"),v62),[v7("\149\147\109\255\86\192\33\152\137\97\193\86\201\44\174","\68\218\230\25\147\63\174")]=Instance.new(v7("\139\56\82\65\179","\214\205\74\51\44"),v62),[v7("\216\67\250\201\103\234\73\240","\23\154\44\130\156")]=Instance.new(v7("\55\180\172\163\51","\115\113\198\205\206\86"),v62),[v7("\166\88\230\118\139\64\251\72","\58\228\55\158")]=Instance.new(v7("\146\155\209\35\57","\85\212\233\176\78\92\205"),v62),[v7("\104\87\144\206\79\94\156","\130\42\56\232")]=Instance.new(v7("\204\167\37\238\69","\95\138\213\68\131\32"),v62),[v7("\8\39\185\113\127\45\32\181","\22\74\72\193\35")]=Instance.new(v7("\10\107\229\85\41","\56\76\25\132"),v62),[v7("\113\212\191\42\198\80\196\159\52\206\93\196\185","\175\62\161\203\70")]=Instance.new(v7("\26\207\194\30\48","\85\92\189\163\115"),v62),[v7("\29\190\49\59\44\190","\88\73\204\80")]=Instance.new(v7("\8\145\17\75\44","\186\78\227\112\38\73"),v62),[v7("\212\94\241\92\84\114\232","\26\156\55\157\53\51")]=Instance.new(v7("\164\209\17\209\180\89\139\208\2","\48\236\184\118\185\216"))};v166.Connection=v31.RenderStepped:Connect(function() v166:Update();end);v11.cache[v165]=v166;return v166;end;v11.Remove=function(v171) local v172=0 + 0 ;local v173;while true do if (v172==(1413 -(1233 + 180))) then v173=969 -(522 + 447) ;while true do if (v173==(1422 -(107 + 1314))) then v11.cache[v171.Character]=nil;table.clear(v171);break;end if (v173==(0 + 0)) then v171.Connection:Disconnect();for v235,v236 in next,v171.Drawings do if (typeof(v236)~=v7("\241\188\85\60\202","\84\133\221\55\80\175")) then v236:Remove();end end v173=2 -1 ;end end break;end end end;local v77=v31.RenderStepped:Connect(function() for v178,v179 in game.Workspace.Players:GetDescendants() do if (v179.ClassName==v7("\144\232\32\163\203","\60\221\135\68\198\167")) then local v194=0 + 0 ;local v195;while true do if (v194==(0 -0)) then v195=v11.cache[v179];if  not v195 then v11.Create(v179);end v194=3 -2 ;end if (v194==(1911 -(716 + 1194))) then v179.Destroying:Connect(function() local v237=0 + 0 ;local v238;while true do if (v237==(1204 -(7 + 1197))) then v238=v11.cache[v179];if v238 then v238:Remove();end break;end end end);break;end end end end end);game:GetService(v7("\220\168\246\176\71\203\248\180\251\134","\185\142\221\152\227\34")).Heartbeat:Connect(function() local v174=0;while true do if (v174==3) then if (v13.SilentAim.Enabled and v69()) then local v204,v205=math.huge,nil;for v221,v222 in game.Workspace.Players:GetDescendants() do if (v222.ClassName==v7("\142\169\203\207\49","\203\195\198\175\170\93\71\237")) then local v239=0 + 0 ;local v240;local v241;local v242;local v243;while true do if (v239==(505 -(74 + 429))) then while true do if (v240==(0 -0)) then local v299=0 + 0 ;while true do if (v299==(2 -1)) then v240=1;break;end if (v299==(0 + 0)) then v241=nil;v242=nil;v299=2 -1 ;end end end if (v240==(8 -6)) then for v328,v329 in v222:GetDescendants() do if (v329.ClassName==v7("\219\61\172\76\123\189\205\149\237\62\161","\216\136\77\201\47\18\220\161")) then if (v329.MeshId==v7("\63\238\51\219\27\207\135\57\229\47\128\71\147\212\124\187\114\136\93\138\208\120\186","\226\77\140\75\186\104\188")) then v242=v329.Parent;end end end if (v242 and v241) then if (v65(v241)~=v66()) then for v350,v351 in next,v13.SilentAim.AimPart do if (v351==v7("\141\193\194\44\64","\47\217\174\176\95")) then local v394=0 -0 ;local v395;local v396;local v397;local v398;while true do if ((0 -0)==v394) then v395,v396=v30:WorldToViewportPoint(v241.Position);v397=Vector2.new(v395.X,v395.Y);v394=140 -(43 + 96) ;end if ((2 -1)==v394) then v398=(v397-v34(v33)).Magnitude;if (v395 and (v398<v204) and (v398<v13.SilentAim.Fov)) then if ((v13.SilentAim.WallCheck~=true) or (v70(v241.Position,{v242.Parent,v29.Character,game.Workspace.Ignore,v30})==true)) then local v416=0;while true do if (v416==(0 -0)) then v204=v398;v205=v241;break;end end end end break;end end elseif (v351==v7("\144\216\119\6","\70\216\189\22\98\210\52\24")) then local v409=17 -(12 + 5) ;local v410;local v411;local v412;local v413;local v414;while true do if ((2 + 0)==v409) then v414=nil;while true do if ((0 -0)==v410) then v411,v412=v30:WorldToViewportPoint(v242.Position);v413=Vector2.new(v411.X,v411.Y);v410=1 + 0 ;end if (v410==(1094 -(277 + 816))) then v414=(v413-v34(v33)).Magnitude;if (v411 and (v414<v204) and (v414<v13.SilentAim.Fov)) then if ((v13.SilentAim.WallCheck~=true) or (v70(v242.Position,{v242.Parent,v29.Character,game.Workspace.Ignore,v30})==true)) then local v481=0 + 0 ;while true do if (v481==(975 -(815 + 160))) then v204=v414;v205=v242;break;end end end end break;end end break;end if ((1941 -(1642 + 298))==v409) then v412=nil;v413=nil;v409=4 -2 ;end if (v409==(0 -0)) then v410=0 -0 ;v411=nil;v409=1 + 0 ;end end end end end end break;end if (v240==(1 + 0)) then v243=nil;for v330,v331 in v222:GetDescendants() do if (v331.ClassName==v7("\29\91\59\214\88\16\240\3\78\45\221","\156\78\43\94\181\49\113")) then if (v331.MeshId==v7("\96\234\220\162\24\80\124\102\225\192\249\68\12\45\34\188\157\241\95\19\41\37\176","\25\18\136\164\195\107\35")) then v241=v331.Parent;end end end v240=5 -3 ;end end break;end if (v239==(973 -(357 + 615))) then v242=nil;v243=nil;v239=2 + 0 ;end if (v239==(1898 -(41 + 1857))) then v240=1893 -(1222 + 671) ;v241=nil;v239=2 -1 ;end end end end local v206=v67();pcall(function() if  not v206:FindFirstChild(v7("\238\214\179","\179\186\191\195\231")) then if (v205 and v206 and (math.random(0 -0 ,80 + 20 )<=v13.SilentAim.HitChance)) then for v273,v274 in pairs(v68()) do local v275=0 + 0 ;local v276;local v277;local v278;local v279;while true do if (v275==(1182 -(229 + 953))) then v274.Position=v274.CFrame.Position;v274.Velocity=Vector3.new();v275=1;end if (v275==(1776 -(1111 + 663))) then v277,v278,v279=CFrame.new(v274.Position,v205.Position):ToEulerAnglesYXZ();v274.Orientation=Vector3.new(math.deg(v277),math.deg(v278),math.deg(v279));v275=1582 -(874 + 705) ;end if (v275==(1 + 0)) then local v304=0 + 0 ;while true do if (v304==(1544 -(1407 + 136))) then v275=3 -1 ;break;end if (v304==(0 + 0)) then v276=v274:FindFirstChildWhichIsA(v7("\206\58\20\224","\132\153\95\120")) or v274:FindFirstChildWhichIsA(v7("\134\183\2\41\212\213\174\162\166\28\44\254\212\180","\192\209\210\110\77\151\186")) ;if v276 then v276:Destroy();end v304=680 -(642 + 37) ;end end end if (v275==(1 + 2)) then v13.SilentAim.Target=true;break;end end end else local v266=0 + 0 ;local v267;while true do if (v266==(0 -0)) then v267=game.Workspace.CurrentCamera.CFrame.LookVector * (351806 -251806) ;for v306,v307 in pairs(v68()) do local v308=95 -(9 + 86) ;local v309;local v310;local v311;local v312;while true do if ((456 -(233 + 221))==v308) then local v340=0 -0 ;while true do if (v340==(64 -(29 + 35))) then v310,v311,v312=CFrame.new(v307.Position,v267):ToEulerAnglesYXZ();v307.Orientation=Vector3.new(math.deg(v310),math.deg(v311),math.deg(v312));v340=1 + 0 ;end if (v340==(1542 -(718 + 823))) then v308=2 + 1 ;break;end end end if (v308==(805 -(266 + 539))) then v307.Position=v307.CFrame.Position;v307.Velocity=Vector3.new();v308=2 -1 ;end if (v308==(1226 -(636 + 589))) then v309=v307:FindFirstChildWhichIsA(v7("\215\6\46\237","\164\128\99\66\137\159")) or v307:FindFirstChildWhichIsA(v7("\55\140\229\186\35\134\231\173\20\155\232\183\14\157","\222\96\233\137")) ;if v309 then v309:Destroy();end v308=2;end if (v308==(6 -3)) then v13.SilentAim.Target=false;break;end end end break;end end end else v13.SilentAim.Target=false;end end);end break;end if (v174==(1013 -(53 + 959))) then if (v13.Visuals.ArmChams.Enable and v69()) then for v223,v224 in next,v30:GetChildren() do if ( not v224.Name:lower():find(v7("\85\196\94\244","\151\56\165\55\154\35\83")) and ( #v224:GetChildren()>0)) then for v248,v249 in next,v224:GetChildren() do if (v249.Name==v7("\147\79\0\235\182\70\22","\142\192\35\101")) then v249:Destroy();else v71(v249,v13.Visuals.ArmChams.Material,v13.Visuals.ArmChams.Color,v13.Visuals.ArmChams.trans,"",v13.Visuals.ArmChams.reflection);end end end end end if (v13.Visuals.GunChams.Enable and v69()) then for v225,v226 in next,v30:GetChildren() do if (v226.Name:lower():find(v7("\219\116\32\173","\118\182\21\73\195\135\236\204")) and ( #v226:GetChildren()>(0 -0))) then for v250,v251 in next,v226:GetChildren() do if (v251.Name==v7("\59\48\31\69\18\8\238","\157\104\92\122\32\100\109")) then v251:Destroy();else v71(v251,v13.Visuals.GunChams.Material,v13.Visuals.GunChams.Color,v13.Visuals.GunChams.trans,"",v13.Visuals.GunChams.reflection);end end end end end v174=2 + 0 ;end if (v174==2) then if v13.Visuals.Ambience.Enabled then local v207=0 + 0 ;while true do if (v207==(1015 -(657 + 358))) then if (game.Lighting.Ambient~=v13.Visuals.Ambience.AmbienceInside) then game.Lighting.Ambient=v13.Visuals.Ambience.AmbienceInside;end if (game.Lighting.OutdoorAmbient~=v13.Visuals.Ambience.AmbienceOutside) then game.Lighting.OutdoorAmbient=v13.Visuals.Ambience.AmbienceOutside;end break;end end end if v13.AimBot.Enabled then if v13.AimBot.IsAimKeyDown then if v13.AimBot.StickyAim then else local v252=0;local v253;local v254;while true do if (v252==(900 -(813 + 86))) then while true do if (v253==(0 -0)) then v254=nil;if (v254~=nil) then end break;end end break;end if (v252==(0 -0)) then v253=0 -0 ;v254=nil;v252=1188 -(1151 + 36) ;end end end end end v174=3 + 0 ;end if (v174==0) then if (v13.AimBot.Enabled and v13.AimBot.ShowFov) then local v208=0 + 0 ;local v209;local v210;while true do if ((0 -0)==v208) then v209=1832 -(1552 + 280) ;v210=nil;v208=835 -(64 + 770) ;end if (v208==(1 + 0)) then while true do if (v209==1) then v210=v33:GetMouseLocation();v44.Position=UDim2.new(0 -0 ,v210.X,0 + 0 ,v210.Y-(1279 -(157 + 1086)) );v209=1242 -(988 + 252) ;end if (v209==(3 -1)) then v44.Size=UDim2.fromOffset(v13.AimBot.Fov * (4.5 -3) ,v13.AimBot.Fov * (1.5 -0) );break;end if (v209==(1970 -(49 + 1921))) then local v282=0;while true do if (v282==(1 -0)) then v209=891 -(223 + 667) ;break;end if (v282==(819 -(599 + 220))) then local v313=52 -(51 + 1) ;while true do if (v313==(1 -0)) then v282=1932 -(1813 + 118) ;break;end if (v313==(0 + 0)) then v57.Enabled=true;v57.Color=v13.AimBot.FovColor;v313=1218 -(841 + 376) ;end end end end end end break;end end else v57.Enabled=false;end if (v13.SilentAim.Enabled and v13.SilentAim.ShowFov) then local v212=0 -0 ;local v213;local v214;while true do if (v212==(1 + 0)) then while true do if (v213==(606 -(311 + 294))) then v214=v33:GetMouseLocation();v44.Position=UDim2.new(0 + 0 ,v214.X,0 -0 ,v214.Y-(895 -(464 + 395)) );v213=5 -3 ;end if (v213==2) then v44.Size=UDim2.fromOffset(v13.SilentAim.Fov * (1444.5 -(496 + 947)) ,v13.SilentAim.Fov * (1.5 + 0) );break;end if (v213==0) then v57.Enabled=true;v57.Color=v13.AimBot.FovColor;v213=1;end end break;end if (v212==(837 -(467 + 370))) then local v245=0;while true do if (v245==1) then v212=1 -0 ;break;end if (v245==(0 + 0)) then v213=0 + 0 ;v214=nil;v245=1646 -(963 + 682) ;end end end end else v57.Enabled=false;end v174=3 -2 ;end end end);coroutine.wrap(function() while game:GetService(v7("\139\166\169\44\141\225\230\176\176\162","\144\217\211\199\127\232\147")).RenderStepped:Wait() do pcall(function() if (v13.SilentAim.iswindowactive and mouse1press and mouse1release and v69()) then if (v13.SilentAim.AoutoShoot and v13.SilentAim.Target) then mouse1press();wait();mouse1rlease();end end end);end end)();
+esp.cache = {
+	__index = esp;
+};
+
+local HyperEscape = { -- Yes It Is Here AND IT DOSE NOT WORK. Please Wait Untill I Can Find A Bypass
+	GUI = {
+		GUIButton = true;
+		GUIToggleKey = Enum.KeyCode.RightShift;
+	};
+
+	AimBot = {
+		Enabled = false; 
+
+		TeamCheck = false;
+		WallCheck = false;
+
+		-- NEW
+		StickyAim = false;
+		Prediction = false; 
+
+		UseMouse = false;
+		MouseBind = "MouseButton2";
+		Keybind = Enum.KeyCode.E;  
+
+		ShowFov = false;
+		Fov = 360;
+
+		Smoothing = 4;
+
+		AimPart = "Head";
+
+		Thickness = 1;
+		FovFillColor = Color3.fromRGB(100,0,100);
+		FovColor = Color3.fromRGB(100,0,100);
+		FovFillTransparency = 1;
+		FovTransparenct = 0;
+
+		IsAimKeyDown = false; 
+		Target = nil;
+		CameraTween = nil;
+	};
+
+	SilentAim = {
+		Enabled = false;
+		WallCheck = false;
+		AoutoShoot = false;
+
+		HitChance = 50;
+
+		AimPart = "Head";
+
+		Fov = 360;
+		ShowFov = false;
+
+		Target = nil;
+
+		iswindowactive = true;
+	};
+	
+	Visuals = { -- TODO: Fps boost
+		gameLighting = "ShadowMap";
+		
+		CustomTimeOfDay = false;
+		TimeOfDay = 24;
+		
+		ArmChams = {
+			Enable = false;
+			
+			Color = Color3.fromRGB(100, 0, 255);
+			Material = "ForceField"; 
+			trans = 0.5;
+			reflection = 1;
+		};
+		GunChams = {
+			Enable = false;
+
+			Color = Color3.fromRGB(100, 0, 255);
+			Material = "ForceField"; 
+			trans = 0.5;
+			reflection = 1;
+		};
+		
+		Ambience = {
+			Enabled = false;
+			AmbienceInside = Color3.fromRGB(255, 255, 255);
+			AmbienceOutside = Color3.fromRGB(255, 255, 255);
+		};
+	};
+};
+
+local DeleteMobLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Mick-gordon/Hyper-Escape/main/DeleteMob%20GUI.lua"))();
+local Window = DeleteMobLib:CreateWindow(Enum.KeyCode.RightShift, "DeleteMob");
+local UIToggle = Window:CreateToggleButton()
+
+local SilentAimTab = Window:CreateTab("Silent Aim");
+local SilentAimSection = SilentAimTab:CreateSector("Silent Aim", "Left");
+SilentAimSection:CreateToggle("Enable", false, function(ESA) HyperEscape.SilentAim.Enabled = ESA; end);
+SilentAimSection:CreateToggle("Wall Check", false, function(EWC) HyperEscape.SilentAim.WallCheck = EWC; end);
+SilentAimSection:CreateSlider("Hit Chance", 0, 50, 100, 1, function(EHC) HyperEscape.SilentAim.HitChance = EHC; end);
+SilentAimSection:CreateDropDown("Hit Scan", {"Head", "Torso"}, {"Head"}, true, function(SHD) HyperEscape.SilentAim.AimPart = SHD; end);
+if mouse1press and mouse1release then
+	SilentAimSection:CreateToggle("Auto Shoot", false, function(SAOS) HyperEscape.SilentAim.AoutoShoot = SAOS; end);
+end
+
+local FOVSection = SilentAimTab:CreateSector("Fov", "Right");
+FOVSection:CreateToggle("Show Fov", false, function(SFS) HyperEscape.SilentAim.ShowFov = SFS; end);
+FOVSection:CreateSlider("Fov", 0, 360, 1000, 1, function(SF) HyperEscape.SilentAim.Fov = SF; end);
+
+local ESPTab = Window:CreateTab("Visuals");
+local ESPOptionsSection = ESPTab:CreateSector("ESP", "Left");
+ESPOptionsSection:CreateToggle("Enable", false, function(ETCE) esp.settings.Enable = ETCE; end);
+ESPOptionsSection:CreateToggle("Box", false, function(EBE) esp.settings.Box.Enabled = EBE; end);
+ESPOptionsSection:CreateToggle("Tracer", false, function(ETE) esp.settings.Tracer.Enabled = ETE; end);
+ESPOptionsSection:CreateToggle("Hilight", false, function(EHE) esp.settings.Hilight.Enabled = EHE; end);
+ESPOptionsSection:CreateToggle("Allways Show Hilight", false, function(EASH) esp.settings.Hilight.AllWaysShow = EASH; end);
+
+local ESPSettingssSection = ESPTab:CreateSector("ESP Settings", "Right");
+ESPSettingssSection:CreateToggle("Border", false, function(EOT) esp.settings.Box.Outline = EOT; end);
+ESPSettingssSection:CreateColorPicker("Border Color", Color3.fromRGB(0, 0, 0), function(ebc) esp.settings.Box.OutlineColor = ebc; end);
+ESPSettingssSection:CreateColorPicker("ESP Color", Color3.fromRGB(255, 255, 255), function(eec) esp.settings.Box.Color = eec; end);
+ESPSettingssSection:CreateColorPicker("Hilight Outline", Color3.fromRGB(255, 255, 255), function(ehf) esp.settings.Hilight.OutlineColor = ehf; end);
+ESPSettingssSection:CreateColorPicker("Hilight Fill", Color3.fromRGB(100, 0, 255), function(ehff) esp.settings.Hilight.FillColor = ehff; end);
+ESPSettingssSection:CreateSlider("Hilight Outline", 0, 50, 100, 1, function(HFF) esp.settings.Hilight.OutlineTransparency = HFF / 100; end);
+ESPSettingssSection:CreateSlider("Hilight Fill", 0, 0, 100, 1, function(HOF) esp.settings.Hilight.FillTransparency = HOF / 100; end);
+
+local WorldVisualsSection = ESPTab:CreateSector("World Visuals", "Right");
+WorldVisualsSection:CreateToggle("Ambience", false, function(VCT) HyperEscape.Visuals.Ambience.Enabled = VCT; end);
+WorldVisualsSection:CreateColorPicker("Ambience Outside", Color3.fromRGB(255, 255, 255), function(egec) HyperEscape.Visuals.Ambience.AmbienceOutside = egec; end);
+WorldVisualsSection:CreateColorPicker("Ambience Inside", Color3.fromRGB(255, 255, 255), function(ehec) HyperEscape.Visuals.Ambience.AmbienceInside = ehec; end);
+WorldVisualsSection:CreateButton("FPS Boost", function() if game.Workspace.Map then for i,v in game.Workspace.Map:GetDescendants() do if v.ClassName == "Part" or v.ClassName == "MeshPart" then v.Material = "SmoothPlastic"; end end end end)
+
+
+local ArmChamsSection = ESPTab:CreateSector("Gun Chams", "Left");
+ArmChamsSection:CreateToggle("Enable", false, function(ETCeE) HyperEscape.Visuals.ArmChams.Enable = ETCeE; end);
+ArmChamsSection:CreateColorPicker("Color", Color3.fromRGB(0, 0, 0), function(hebc) HyperEscape.Visuals.ArmChams.Color = hebc; end);
+ArmChamsSection:CreateDropDown("Material", {"ForceField", "SmoothPlastic", "Glass", "Neon", "Plastic"}, "ForceField", false, function(GLbfSM) HyperEscape.Visuals.ArmChams.Material = GLbfSM; end);
+ArmChamsSection:CreateSlider("Transparency", 0, 0, 99, 1, function(HdgOF) HyperEscape.Visuals.ArmChams.trans = HdgOF / 100; end);
+ArmChamsSection:CreateSlider("Reflection", 1, 1, 50, 1, function(HjgOF) HyperEscape.Visuals.ArmChams.reflection = HjgOF / 100; end);
+
+local GunChamsSection = ESPTab:CreateSector("Arm Chams", "Left");
+GunChamsSection:CreateToggle("Enable", false, function(ETCgeE) HyperEscape.Visuals.GunChams.Enable = ETCgeE; end);
+GunChamsSection:CreateColorPicker("Color", Color3.fromRGB(0, 0, 0), function(hefbc) HyperEscape.Visuals.GunChams.Color = hefbc; end);
+GunChamsSection:CreateDropDown("Material", {"ForceField", "SmoothPlastic", "Glass", "Neon", "Plastic"}, "ForceField", false, function(GLbffSM) HyperEscape.Visuals.GunChams.Material = GLbffSM; end);
+GunChamsSection:CreateSlider("Transparency", 0, 0, 99, 1, function(HfdgOF) HyperEscape.Visuals.GunChams.trans = HfdgOF / 100; end);
+GunChamsSection:CreateSlider("Reflection", 1, 1, 50, 1, function(HjggOF) HyperEscape.Visuals.GunChams.reflection = HjggOF / 100; end);
+
+local SettingsTab = Window:CreateTab("Settings");
+local SettingsInfoSector = SettingsTab:CreateSector("Info", "Left");
+SettingsInfoSector:CreateCoppyText("Made By m1ckgordon");
+SettingsInfoSector:CreateCoppyText("https://discord.gg/jNRKdtH3 - Click Me");
+
+SettingsTab:CreateConfig("Right");
+
+local SettingsSettings = SettingsTab:CreateSector("GUI Settigns", "Left");
+SettingsSettings:CreateToggle("UI Toggle Button", true, function(GUITB) HyperEscape.GUI.GUIButton = GUITB; UIToggle:Update(GUITB); end);
+SettingsSettings:CreateKeyBind("UI Key Bind", Enum.KeyCode.RightShift, function(SUITK) HyperEscape.GUI.GUIToggleKey = SUITK; Window:UpdateKeyBind(SUITK); end);
+
+
+local localPlayer = game.Players.LocalPlayer;
+local currentCamera = game.Workspace.CurrentCamera;
+local RunService = game:GetService("RunService");
+local TweenService = game.TweenService;
+local UIS = game.UserInputService;
+local mouseLocation = UIS.GetMouseLocation;
+local CoreGui = game:FindFirstChild("CoreGui");
+local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local ESPHolder = Instance.new("Folder", (CoreGui or localPlayer.PlayerGui)); 
+local Fov = Instance.new("ScreenGui",(CoreGui or localPlayer.PlayerGui))Fov.Name = "Fov" Fov.ZIndexBehavior = Enum.ZIndexBehavior.Sibling Fov.ResetOnSpawn = false; -- Yapee
+local FOVFFrame = Instance.new("Frame")FOVFFrame.Parent = Fov FOVFFrame.Name = "FOVFFrame" FOVFFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255) FOVFFrame.BorderColor3 = Color3.fromRGB(0, 0, 0) FOVFFrame.BorderSizePixel = 0 FOVFFrame.BackgroundTransparency = 1 FOVFFrame.AnchorPoint = Vector2.new(0.5, 0.5) FOVFFrame.Position = UDim2.new(0.5, 0,0.5, 0) FOVFFrame.Size = UDim2.new(0, HyperEscape.AimBot.Fov, 0, HyperEscape.AimBot.Fov) FOVFFrame.BackgroundTransparency = 1;
+local UICorner = Instance.new("UICorner")UICorner.CornerRadius = UDim.new(1, 0) UICorner.Parent = FOVFFrame;
+local UIStroke = Instance.new("UIStroke")UIStroke.Color = Color3.fromRGB(100,0,100) UIStroke.Parent = FOVFFrame UIStroke.Thickness = 1 UIStroke.ApplyStrokeMode = "Border";
+
+local Holder = Instance.new("ScreenGui", game.CoreGui);
+
+local Materials = {
+	["ForceField"] = Enum.Material.ForceField,
+	["SmoothPlastic"] = Enum.Material.SmoothPlastic,
+	["Glass"] = Enum.Material.Glass,
+	["Neon"] = Enum.Material.Neon,
+	["Plastic"] = Enum.Material.Plastic,
+};
+local Textures = {
+	["Groove"] = "rbxassetid://10785404176",
+	["Cloud"] = "rbxassetid://5176277457",
+	["Sky"] = "rbxassetid://1494603972",
+	["Smudge"] = "rbxassetid://6096634060",
+	["Scrapes"] = "rbxassetid://6248583558",
+	["Galaxy"] = "rbxassetid://1120738433",
+	["Stars"] = "rbxassetid://598201818",
+	["Rainbow"] = "rbxassetid://10037165803",
+	["Skibidy Toilet"] = "rbxassetid://14488881439"
+};
+
+local function GetTeamColor(Part) -- It Works Ok
+	for i,Vest in pairs(Part.Parent:GetDescendants()) do
+		if Vest.ClassName == "MeshPart" and Vest.MeshId == "rbxassetid://11232478007" and Vest.BrickColor == BrickColor.new("Earth blue") then
+			return BrickColor.new("Bright blue");
+		end
+	end
+	return BrickColor.new("Bright orange");
+end
+
+local function localTeamColor()
+	if not game.Players.LocalPlayer.Neutral then
+		return game.Players.LocalPlayer.TeamColor;
+	end
+end
+
+local function GetGun()
+	for i,Gun in currentCamera:GetChildren() do
+		if Gun.ClassName == "Model" and Gun.Name ~= "Left Arm" and Gun.Name ~= "Right Arm"then
+			return Gun;
+		end
+	end
+	return nil;
+end
+
+local function GetDirChange()
+	local a={}
+	if game.Workspace.CurrentCamera:FindFirstChild(GetGun().Name) then 
+		for _,v in pairs(GetGun():GetChildren()) do
+			if string.find(string.lower(tostring(v)), "flame") or string.find(string.lower(tostring(v)), "sightmark") or string.find(string.lower(tostring(v))," flamesup") then
+				a[#a+1] = v;
+			end
+		end
+	end
+	return a;
+end
+
+local function IsAlive()
+	if game.Workspace.Ignore:FindFirstChild("RefPlayer") then 
+		return true;
+	end
+	return false;
+end
+
+local function IsVisible(pos, ignoreList)
+	return #currentCamera:GetPartsObscuringTarget({game.Workspace.Ignore:FindFirstChild("RefPlayer").Head, pos}, ignoreList) == 0 and true or false;
+end
+
+local function ApplyChams(part, material, color, transparency, decal, reflectance)
+	if part:IsA("BasePart") and part.Transparency < 1 then
+		local Material = Materials[material]
+		local Texture = material == "ForceField" and Textures[decal] or ""
+
+		if part:FindFirstChildOfClass("SpecialMesh") then
+			local Mesh = part:FindFirstChildOfClass("SpecialMesh")
+			Mesh.TextureId = Texture
+			Mesh.VertexColor = Vector3.new(color.R, color.G, color.B)
+		end
+
+		if part:FindFirstChildOfClass("MeshPart") then
+			local Mesh = part:FindFirstChildOfClass("MeshPart")
+			Mesh.TextureId = Texture
+			Mesh.VertexColor = Vector3.new(color.R, color.G, color.B)
+		end
+
+		if part.ClassName == "UnionOperation" then
+			part.UsePartColor = true
+		end
+
+		if part:FindFirstChild("SurfaceAppearance") then
+			part.SurfaceAppearance:Destroy()
+		end
+
+		if part:IsA("MeshPart") then
+			part.TextureID = Texture
+		end
+
+		part.Color = color
+		part.Material = material
+		part.Transparency = transparency
+		part.Reflectance = reflectance 
+	end
+end
+local function focusGained()
+	HyperEscape.SilentAim.iswindowactive= true;
+end
+
+local function focusReleased()
+	HyperEscape.SilentAim.iswindowactive= false;
+end
+
+UserInputService.WindowFocused:Connect(focusGained)
+UserInputService.WindowFocusReleased:Connect(focusReleased)
+
+function esp:Update()
+	if self and self.Character then
+		local tosro = nil
+
+		for i,Parts in self.Character:GetDescendants() do -- Erm, What The Sigma
+			if Parts.ClassName == "SpecialMesh" then
+				if Parts.MeshId == "rbxassetid://4049240078" then
+					tosro = Parts.Parent;
+				end
+			end
+		end
+
+		if tosro ~= nil then
+			local screen, onScreen = currentCamera:WorldToScreenPoint(tosro.Position); 
+
+			if screen and onScreen and IsAlive() and esp.settings.Enable and GetTeamColor(tosro) ~= localTeamColor() then 
+
+				local frustumHeight = math.tan(math.rad(currentCamera.FieldOfView * 0.5)) * 2 * screen.Z ; -- Thank you mickeydev, Join .gg/lunarity for the best paid script hub for fps games made by known and trusted developers. 
+				local size = currentCamera.ViewportSize.Y / frustumHeight * Vector2.new(5,6);
+				local position = Vector2.new(screen.X, screen.Y) - (size / 2 - Vector2.new(0, size.Y) / 20);
+
+				if esp.settings.Box.Enabled then
+					self.Drawings.BoxLeft.Size = UDim2.fromOffset(size.X, 1);
+					self.Drawings.BoxRight.Size = UDim2.fromOffset(size.X, 1);
+					self.Drawings.BoxUpper.Size = UDim2.fromOffset(1, size.Y);
+					self.Drawings.BoxLower.Size = UDim2.fromOffset(1, size.Y);
+
+					self.Drawings.OutlineBoxLeft.Size = self.Drawings.BoxLeft.Size;
+					self.Drawings.OutlineBoxRight.Size = self.Drawings.BoxRight.Size;
+					self.Drawings.OutlineBoxUpper.Size = self.Drawings.BoxUpper.Size;
+					self.Drawings.OutlineBoxLower.Size = self.Drawings.BoxLower.Size;
+
+					self.Drawings.BoxLeft.Position = UDim2.fromOffset(position.X, position.Y);
+					self.Drawings.BoxRight.Position = UDim2.fromOffset(position.X, position.Y + size.Y - 1);
+					self.Drawings.BoxUpper.Position = UDim2.fromOffset(position.X, position.Y);
+					self.Drawings.BoxLower.Position = UDim2.fromOffset(position.X + size.X - 1, position.Y);
+
+					self.Drawings.OutlineBoxLeft.Position = self.Drawings.BoxLeft.Position;
+					self.Drawings.OutlineBoxRight.Position = self.Drawings.BoxRight.Position;
+					self.Drawings.OutlineBoxUpper.Position = self.Drawings.BoxUpper.Position;
+					self.Drawings.OutlineBoxLower.Position = self.Drawings.BoxLower.Position;
+
+					self.Drawings.BoxLeft.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.BoxRight.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.BoxUpper.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.BoxLower.BackgroundColor3 = esp.settings.Box.Color;
+
+					self.Drawings.OutlineBoxLeft.BorderSizePixel = 1;
+					self.Drawings.OutlineBoxRight.BorderSizePixel = 1;
+					self.Drawings.OutlineBoxUpper.BorderSizePixel = 1;
+					self.Drawings.OutlineBoxLower.BorderSizePixel = 1;
+
+					self.Drawings.BoxLeft.BorderSizePixel = 0;
+					self.Drawings.BoxRight.BorderSizePixel = 0;
+					self.Drawings.BoxUpper.BorderSizePixel = 0;
+					self.Drawings.BoxLower.BorderSizePixel = 0;
+
+					self.Drawings.OutlineBoxLeft.BorderColor3 = esp.settings.Box.OutlineColor;
+					self.Drawings.OutlineBoxRight.BorderColor3 = esp.settings.Box.OutlineColor;
+					self.Drawings.OutlineBoxUpper.BorderColor3 = esp.settings.Box.OutlineColor;
+					self.Drawings.OutlineBoxLower.BorderColor3 = esp.settings.Box.OutlineColor;
+
+					self.Drawings.OutlineBoxLeft.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.OutlineBoxRight.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.OutlineBoxUpper.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.OutlineBoxLower.BackgroundColor3 = esp.settings.Box.Color;
+
+					self.Drawings.BoxLeft.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoxRight.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoxUpper.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoxLower.Visible = esp.settings.Box.Enabled;
+
+					self.Drawings.OutlineBoxLeft.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
+					self.Drawings.OutlineBoxRight.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
+					self.Drawings.OutlineBoxUpper.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
+					self.Drawings.OutlineBoxLower.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
+				else
+					self.Drawings.BoxLeft.Visible = false;
+					self.Drawings.BoxRight.Visible = false;
+					self.Drawings.BoxUpper.Visible = false;
+					self.Drawings.BoxLower.Visible = false;
+					self.Drawings.OutlineBoxLeft.Visible = false;
+					self.Drawings.OutlineBoxRight.Visible = false;
+					self.Drawings.OutlineBoxUpper.Visible = false;
+					self.Drawings.OutlineBoxLower.Visible = false;
+				end
+
+				if esp.settings.Tracer.Enabled then
+					-- Tracer
+					local ScreenVec2 = Vector2.new(screen.X, screen.Y + size.Y / 2 + size.Y / 20);
+					local Origin = Vector2.new(currentCamera.ViewportSize.X/2, currentCamera.ViewportSize.Y - 1);
+					local TracerPosition = (Origin + ScreenVec2) / 2;
+
+					self.Drawings.Tracer.AnchorPoint = Vector2.new(0.5, 0.5);
+					self.Drawings.Tracer.Rotation = math.deg(math.atan2(ScreenVec2.Y - Origin.Y, ScreenVec2.X - Origin.X));
+					self.Drawings.Tracer.Position = UDim2.new(0, TracerPosition.X, 0, TracerPosition.Y);
+					self.Drawings.Tracer.Size = UDim2.fromOffset((Origin - ScreenVec2).Magnitude, 1);
+
+					self.Drawings.Tracer.BackgroundColor3 = esp.settings.Tracer.Color;
+					self.Drawings.Tracer.Visible = esp.settings.Tracer.Enabled;
+					self.Drawings.Tracer.BorderSizePixel = 0;
+
+					self.Drawings.OutlineTracer.AnchorPoint = self.Drawings.Tracer.AnchorPoint;
+					self.Drawings.OutlineTracer.Rotation = self.Drawings.Tracer.Rotation;
+					self.Drawings.OutlineTracer.Position = self.Drawings.Tracer.Position;
+					self.Drawings.OutlineTracer.Size = self.Drawings.Tracer.Size;
+
+					self.Drawings.OutlineTracer.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.OutlineTracer.Visible = esp.settings.Tracer.Enabled and esp.settings.Box.Outline;
+					self.Drawings.OutlineTracer.BorderColor3 = esp.settings.Box.OutlineColor;
+					self.Drawings.OutlineTracer.BorderSizePixel = 1;
+				else
+					self.Drawings.Tracer.Visible = false;
+					self.Drawings.OutlineTracer.Visible = false;
+				end
+
+				if esp.settings.Hilight.Enabled then
+					-- Hilight
+					self.Drawings.Hilight.Adornee = tosro.Parent;
+					self.Drawings.Hilight.Enabled = esp.settings.Hilight.Enabled;
+					self.Drawings.Hilight.Parent = tosro.Parent;
+
+					self.Drawings.Hilight.OutlineColor = esp.settings.Hilight.OutlineColor;
+					self.Drawings.Hilight.FillColor = esp.settings.Hilight.FillColor;
+
+					self.Drawings.Hilight.FillTransparency = esp.settings.Hilight.FillTransparency;
+					self.Drawings.Hilight.OutlineTransparency = esp.settings.Hilight.OutlineTransparency;
+
+					self.Drawings.Hilight.DepthMode = (esp.settings.Hilight.AllWaysShow and "AlwaysOnTop" or not esp.settings.Hilight.AllWaysShow and "Occluded");
+				else
+					self.Drawings.Hilight.Adornee = nil;
+					self.Drawings.Hilight.Enabled = false;
+				end
+
+			else
+				self.Drawings.BoxLeft.Visible = false;
+				self.Drawings.BoxRight.Visible = false;
+				self.Drawings.BoxUpper.Visible = false;
+				self.Drawings.BoxLower.Visible = false;
+				self.Drawings.Hilight.Adornee = nil;
+				self.Drawings.Hilight.Enabled = false;
+				self.Drawings.Tracer.Visible = false;
+				self.Drawings.OutlineBoxLeft.Visible = false;
+				self.Drawings.OutlineBoxRight.Visible = false;
+				self.Drawings.OutlineBoxUpper.Visible = false;
+				self.Drawings.OutlineBoxLower.Visible = false;
+				self.Drawings.OutlineTracer.Visible = false;
+			end
+		else
+			self.Drawings.BoxLeft.Visible = false;
+			self.Drawings.BoxRight.Visible = false;
+			self.Drawings.BoxUpper.Visible = false;
+			self.Drawings.BoxLower.Visible = false;
+			self.Drawings.Hilight.Adornee = nil;
+			self.Drawings.Hilight.Enabled = false;
+			self.Drawings.Tracer.Visible = false;
+			self.Drawings.OutlineBoxLeft.Visible = false;
+			self.Drawings.OutlineBoxRight.Visible = false;
+			self.Drawings.OutlineBoxUpper.Visible = false;
+			self.Drawings.OutlineBoxLower.Visible = false;
+			self.Drawings.OutlineTracer.Visible = false;
+		end
+	end
+end
+
+function esp.Create(Character)
+	local self = setmetatable({}, esp.cache);
+	self.Character = Character;
+	self.Drawings = {
+		OutlineBoxUpper = Instance.new("Frame", Holder);
+		OutlineBoxLower = Instance.new("Frame", Holder);
+		OutlineBoxLeft = Instance.new("Frame", Holder);
+		OutlineBoxRight = Instance.new("Frame", Holder);
+
+		BoxUpper = Instance.new("Frame", Holder);
+		BoxLower = Instance.new("Frame", Holder);
+		BoxLeft = Instance.new("Frame", Holder);
+		BoxRight = Instance.new("Frame", Holder);
+
+		OutlineTracer = Instance.new("Frame", Holder);
+		Tracer = Instance.new("Frame", Holder);
+
+		Hilight = Instance.new("Highlight");
+	};
+
+	self.Connection = RunService.RenderStepped:Connect(function()
+		self:Update();
+	end)
+
+	esp.cache[Character] = self;
+	return self;
+end
+
+function esp:Remove()
+	self.Connection:Disconnect();
+	for _,Drawings in next, self.Drawings do
+		if typeof(Drawings) ~= "table" then
+			Drawings:Remove();
+		end
+	end
+	esp.cache[self.Character] = nil;
+	table.clear(self);
+end
+
+local loop = RunService.RenderStepped:Connect(function()
+	for i,Character in game.Workspace.Players:GetDescendants() do 
+		if Character.ClassName == "Model" then
+			local self = esp.cache[Character];
+
+			if not self then
+				esp.Create(Character);
+			end
+
+			Character.Destroying:Connect(function()
+				local self = esp.cache[Character];
+			
+				if self then
+					self:Remove();
+				end
+			end)
+		end
+	end
+end)
+
+
+game:GetService("RunService").Heartbeat:Connect(function() 
+
+	if HyperEscape.AimBot.Enabled and HyperEscape.AimBot.ShowFov then
+		UIStroke.Enabled = true;
+		UIStroke.Color = HyperEscape.AimBot.FovColor;
+
+		local posd = UIS:GetMouseLocation();
+		FOVFFrame.Position = UDim2.new(0, posd.X, 0, posd.Y - 36);
+		FOVFFrame.Size = UDim2.fromOffset(HyperEscape.AimBot.Fov * 1.5, HyperEscape.AimBot.Fov * 1.5);
+	else
+		UIStroke.Enabled = false;
+	end
+
+	if HyperEscape.SilentAim.Enabled and HyperEscape.SilentAim.ShowFov then
+		UIStroke.Enabled = true;
+		UIStroke.Color = HyperEscape.AimBot.FovColor;
+
+		local posd = UIS:GetMouseLocation();
+		FOVFFrame.Position = UDim2.new(0, posd.X, 0, posd.Y - 36);
+		FOVFFrame.Size = UDim2.fromOffset(HyperEscape.SilentAim.Fov * 1.5, HyperEscape.SilentAim.Fov * 1.5);
+	else
+		UIStroke.Enabled = false;
+	end
+	
+	if HyperEscape.Visuals.ArmChams.Enable and IsAlive() then
+		for _,part in next, currentCamera:GetChildren() do
+			if not part.Name:lower():find("main") and #part:GetChildren() > 0 then
+
+				for _,childPart in next, part:GetChildren() do
+					if childPart.Name == "Sleeves" then
+						childPart:Destroy();
+					else
+						ApplyChams(
+							childPart, 
+							HyperEscape.Visuals.ArmChams.Material, 
+							HyperEscape.Visuals.ArmChams.Color, 
+							HyperEscape.Visuals.ArmChams.trans,
+							"",
+							HyperEscape.Visuals.ArmChams.reflection
+						)
+					end
+				end
+			end
+		end
+	end
+	
+	if HyperEscape.Visuals.GunChams.Enable and IsAlive() then
+		for _,part in next, currentCamera:GetChildren() do
+			if part.Name:lower():find("main") and #part:GetChildren() > 0 then
+
+				for _,childPart in next, part:GetChildren() do
+					if childPart.Name == "Sleeves" then
+						childPart:Destroy();
+					else
+						ApplyChams(
+							childPart, 
+							HyperEscape.Visuals.GunChams.Material, 
+							HyperEscape.Visuals.GunChams.Color, 
+							HyperEscape.Visuals.GunChams.trans,
+							"",
+							HyperEscape.Visuals.GunChams.reflection
+						)
+					end
+				end
+			end
+		end
+	end
+	
+	if HyperEscape.Visuals.Ambience.Enabled then
+		if game.Lighting.Ambient ~= HyperEscape.Visuals.Ambience.AmbienceInside then
+			game.Lighting.Ambient = HyperEscape.Visuals.Ambience.AmbienceInside;
+		end
+
+		if game.Lighting.OutdoorAmbient ~= HyperEscape.Visuals.Ambience.AmbienceOutside then
+			game.Lighting.OutdoorAmbient = HyperEscape.Visuals.Ambience.AmbienceOutside;
+		end
+	end
+
+	if HyperEscape.AimBot.Enabled then 
+		if HyperEscape.AimBot.IsAimKeyDown then
+			if HyperEscape.AimBot.StickyAim then
+
+			else
+				local target = nil;
+				if target ~= nil then -- This Is Here For Now As Idk Any Executors That Have Working mousemoverel
+					
+				end
+			end
+		end
+	end	
+
+	if HyperEscape.SilentAim.Enabled and IsAlive() then
+		
+		local SmallestMagnitude, Target = math.huge, nil;
+		for i,Character in game.Workspace.Players:GetDescendants() do
+			if Character.ClassName == "Model" then
+				local Torso = nil;
+				local Head = nil;
+				local AimPart = nil;
+
+				for i,torsoParts in Character:GetDescendants() do -- Erm, What The Sigma
+					if torsoParts.ClassName == "SpecialMesh" then
+						if torsoParts.MeshId == "rbxassetid://4049240078" then
+							Torso = torsoParts.Parent;
+						end
+					end
+				end
+
+				for i,headParts in Character:GetDescendants() do -- Erm, What The Sigma
+					if headParts.ClassName == "SpecialMesh" then
+						if headParts.MeshId == "rbxassetid://6179256256" then
+							Head = headParts.Parent;
+						end
+					end
+				end
+
+				if Head and Torso then
+					if GetTeamColor(Torso) ~= localTeamColor() then 
+						for i,HitParts in next, HyperEscape.SilentAim.AimPart do
+							if  HitParts == "Torso" then
+								local TorsoScreenPos, TorsoOnScreen = currentCamera:WorldToViewportPoint(Torso.Position);		
+								local TorsoPos = Vector2.new(TorsoScreenPos.X, TorsoScreenPos.Y);
+								local TorsoMagnitude = (TorsoPos - mouseLocation(UIS)).Magnitude;
+								if TorsoScreenPos and TorsoMagnitude < SmallestMagnitude and TorsoMagnitude < HyperEscape.SilentAim.Fov then
+									if HyperEscape.SilentAim.WallCheck ~= true or IsVisible(Torso.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
+										SmallestMagnitude = TorsoMagnitude;
+										Target = Torso;
+									end
+								end
+							elseif HitParts == "Head" then
+								local HeadScreenPos, HeadOnScreen = currentCamera:WorldToViewportPoint(Head.Position);
+								local HeadPos = Vector2.new(HeadScreenPos.X, HeadScreenPos.Y);
+								local HeadMagnitude = (HeadPos - mouseLocation(UIS)).Magnitude;
+								if HeadScreenPos and HeadMagnitude < SmallestMagnitude and HeadMagnitude < HyperEscape.SilentAim.Fov then
+									if HyperEscape.SilentAim.WallCheck ~= true or IsVisible(Head.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
+										SmallestMagnitude = HeadMagnitude;
+										Target = Head;
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+		
+		local CamGun = GetGun();
+
+		pcall(function()
+			if not CamGun:FindFirstChild("Tip") then
+				if Target and CamGun and math.random(0, 100) <= HyperEscape.SilentAim.HitChance then
+					for _,v in pairs(GetDirChange()) do
+
+						v.Position = v.CFrame.Position;
+						v.Velocity = Vector3.new();
+
+						local weld = v:FindFirstChildWhichIsA("Weld") or v:FindFirstChildWhichIsA("WeldConstraint");
+						if weld then
+							weld:Destroy();
+						end
+
+						local x,y,z = CFrame.new(v.Position, Target.Position ):ToEulerAnglesYXZ();
+						v.Orientation = Vector3.new(math.deg(x), math.deg(y), math.deg(z));
+
+						HyperEscape.SilentAim.Target = true;
+					end
+				else
+					
+					local straight = game.Workspace.CurrentCamera.CFrame.LookVector*100000;
+					for _,v in pairs(GetDirChange()) do
+
+						v.Position = v.CFrame.Position;
+						v.Velocity = Vector3.new();
+
+						local weld = v:FindFirstChildWhichIsA("Weld") or v:FindFirstChildWhichIsA("WeldConstraint");
+						if weld then
+							weld:Destroy();
+						end
+
+						local x,y,z = CFrame.new(v.Position,straight):ToEulerAnglesYXZ();
+						v.Orientation = Vector3.new(math.deg(x), math.deg(y), math.deg(z));
+
+						HyperEscape.SilentAim.Target = false;
+					end
+				end
+			else
+				HyperEscape.SilentAim.Target = false;
+			end
+		end)
+	end
+end)
+
+coroutine.wrap(function()
+	while game:GetService("RunService").RenderStepped:Wait() do
+		pcall(function()
+			if HyperEscape.SilentAim.iswindowactive and mouse1press and mouse1release and IsAlive() then
+				if HyperEscape.SilentAim.AoutoShoot and HyperEscape.SilentAim.Target then
+					mouse1press()wait()mouse1rlease()
+				end
+			end
+		end)
+	end
+end)()
+
