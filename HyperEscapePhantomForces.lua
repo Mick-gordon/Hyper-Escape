@@ -70,16 +70,16 @@ local HyperEscape = { -- Yes It Is Here AND IT DOSE NOT WORK. Please Wait Untill
 
 		iswindowactive = true;
 	};
-	
+
 	Visuals = { -- TODO: Fps boost
 		gameLighting = "ShadowMap";
-		
+
 		CustomTimeOfDay = false;
 		TimeOfDay = 24;
-		
+
 		ArmChams = {
 			Enable = false;
-			
+
 			Color = Color3.fromRGB(100, 0, 255);
 			Material = "ForceField"; 
 			trans = 0.5;
@@ -93,7 +93,7 @@ local HyperEscape = { -- Yes It Is Here AND IT DOSE NOT WORK. Please Wait Untill
 			trans = 0.5;
 			reflection = 1;
 		};
-		
+
 		Ambience = {
 			Enabled = false;
 			AmbienceInside = Color3.fromRGB(255, 255, 255);
@@ -207,7 +207,7 @@ local Textures = {
 	["Skibidy Toilet"] = "rbxassetid://14488881439"
 };
 
-local function GetTeamColor(Part) -- It Works Ok
+local function GetTeamColor(Part) 
 	for i,Vest in pairs(Part.Parent:GetDescendants()) do
 		if Vest.ClassName == "MeshPart" and Vest.MeshId == "rbxassetid://11232478007" and Vest.BrickColor == BrickColor.new("Earth blue") then
 			return BrickColor.new("Bright blue");
@@ -301,7 +301,7 @@ UserInputService.WindowFocusReleased:Connect(focusReleased);
 
 function esp:Update()
 	if self and self.Character then
-		local tosro = nil
+		local tosro = nil;
 
 		for i,Parts in self.Character:GetDescendants() do -- Erm, What The Sigma
 			if Parts.ClassName == "SpecialMesh" then
@@ -314,7 +314,7 @@ function esp:Update()
 		if tosro ~= nil then
 			local screen, onScreen = currentCamera:WorldToScreenPoint(tosro.Position); 
 
-			if screen and onScreen and IsAlive() and esp.settings.Enable and GetTeamColor(tosro) ~= localTeamColor() then 
+			if screen and onScreen and IsAlive() and esp.settings.Enable then 
 
 				local frustumHeight = math.tan(math.rad(currentCamera.FieldOfView * 0.5)) * 2 * screen.Z ; -- Thank you mickeydev, Join .gg/lunarity for the best paid script hub for fps games made by known and trusted developers. 
 				local size = currentCamera.ViewportSize.Y / frustumHeight * Vector2.new(5,6);
@@ -340,38 +340,38 @@ function esp:Update()
 					self.Drawings.OutlineBoxRight.Position = self.Drawings.BoxRight.Position;
 					self.Drawings.OutlineBoxUpper.Position = self.Drawings.BoxUpper.Position;
 					self.Drawings.OutlineBoxLower.Position = self.Drawings.BoxLower.Position;
-					
+
 					if self.Drawings.BoxLeft.BackgroundColor3 ~= esp.settings.Box.Color then
 						self.Drawings.BoxLeft.BackgroundColor3 = esp.settings.Box.Color;
 						self.Drawings.BoxRight.BackgroundColor3 = esp.settings.Box.Color;
 						self.Drawings.BoxUpper.BackgroundColor3 = esp.settings.Box.Color;
 						self.Drawings.BoxLower.BackgroundColor3 = esp.settings.Box.Color;
 					end
-					
+
 					if self.Drawings.OutlineBoxLeft.BorderColor3 ~= esp.settings.Box.OutlineColor then
 						self.Drawings.OutlineBoxLeft.BorderColor3 = esp.settings.Box.OutlineColor;
 						self.Drawings.OutlineBoxRight.BorderColor3 = esp.settings.Box.OutlineColor;
 						self.Drawings.OutlineBoxUpper.BorderColor3 = esp.settings.Box.OutlineColor;
 						self.Drawings.OutlineBoxLower.BorderColor3 = esp.settings.Box.OutlineColor;
 					end
-					
+
 					if self.Drawings.OutlineBoxLeft.BackgroundColor3 ~= esp.settings.Box.Color then
 						self.Drawings.OutlineBoxLeft.BackgroundColor3 = esp.settings.Box.Color;
 						self.Drawings.OutlineBoxRight.BackgroundColor3 = esp.settings.Box.Color;
 						self.Drawings.OutlineBoxUpper.BackgroundColor3 = esp.settings.Box.Color;
 						self.Drawings.OutlineBoxLower.BackgroundColor3 = esp.settings.Box.Color;
 					end
-					
+
 					self.Drawings.OutlineBoxLeft.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
 					self.Drawings.OutlineBoxRight.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
 					self.Drawings.OutlineBoxUpper.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
 					self.Drawings.OutlineBoxLower.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
-					
+
 					self.Drawings.BoxLeft.Visible = esp.settings.Box.Enabled;
 					self.Drawings.BoxRight.Visible = esp.settings.Box.Enabled;
 					self.Drawings.BoxUpper.Visible = esp.settings.Box.Enabled;
 					self.Drawings.BoxLower.Visible = esp.settings.Box.Enabled;
-					
+
 				else
 					self.Drawings.BoxLeft.Visible = false;
 					self.Drawings.BoxRight.Visible = false;
@@ -396,7 +396,7 @@ function esp:Update()
 					if self.Drawings.Tracer.BackgroundColor3 ~= esp.settings.Tracer.Color then
 						self.Drawings.Tracer.BackgroundColor3 = esp.settings.Tracer.Color;
 					end
-					
+
 					self.Drawings.Tracer.Visible = esp.settings.Tracer.Enabled;
 					if self.Drawings.Tracer.BorderSizePixel ~= (esp.settings.Box.Outline and 1 or not esp.settings.Box.Outline and 0)  then
 						self.Drawings.Tracer.BorderSizePixel = (esp.settings.Box.Outline and 1 or not esp.settings.Box.Outline and 0);
@@ -410,12 +410,12 @@ function esp:Update()
 					self.Drawings.Hilight.Adornee = tosro.Parent;
 					self.Drawings.Hilight.Enabled = esp.settings.Hilight.Enabled;
 					self.Drawings.Hilight.Parent = tosro.Parent;
-					
-					
+
+
 					if self.Drawings.Hilight.OutlineColor ~= esp.settings.Hilight.OutlineColor then
 						self.Drawings.Hilight.OutlineColor = esp.settings.Hilight.OutlineColor;
 					end
-					
+
 					if self.Drawings.Hilight.FillColor ~= esp.settings.Hilight.FillColor then
 						self.Drawings.Hilight.FillColor = esp.settings.Hilight.FillColor;
 					end
@@ -482,7 +482,7 @@ function esp.Create(Character)
 
 		Hilight = Instance.new("Highlight");
 	};
-	
+
 	self.Drawings.OutlineBoxLeft.BorderSizePixel = 1;
 	self.Drawings.OutlineBoxRight.BorderSizePixel = 1;
 	self.Drawings.OutlineBoxUpper.BorderSizePixel = 1;
@@ -492,7 +492,7 @@ function esp.Create(Character)
 	self.Drawings.BoxRight.BorderSizePixel = 0;
 	self.Drawings.BoxUpper.BorderSizePixel = 0;
 	self.Drawings.BoxLower.BorderSizePixel = 0;
-	
+
 	self.Drawings.Tracer.AnchorPoint = Vector2.new(0.5, 0.5);
 
 	self.Connection = RunService.RenderStepped:Connect(function()
@@ -515,21 +515,36 @@ function esp:Remove()
 end
 
 local loop = RunService.RenderStepped:Connect(function()
-	for i,Character in game.Workspace.Players:GetDescendants() do 
-		if Character.ClassName == "Model" then
-			local self = esp.cache[Character];
+	if esp.settings.Enable then -- + 0.1 fps
+		for i,Character in game.Workspace.Players:GetDescendants() do 
+			if Character.ClassName == "Model" then
 
-			if not self then
-				esp.Create(Character);
-			end
-
-			Character.Destroying:Connect(function()
-				local self = esp.cache[Character];
-			
-				if self then
-					self:Remove();
+				local torso = nil;
+				for i,torsoParts in Character:GetDescendants() do 
+					if torsoParts.ClassName == "SpecialMesh" then
+						if torsoParts.MeshId == "rbxassetid://4049240078" then
+							torso = torsoParts.Parent;
+						end
+					end
 				end
-			end)
+
+
+				if torso and GetTeamColor(torso) ~= localTeamColor() then 
+					local self = esp.cache[Character];
+
+					if not self then
+						esp.Create(Character);
+					end
+
+					Character.Destroying:Connect(function()
+						local self = esp.cache[Character];
+
+						if self then
+							self:Remove();
+						end
+					end)
+				end
+			end
 		end
 	end
 end)
@@ -602,12 +617,11 @@ localPlayer:GetMouse().KeyUp:Connect(function(Key)
 	end
 end)
 
+RunService.RenderStepped:Connect(function()
 
-game:GetService("RunService").Heartbeat:Connect(function() 
-	
 	if HyperEscape.AimBot.Enabled and HyperEscape.AimBot.IsAimKeyDown then
 		local target = GetTarget()
-		
+
 		if target  then
 			currentCamera.CFrame = CFrame.new(currentCamera.CFrame.Position, target.Position)
 		end
@@ -634,7 +648,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 	else
 		UIStroke.Enabled = false;
 	end
-	
+
 	if HyperEscape.Visuals.ArmChams.Enable and IsAlive() then
 		for _,part in next, currentCamera:GetChildren() do
 			if not part.Name:lower():find("main") and #part:GetChildren() > 0 then
@@ -656,7 +670,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 			end
 		end
 	end
-	
+
 	if HyperEscape.Visuals.GunChams.Enable and IsAlive() then
 		for _,part in next, currentCamera:GetChildren() do
 			if part.Name:lower():find("main") and #part:GetChildren() > 0 then
@@ -678,7 +692,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 			end
 		end
 	end
-	
+
 	if HyperEscape.Visuals.Ambience.Enabled then
 		if game.Lighting.Ambient ~= HyperEscape.Visuals.Ambience.AmbienceInside then
 			game.Lighting.Ambient = HyperEscape.Visuals.Ambience.AmbienceInside;
@@ -696,14 +710,14 @@ game:GetService("RunService").Heartbeat:Connect(function()
 			else
 				local target = nil;
 				if target ~= nil then -- This Is Here For Now As Idk Any Executors That Have Working mousemoverel
-					
+
 				end
 			end
 		end
 	end	
 
 	if HyperEscape.SilentAim.Enabled and IsAlive() then
-		
+
 		local SmallestMagnitude, Target = math.huge, nil;
 		for i,Character in game.Workspace.Players:GetDescendants() do
 			if Character.ClassName == "Model" then
@@ -756,7 +770,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 				end
 			end
 		end
-		
+
 		local CamGun = GetGun();
 
 		pcall(function()
@@ -778,7 +792,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 						HyperEscape.SilentAim.Target = true;
 					end
 				else
-					
+
 					local straight = game.Workspace.CurrentCamera.CFrame.LookVector*100000;
 					for _,v in pairs(GetDirChange()) do
 
@@ -814,4 +828,3 @@ coroutine.wrap(function()
 		end)
 	end
 end)()
-
