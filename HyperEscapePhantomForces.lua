@@ -23,7 +23,7 @@ local HyperEscape = { -- Yes It Is Here AND IT DOSE NOT WORK. Please Wait Untill
 	};
 
 	AimBot = {
-		Enabled = false; 
+		Enabled = true; 
 
 		TeamCheck = false;
 		WallCheck = false;
@@ -224,7 +224,7 @@ end
 
 local function GetGun()
 	for i,Gun in currentCamera:GetChildren() do
-		if Gun.ClassName == "Model" and Gun.Name ~= "Left Arm" and Gun.Name ~= "Right Arm"then
+		if Gun.Name:lower():find("main") and #Gun:GetChildren() > 0 then
 			return Gun;
 		end
 	end
@@ -232,11 +232,11 @@ local function GetGun()
 end
 
 local function GetDirChange()
-	local a={}
+	local a = { };
 	if game.Workspace.CurrentCamera:FindFirstChild(GetGun().Name) then 
 		for _,v in pairs(GetGun():GetChildren()) do
 			if string.find(string.lower(tostring(v)), "flame") or string.find(string.lower(tostring(v)), "sightmark") or string.find(string.lower(tostring(v))," flamesup") then
-				a[#a+1] = v;
+				a[#a + 1] = v;
 			end
 		end
 	end
@@ -256,49 +256,48 @@ end
 
 local function ApplyChams(part, material, color, transparency, decal, reflectance)
 	if part:IsA("BasePart") and part.Transparency < 1 then
-		local Material = Materials[material]
-		local Texture = material == "ForceField" and Textures[decal] or ""
+		local Material = Materials[material];
+		local Texture = material == "ForceField" and Textures[decal] or "";
 
 		if part:FindFirstChildOfClass("SpecialMesh") then
 			local Mesh = part:FindFirstChildOfClass("SpecialMesh")
-			Mesh.TextureId = Texture
-			Mesh.VertexColor = Vector3.new(color.R, color.G, color.B)
+			Mesh.TextureId = Texture;
+			Mesh.VertexColor = Vector3.new(color.R, color.G, color.B);
 		end
 
 		if part:FindFirstChildOfClass("MeshPart") then
 			local Mesh = part:FindFirstChildOfClass("MeshPart")
-			Mesh.TextureId = Texture
-			Mesh.VertexColor = Vector3.new(color.R, color.G, color.B)
+			Mesh.TextureId = Texture;
+			Mesh.VertexColor = Vector3.new(color.R, color.G, color.B);
 		end
 
 		if part.ClassName == "UnionOperation" then
-			part.UsePartColor = true
+			part.UsePartColor = true;
 		end
 
 		if part:FindFirstChild("SurfaceAppearance") then
-			part.SurfaceAppearance:Destroy()
+			part.SurfaceAppearance:Destroy();
 		end
 
 		if part:IsA("MeshPart") then
-			part.TextureID = Texture
+			part.TextureID = Texture;
 		end
 
-		part.Color = color
-		part.Material = material
-		part.Transparency = transparency
-		part.Reflectance = reflectance 
+		part.Color = color;
+		part.Material = material;
+		part.Transparency = transparency;
+		part.Reflectance = reflectance;
 	end
 end
-local function focusGained()
+
+local function focusGained() -- Idk If This Even Works I Just Got It From The Roblox Docs
 	HyperEscape.SilentAim.iswindowactive= true;
 end
-
 local function focusReleased()
 	HyperEscape.SilentAim.iswindowactive= false;
 end
-
-UserInputService.WindowFocused:Connect(focusGained)
-UserInputService.WindowFocusReleased:Connect(focusReleased)
+UserInputService.WindowFocused:Connect(focusGained);
+UserInputService.WindowFocusReleased:Connect(focusReleased);
 
 function esp:Update()
 	if self and self.Character then
@@ -341,41 +340,38 @@ function esp:Update()
 					self.Drawings.OutlineBoxRight.Position = self.Drawings.BoxRight.Position;
 					self.Drawings.OutlineBoxUpper.Position = self.Drawings.BoxUpper.Position;
 					self.Drawings.OutlineBoxLower.Position = self.Drawings.BoxLower.Position;
-
-					self.Drawings.BoxLeft.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.BoxRight.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.BoxUpper.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.BoxLower.BackgroundColor3 = esp.settings.Box.Color;
-
-					self.Drawings.OutlineBoxLeft.BorderSizePixel = 1;
-					self.Drawings.OutlineBoxRight.BorderSizePixel = 1;
-					self.Drawings.OutlineBoxUpper.BorderSizePixel = 1;
-					self.Drawings.OutlineBoxLower.BorderSizePixel = 1;
-
-					self.Drawings.BoxLeft.BorderSizePixel = 0;
-					self.Drawings.BoxRight.BorderSizePixel = 0;
-					self.Drawings.BoxUpper.BorderSizePixel = 0;
-					self.Drawings.BoxLower.BorderSizePixel = 0;
-
-					self.Drawings.OutlineBoxLeft.BorderColor3 = esp.settings.Box.OutlineColor;
-					self.Drawings.OutlineBoxRight.BorderColor3 = esp.settings.Box.OutlineColor;
-					self.Drawings.OutlineBoxUpper.BorderColor3 = esp.settings.Box.OutlineColor;
-					self.Drawings.OutlineBoxLower.BorderColor3 = esp.settings.Box.OutlineColor;
-
-					self.Drawings.OutlineBoxLeft.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.OutlineBoxRight.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.OutlineBoxUpper.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.OutlineBoxLower.BackgroundColor3 = esp.settings.Box.Color;
-
-					self.Drawings.BoxLeft.Visible = esp.settings.Box.Enabled;
-					self.Drawings.BoxRight.Visible = esp.settings.Box.Enabled;
-					self.Drawings.BoxUpper.Visible = esp.settings.Box.Enabled;
-					self.Drawings.BoxLower.Visible = esp.settings.Box.Enabled;
-
+					
+					if self.Drawings.BoxLeft.BackgroundColor3 ~= esp.settings.Box.Color then
+						self.Drawings.BoxLeft.BackgroundColor3 = esp.settings.Box.Color;
+						self.Drawings.BoxRight.BackgroundColor3 = esp.settings.Box.Color;
+						self.Drawings.BoxUpper.BackgroundColor3 = esp.settings.Box.Color;
+						self.Drawings.BoxLower.BackgroundColor3 = esp.settings.Box.Color;
+					end
+					
+					if self.Drawings.OutlineBoxLeft.BorderColor3 ~= esp.settings.Box.OutlineColor then
+						self.Drawings.OutlineBoxLeft.BorderColor3 = esp.settings.Box.OutlineColor;
+						self.Drawings.OutlineBoxRight.BorderColor3 = esp.settings.Box.OutlineColor;
+						self.Drawings.OutlineBoxUpper.BorderColor3 = esp.settings.Box.OutlineColor;
+						self.Drawings.OutlineBoxLower.BorderColor3 = esp.settings.Box.OutlineColor;
+					end
+					
+					if self.Drawings.OutlineBoxLeft.BackgroundColor3 ~= esp.settings.Box.Color then
+						self.Drawings.OutlineBoxLeft.BackgroundColor3 = esp.settings.Box.Color;
+						self.Drawings.OutlineBoxRight.BackgroundColor3 = esp.settings.Box.Color;
+						self.Drawings.OutlineBoxUpper.BackgroundColor3 = esp.settings.Box.Color;
+						self.Drawings.OutlineBoxLower.BackgroundColor3 = esp.settings.Box.Color;
+					end
+					
 					self.Drawings.OutlineBoxLeft.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
 					self.Drawings.OutlineBoxRight.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
 					self.Drawings.OutlineBoxUpper.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
 					self.Drawings.OutlineBoxLower.Visible = esp.settings.Box.Enabled and esp.settings.Box.Outline;
+					
+					self.Drawings.BoxLeft.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoxRight.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoxUpper.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoxLower.Visible = esp.settings.Box.Enabled;
+					
 				else
 					self.Drawings.BoxLeft.Visible = false;
 					self.Drawings.BoxRight.Visible = false;
@@ -393,27 +389,20 @@ function esp:Update()
 					local Origin = Vector2.new(currentCamera.ViewportSize.X/2, currentCamera.ViewportSize.Y - 1);
 					local TracerPosition = (Origin + ScreenVec2) / 2;
 
-					self.Drawings.Tracer.AnchorPoint = Vector2.new(0.5, 0.5);
 					self.Drawings.Tracer.Rotation = math.deg(math.atan2(ScreenVec2.Y - Origin.Y, ScreenVec2.X - Origin.X));
 					self.Drawings.Tracer.Position = UDim2.new(0, TracerPosition.X, 0, TracerPosition.Y);
 					self.Drawings.Tracer.Size = UDim2.fromOffset((Origin - ScreenVec2).Magnitude, 1);
 
-					self.Drawings.Tracer.BackgroundColor3 = esp.settings.Tracer.Color;
+					if self.Drawings.Tracer.BackgroundColor3 ~= esp.settings.Tracer.Color then
+						self.Drawings.Tracer.BackgroundColor3 = esp.settings.Tracer.Color;
+					end
+					
 					self.Drawings.Tracer.Visible = esp.settings.Tracer.Enabled;
-					self.Drawings.Tracer.BorderSizePixel = 0;
-
-					self.Drawings.OutlineTracer.AnchorPoint = self.Drawings.Tracer.AnchorPoint;
-					self.Drawings.OutlineTracer.Rotation = self.Drawings.Tracer.Rotation;
-					self.Drawings.OutlineTracer.Position = self.Drawings.Tracer.Position;
-					self.Drawings.OutlineTracer.Size = self.Drawings.Tracer.Size;
-
-					self.Drawings.OutlineTracer.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.OutlineTracer.Visible = esp.settings.Tracer.Enabled and esp.settings.Box.Outline;
-					self.Drawings.OutlineTracer.BorderColor3 = esp.settings.Box.OutlineColor;
-					self.Drawings.OutlineTracer.BorderSizePixel = 1;
+					if self.Drawings.Tracer.BorderSizePixel ~= (esp.settings.Box.Outline and 1 or not esp.settings.Box.Outline and 0)  then
+						self.Drawings.Tracer.BorderSizePixel = (esp.settings.Box.Outline and 1 or not esp.settings.Box.Outline and 0);
+					end
 				else
 					self.Drawings.Tracer.Visible = false;
-					self.Drawings.OutlineTracer.Visible = false;
 				end
 
 				if esp.settings.Hilight.Enabled then
@@ -421,14 +410,26 @@ function esp:Update()
 					self.Drawings.Hilight.Adornee = tosro.Parent;
 					self.Drawings.Hilight.Enabled = esp.settings.Hilight.Enabled;
 					self.Drawings.Hilight.Parent = tosro.Parent;
+					
+					
+					if self.Drawings.Hilight.OutlineColor ~= esp.settings.Hilight.OutlineColor then
+						self.Drawings.Hilight.OutlineColor = esp.settings.Hilight.OutlineColor;
+					end
+					
+					if self.Drawings.Hilight.FillColor ~= esp.settings.Hilight.FillColor then
+						self.Drawings.Hilight.FillColor = esp.settings.Hilight.FillColor;
+					end
 
-					self.Drawings.Hilight.OutlineColor = esp.settings.Hilight.OutlineColor;
-					self.Drawings.Hilight.FillColor = esp.settings.Hilight.FillColor;
+					if self.Drawings.Hilight.FillTransparency ~= esp.settings.Hilight.FillTransparency then
+						self.Drawings.Hilight.FillTransparency = esp.settings.Hilight.FillTransparency;
+					end
+					if self.Drawings.Hilight.OutlineTransparency ~= esp.settings.Hilight.OutlineTransparency then
+						self.Drawings.Hilight.OutlineTransparency = esp.settings.Hilight.OutlineTransparency;
+					end
 
-					self.Drawings.Hilight.FillTransparency = esp.settings.Hilight.FillTransparency;
-					self.Drawings.Hilight.OutlineTransparency = esp.settings.Hilight.OutlineTransparency;
-
-					self.Drawings.Hilight.DepthMode = (esp.settings.Hilight.AllWaysShow and "AlwaysOnTop" or not esp.settings.Hilight.AllWaysShow and "Occluded");
+					if self.Drawings.Hilight.DepthMode ~= (esp.settings.Hilight.AllWaysShow and "AlwaysOnTop" or not esp.settings.Hilight.AllWaysShow and "Occluded") then
+						self.Drawings.Hilight.DepthMode = (esp.settings.Hilight.AllWaysShow and "AlwaysOnTop" or not esp.settings.Hilight.AllWaysShow and "Occluded");
+					end
 				else
 					self.Drawings.Hilight.Adornee = nil;
 					self.Drawings.Hilight.Enabled = false;
@@ -446,7 +447,6 @@ function esp:Update()
 				self.Drawings.OutlineBoxRight.Visible = false;
 				self.Drawings.OutlineBoxUpper.Visible = false;
 				self.Drawings.OutlineBoxLower.Visible = false;
-				self.Drawings.OutlineTracer.Visible = false;
 			end
 		else
 			self.Drawings.BoxLeft.Visible = false;
@@ -460,7 +460,6 @@ function esp:Update()
 			self.Drawings.OutlineBoxRight.Visible = false;
 			self.Drawings.OutlineBoxUpper.Visible = false;
 			self.Drawings.OutlineBoxLower.Visible = false;
-			self.Drawings.OutlineTracer.Visible = false;
 		end
 	end
 end
@@ -469,21 +468,32 @@ function esp.Create(Character)
 	local self = setmetatable({}, esp.cache);
 	self.Character = Character;
 	self.Drawings = {
-		OutlineBoxUpper = Instance.new("Frame", Holder);
-		OutlineBoxLower = Instance.new("Frame", Holder);
 		OutlineBoxLeft = Instance.new("Frame", Holder);
 		OutlineBoxRight = Instance.new("Frame", Holder);
+		OutlineBoxUpper = Instance.new("Frame", Holder);
+		OutlineBoxLower = Instance.new("Frame", Holder);
 
 		BoxUpper = Instance.new("Frame", Holder);
 		BoxLower = Instance.new("Frame", Holder);
 		BoxLeft = Instance.new("Frame", Holder);
 		BoxRight = Instance.new("Frame", Holder);
 
-		OutlineTracer = Instance.new("Frame", Holder);
 		Tracer = Instance.new("Frame", Holder);
 
 		Hilight = Instance.new("Highlight");
 	};
+	
+	self.Drawings.OutlineBoxLeft.BorderSizePixel = 1;
+	self.Drawings.OutlineBoxRight.BorderSizePixel = 1;
+	self.Drawings.OutlineBoxUpper.BorderSizePixel = 1;
+	self.Drawings.OutlineBoxLower.BorderSizePixel = 1;
+
+	self.Drawings.BoxLeft.BorderSizePixel = 0;
+	self.Drawings.BoxRight.BorderSizePixel = 0;
+	self.Drawings.BoxUpper.BorderSizePixel = 0;
+	self.Drawings.BoxLower.BorderSizePixel = 0;
+	
+	self.Drawings.Tracer.AnchorPoint = Vector2.new(0.5, 0.5);
 
 	self.Connection = RunService.RenderStepped:Connect(function()
 		self:Update();
@@ -524,8 +534,84 @@ local loop = RunService.RenderStepped:Connect(function()
 	end
 end)
 
+local function GetTarget()
+	local SmallestMagnitude, Target = math.huge, nil;
+	for i,Character in game.Workspace.Players:GetDescendants() do
+		if Character.ClassName == "Model" then
+			local Torso = nil;
+			local Head = nil;
+			local AimPart = nil;
+
+			for i,torsoParts in Character:GetDescendants() do -- Erm, What The Sigma
+				if torsoParts.ClassName == "SpecialMesh" then
+					if torsoParts.MeshId == "rbxassetid://4049240078" then
+						Torso = torsoParts.Parent;
+					end
+				end
+			end
+
+			for i,headParts in Character:GetDescendants() do -- Erm, What The Sigma
+				if headParts.ClassName == "SpecialMesh" then
+					if headParts.MeshId == "rbxassetid://6179256256" then
+						Head = headParts.Parent;
+					end
+				end
+			end
+
+			if Head and Torso then
+				if GetTeamColor(Torso) ~= localTeamColor() then 
+					for i,HitParts in next, HyperEscape.AimBot.AimPart do
+						if  HitParts == "Torso" then
+							local TorsoScreenPos, TorsoOnScreen = currentCamera:WorldToViewportPoint(Torso.Position);		
+							local TorsoPos = Vector2.new(TorsoScreenPos.X, TorsoScreenPos.Y);
+							local TorsoMagnitude = (TorsoPos - mouseLocation(UIS)).Magnitude;
+							if TorsoScreenPos and TorsoMagnitude < SmallestMagnitude and TorsoMagnitude < HyperEscape.AimBot.Fov then
+								if HyperEscape.AimBot.WallCheck ~= true or IsVisible(Torso.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
+									SmallestMagnitude = TorsoMagnitude;
+									Target = Torso;
+								end
+							end
+						elseif HitParts == "Head" then
+							local HeadScreenPos, HeadOnScreen = currentCamera:WorldToViewportPoint(Head.Position);
+							local HeadPos = Vector2.new(HeadScreenPos.X, HeadScreenPos.Y);
+							local HeadMagnitude = (HeadPos - mouseLocation(UIS)).Magnitude;
+							if HeadScreenPos and HeadMagnitude < SmallestMagnitude and HeadMagnitude < HyperEscape.AimBot.Fov then
+								if HyperEscape.AimBot.WallCheck ~= true or IsVisible(Head.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
+									SmallestMagnitude = HeadMagnitude;
+									Target = Head;
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	return Target;
+end
+
+localPlayer:GetMouse().KeyDown:Connect(function(Key)
+	if Key == Enum.KeyCode.E then
+		HyperEscape.AimBot.IsAimKeyDown = true;
+	end
+end)
+
+localPlayer:GetMouse().KeyUp:Connect(function(Key)
+	if Key == Enum.KeyCode.E then
+		HyperEscape.AimBot.IsAimKeyDown = false;
+	end
+end)
+
 
 game:GetService("RunService").Heartbeat:Connect(function() 
+	
+	if HyperEscape.AimBot.Enabled and HyperEscape.AimBot.IsAimKeyDown then
+		local target = GetTarget()
+		
+		if target  then
+			currentCamera.CFrame = CFrame.new(currentCamera.CFrame.Position, target.Position)
+		end
+	end
 
 	if HyperEscape.AimBot.Enabled and HyperEscape.AimBot.ShowFov then
 		UIStroke.Enabled = true;
@@ -564,7 +650,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 							HyperEscape.Visuals.ArmChams.trans,
 							"",
 							HyperEscape.Visuals.ArmChams.reflection
-						)
+						);
 					end
 				end
 			end
@@ -586,7 +672,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 							HyperEscape.Visuals.GunChams.trans,
 							"",
 							HyperEscape.Visuals.GunChams.reflection
-						)
+						);
 					end
 				end
 			end
@@ -722,7 +808,7 @@ coroutine.wrap(function()
 		pcall(function()
 			if HyperEscape.SilentAim.iswindowactive and mouse1press and mouse1release and IsAlive() then
 				if HyperEscape.SilentAim.AoutoShoot and HyperEscape.SilentAim.Target then
-					mouse1press()wait()mouse1rlease()
+					mouse1press(); wait(); mouse1rlease();
 				end
 			end
 		end)
