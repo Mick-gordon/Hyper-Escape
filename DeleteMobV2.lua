@@ -1311,7 +1311,11 @@ else
 
 		return library;
 	end
-
+	
+	local IsArsenal = false;
+	if game.PlaceId == 286090429 then
+		IsArsenal = true;
+	end
 
 	local DeleteMobLib = library();
 
@@ -1347,17 +1351,21 @@ else
 	EnableSector:CreateToggle("Name", HyperEscape.esp.Box.Name, function(EN) HyperEscape.esp.Box.Name = EN; end);
 	EnableSector:CreateToggle("Distance", HyperEscape.esp.Box.Distance, function(ED) HyperEscape.esp.Box.Distance = ED; end);
 	EnableSector:CreateToggle("Health Bar", HyperEscape.esp.Box.HealthBar, function(EHB) HyperEscape.esp.Box.HealthBar = EHB; end);
-	EnableSector:CreateToggle("Hilights", HyperEscape.esp.Hilights.Hilights, function(EHi) HyperEscape.esp.Hilights.Hilights = EHi; end);
-	EnableSector:CreateToggle("Show Hilight Through Walls", HyperEscape.esp.Hilights.AllWaysVisible, function(ESHTW) HyperEscape.esp.Hilights.AllWaysVisible = ESHTW; end);
+	if not IsArsenal then
+		EnableSector:CreateToggle("Hilights", HyperEscape.esp.Hilights.Hilights, function(EHi) HyperEscape.esp.Hilights.Hilights = EHi; end);
+		EnableSector:CreateToggle("Show Hilight Through Walls", HyperEscape.esp.Hilights.AllWaysVisible, function(ESHTW) HyperEscape.esp.Hilights.AllWaysVisible = ESHTW; end);
+	end
 
 	local ESPSettingsSecor = ESPTab:CreateSector("Settings", "Right");
 	ESPSettingsSecor:CreateToggle("Outlines", HyperEscape.esp.Box.Outline, function(ESO) HyperEscape.esp.Box.Outline = ESO; HyperEscape.esp.Tracer.Outline = ESO; end);
 	ESPSettingsSecor:CreateColorPicker("Outline Color", HyperEscape.esp.Box.OutlineColor, function(EOC) HyperEscape.esp.Box.OutlineColor = EOC; HyperEscape.esp.Tracer.OutlineColor = EOC; end);
 	ESPSettingsSecor:CreateColorPicker("ESP Color", HyperEscape.esp.Box.Color, function(EEC) HyperEscape.esp.Box.Color = EEC; HyperEscape.esp.Tracer.Color = EEC; end);
-	ESPSettingsSecor:CreateColorPicker("Hilight Outline", HyperEscape.esp.Hilights.OutlineColor, function(EOCC) HyperEscape.esp.Hilights.OutlineColor = EOCC; end);
-	ESPSettingsSecor:CreateColorPicker("Hilight Fill", HyperEscape.esp.Hilights.FillColor, function(EFCC) HyperEscape.esp.Hilights.FillColor = EFCC; end);
-	ESPSettingsSecor:CreateSlider("Hilight Outline", 0, HyperEscape.esp.Hilights.OutlineTransparency * 100, 100, 1, function(EHOT) HyperEscape.esp.Hilights.OutlineTransparency = EHOT / 100; end);
-	ESPSettingsSecor:CreateSlider("Hilight Fill", 0, HyperEscape.esp.Hilights.FillTransparency * 100, 100, 1, function(EHFT) HyperEscape.esp.Hilights.FillTransparency = EHFT / 100; end);
+	if not IsArsenal then
+		ESPSettingsSecor:CreateColorPicker("Hilight Outline", HyperEscape.esp.Hilights.OutlineColor, function(EOCC) HyperEscape.esp.Hilights.OutlineColor = EOCC; end);
+		ESPSettingsSecor:CreateColorPicker("Hilight Fill", HyperEscape.esp.Hilights.FillColor, function(EFCC) HyperEscape.esp.Hilights.FillColor = EFCC; end);
+		ESPSettingsSecor:CreateSlider("Hilight Outline", 0, HyperEscape.esp.Hilights.OutlineTransparency * 100, 100, 1, function(EHOT) HyperEscape.esp.Hilights.OutlineTransparency = EHOT / 100; end);
+		ESPSettingsSecor:CreateSlider("Hilight Fill", 0, HyperEscape.esp.Hilights.FillTransparency * 100, 100, 1, function(EHFT) HyperEscape.esp.Hilights.FillTransparency = EHFT / 100; end);
+	end
 
 	local SettingsTab = Window:CreateTab("Settings");
 	local SettingsInfoSector = SettingsTab:CreateSector("Info", "Left");
@@ -1376,11 +1384,6 @@ else
 	local FOVFFrame = Instance.new("Frame")FOVFFrame.Parent = Fov FOVFFrame.Name = "FOVFFrame" FOVFFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255) FOVFFrame.BorderColor3 = Color3.fromRGB(0, 0, 0) FOVFFrame.BorderSizePixel = 0 FOVFFrame.BackgroundTransparency = 1 FOVFFrame.AnchorPoint = Vector2.new(0.5, 0.5) FOVFFrame.Position = UDim2.new(0.5, 0,0.5, 0) FOVFFrame.Size = UDim2.new(0, HyperEscape.AimBot.Fov, 0, HyperEscape.AimBot.Fov) FOVFFrame.BackgroundTransparency = 1;
 	local UICorner = Instance.new("UICorner")UICorner.CornerRadius = UDim.new(1, 0) UICorner.Parent = FOVFFrame;
 	local UIStroke = Instance.new("UIStroke")UIStroke.Color = Color3.fromRGB(100,0,100) UIStroke.Parent = FOVFFrame UIStroke.Thickness = 1 UIStroke.ApplyStrokeMode = "Border"; game:GetService("StarterGui"):SetCore("SendNotification", {Title = "https://discord.gg/FsApQ7YNTq", Text = "The Discord For More!"});
-	local IsArsenal = false;
-
-	if game.PlaceId == 286090429 then
-		IsArsenal = true;
-	end
 
 	local function IsAlive(Player)
 		if Player and Player.Character and Player.Character:FindFirstChild("Humanoid") ~= nil and (IsArsenal and players[Player.Character.Name].NRPBS["Health"].Value > 0 or not IsArsenal and Player.Character.Humanoid.Health > 0) then
@@ -1667,9 +1670,12 @@ else
 						-- Hilight 
 
 						if HyperEscape.esp.Hilights.TeamCheck ~= true or GetTeam(Player) ~= GetTeam(localPlayer) then
-
+							
 							Hilight.Enabled = HyperEscape.esp.Hilights.Hilights;
-							Hilight.Adornee = Player.Character;
+							
+							if not IsArsenal then
+								Hilight.Adornee = Player.Character;
+							end
 
 							Hilight.OutlineColor = HyperEscape.esp.Hilights.OutlineColor;
 							Hilight.FillColor = HyperEscape.esp.Hilights.FillColor;
@@ -1813,7 +1819,7 @@ else
 			UIStroke.Enabled = false;
 		end
 
-		if HyperEscape.AimBot.Enabled then -- I Am Pretty Happy With This Legit Bot. Best One I Have Made So Far.
+		if HyperEscape.AimBot.Enabled then
 			if HyperEscape.AimBot.IsAimKeyDown then
 				if HyperEscape.AimBot.StickyAim then
 					if HyperEscape.AimBot.Target ~= nil then
@@ -1834,7 +1840,7 @@ else
 						HyperEscape.AimBot.CameraTween:Play();
 
 					elseif HyperEscape.AimBot.CameraTween ~= nil then
-						HyperEscape.AimBot.CameraTween:Cancel(); -- There Was A Bug Where The Camera Would Do Wired Ass Shit And Be Delayed. If There Sill Is Wierd Bugs With The Camera Tell Me Please.
+						HyperEscape.AimBot.CameraTween:Cancel(); 
 					end
 				end
 			end
