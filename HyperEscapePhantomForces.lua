@@ -1,6 +1,7 @@
 local BoxDefult = {Enabled = false; Color = Color3.fromRGB(255,255,255); Outline = true; OutlineColor = Color3.fromRGB(0,0,0)};
 local TracerDefult = {Enabled = false; Color = Color3.fromRGB(255,255,255); Outline = true; OutlineColor = Color3.fromRGB(0,0,0)};
 local HilightDefult = {Enabled = false; FillColor = Color3.fromRGB(255,255,255); OutlineColor = Color3.fromRGB(0,0,0); OutlineTransparency = 0.5; FillTransparency= 0.5; AllWaysShow = false;};
+local BoneDefult = {Enabled = true; Color = Color3.fromRGB(255, 255, 255); Transparency = 0;}
 
 local esp = {
 	settings = {
@@ -9,6 +10,7 @@ local esp = {
 		Box = table.clone(BoxDefult);
 		Tracer = table.clone(TracerDefult);
 		Hilight = table.clone(HilightDefult);
+		Bones = table.clone(BoneDefult);
 	};
 };
 
@@ -61,7 +63,7 @@ local HyperEscape = { -- Yes It Is Here AND IT DOSE NOT WORK. Please Wait Untill
 
 		HitChance = 50;
 
-		AimPart = "Head";
+		AimPart = {"Head"};
 
 		Fov = 360;
 		ShowFov = false;
@@ -207,18 +209,18 @@ local Textures = {
 	["Skibidy Toilet"] = "rbxassetid://14488881439"
 };
 
-local function GetTeamColor(Part) 
+local function GetTeam(Part) 
 	for i,Vest in pairs(Part.Parent:GetDescendants()) do
 		if Vest.ClassName == "MeshPart" and Vest.MeshId == "rbxassetid://11232478007" and Vest.BrickColor == BrickColor.new("Earth blue") then
-			return BrickColor.new("Bright blue");
+			return game.Teams.Phantoms;
 		end
 	end
-	return BrickColor.new("Bright orange");
+	return game.Teams.Ghosts;
 end
 
-local function localTeamColor()
+local function localTeam()
 	if not game.Players.LocalPlayer.Neutral then
-		return game.Players.LocalPlayer.TeamColor;
+		return game.Players.LocalPlayer.Team;
 	end
 end
 
@@ -301,16 +303,16 @@ UserInputService.WindowFocusReleased:Connect(focusReleased);
 
 function esp:Update()
 	if self and self.Character then
-		local tosro = nil;
-
-		for i,Parts in self.Character:GetDescendants() do -- Erm, What The Sigma
-			if Parts.ClassName == "SpecialMesh" then
-				if Parts.MeshId == "rbxassetid://4049240078" then
-					tosro = Parts.Parent;
-				end
-			end
-		end
-
+		
+		local children = self.Character:GetChildren();
+		
+		local head = children[7];
+		local leftArm = children[5];
+		local rightArm = children[4];
+		local tosro = children[6];
+		local rightLeg = children[3];
+		local leftLeg = children[2];
+		
 		if tosro ~= nil then
 			local screen, onScreen = currentCamera:WorldToScreenPoint(tosro.Position); 
 
@@ -434,6 +436,37 @@ function esp:Update()
 					self.Drawings.Hilight.Adornee = nil;
 					self.Drawings.Hilight.Enabled = false;
 				end
+				
+				if esp.settings.Bones.Enabled then
+					
+					local size = currentCamera.ViewportSize.Y / frustumHeight * Vector2.new(5,6);
+					local position = Vector2.new(screen.X, screen.Y) - (size / 2 - Vector2.new(0, size.Y) / 20);
+					
+					self.Drawings.BoneLeftArm.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoneRightArm.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoneLeftLeg.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoneRightLeg.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoneHead.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoneTorso.Visible = esp.settings.Box.Enabled;
+					
+					self.Drawings.BoneLeftArm.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.BoneRightArm.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.BoneLeftLeg.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.BoneRightLeg.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.BoneHead.BackgroundColor3 = esp.settings.Box.Color;
+					self.Drawings.BoneTorso.BackgroundColor3 = esp.settings.Box.Color;
+					
+		
+					
+					
+				else
+					self.Drawings.BoneLeftArm.Visible = false; -- In Next Update Please Wait
+					self.Drawings.BoneRightArm.Visible = false;
+					self.Drawings.BoneLeftLeg.Visible = false;
+					self.Drawings.BoneRightLeg.Visible = false;
+					self.Drawings.BoneHead.Visible = false;
+					self.Drawings.BoneTorso.Visible = false;
+				end
 
 			else
 				self.Drawings.BoxLeft.Visible = false;
@@ -477,6 +510,14 @@ function esp.Create(Character)
 		BoxLower = Instance.new("Frame", Holder);
 		BoxLeft = Instance.new("Frame", Holder);
 		BoxRight = Instance.new("Frame", Holder);
+		
+		BoneLeftArm = Instance.new("Frame", Holder);
+		BoneRightArm = Instance.new("Frame", Holder);
+		BoneLeftLeg = Instance.new("Frame", Holder);
+		BoneRightLeg = Instance.new("Frame", Holder);
+		BoneHead = Instance.new("Frame", Holder);
+		BoneTorso = Instance.new("Frame", Holder);
+		
 
 		Tracer = Instance.new("Frame", Holder);
 
@@ -519,17 +560,11 @@ local loop = RunService.RenderStepped:Connect(function()
 		for i,Character in game.Workspace.Players:GetDescendants() do 
 			if Character.ClassName == "Model" then
 
-				local torso = nil;
-				for i,torsoParts in Character:GetDescendants() do 
-					if torsoParts.ClassName == "SpecialMesh" then
-						if torsoParts.MeshId == "rbxassetid://4049240078" then
-							torso = torsoParts.Parent;
-						end
-					end
-				end
+				local children = Character:GetChildren();
+				
+				local Torso = children[6];
 
-
-				if torso and GetTeamColor(torso) ~= localTeamColor() then 
+				if Torso and GetTeam(Torso) ~= localTeam() then 
 					local self = esp.cache[Character];
 
 					if not self then
@@ -553,29 +588,21 @@ local function GetTarget()
 	local SmallestMagnitude, Target = math.huge, nil;
 	for i,Character in game.Workspace.Players:GetDescendants() do
 		if Character.ClassName == "Model" then
-			local Torso = nil;
-			local Head = nil;
+
 			local AimPart = nil;
+			
+			local children = Character:GetChildren();
 
-			for i,torsoParts in Character:GetDescendants() do -- Erm, What The Sigma
-				if torsoParts.ClassName == "SpecialMesh" then
-					if torsoParts.MeshId == "rbxassetid://4049240078" then
-						Torso = torsoParts.Parent;
-					end
-				end
-			end
-
-			for i,headParts in Character:GetDescendants() do -- Erm, What The Sigma
-				if headParts.ClassName == "SpecialMesh" then
-					if headParts.MeshId == "rbxassetid://6179256256" then
-						Head = headParts.Parent;
-					end
-				end
-			end
+			local Head = children[7];
+			local leftArm = children[5];
+			local rightArm = children[4];
+			local Torso = children[6];
+			local rightLeg = children[3];
+			local leftLeg = children[2];
 
 			if Head and Torso then
-				if GetTeamColor(Torso) ~= localTeamColor() then 
-					for i,HitParts in next, HyperEscape.AimBot.AimPart do
+				if GetTeam(Torso) ~= localTeam() then 
+					for i,HitParts in next, HyperEscape.SilentAim.AimPart do -- Dog Shit Just Wait 
 						if  HitParts == "Torso" then
 							local TorsoScreenPos, TorsoOnScreen = currentCamera:WorldToViewportPoint(Torso.Position);		
 							local TorsoPos = Vector2.new(TorsoScreenPos.X, TorsoScreenPos.Y);
@@ -623,7 +650,11 @@ RunService.RenderStepped:Connect(function()
 		local target = GetTarget()
 
 		if target  then
-			currentCamera.CFrame = CFrame.new(currentCamera.CFrame.Position, target.Position)
+			local screenpoint = currentCamera:WorldToViewportPoint(target.Position);
+			local targetPos = Vector2.new(screenpoint.X, screenpoint.Y);
+			if mousemoverel then
+				mousemoverel((targetPos.X - localPlayer:GetMouse().X) / 5, (targetPos.Y - localPlayer:GetMouse().Y) / 5)
+			end
 		end
 	end
 
@@ -721,35 +752,27 @@ RunService.RenderStepped:Connect(function()
 		local SmallestMagnitude, Target = math.huge, nil;
 		for i,Character in game.Workspace.Players:GetDescendants() do
 			if Character.ClassName == "Model" then
-				local Torso = nil;
-				local Head = nil;
+
 				local AimPart = nil;
 
-				for i,torsoParts in Character:GetDescendants() do -- Erm, What The Sigma
-					if torsoParts.ClassName == "SpecialMesh" then
-						if torsoParts.MeshId == "rbxassetid://4049240078" then
-							Torso = torsoParts.Parent;
-						end
-					end
-				end
+				local children = Character:GetChildren();
 
-				for i,headParts in Character:GetDescendants() do -- Erm, What The Sigma
-					if headParts.ClassName == "SpecialMesh" then
-						if headParts.MeshId == "rbxassetid://6179256256" then
-							Head = headParts.Parent;
-						end
-					end
-				end
+				local Head = children[7];
+				local leftArm = children[5];
+				local rightArm = children[4];
+				local Torso = children[6];
+				local rightLeg = children[3];
+				local leftLeg = children[2];
 
 				if Head and Torso then
-					if GetTeamColor(Torso) ~= localTeamColor() then 
-						for i,HitParts in next, HyperEscape.SilentAim.AimPart do
+					if GetTeam(Torso) ~= localTeam() then 
+						for i,HitParts in next, HyperEscape.SilentAim.AimPart do -- Dog Shit Just Wait 
 							if  HitParts == "Torso" then
 								local TorsoScreenPos, TorsoOnScreen = currentCamera:WorldToViewportPoint(Torso.Position);		
 								local TorsoPos = Vector2.new(TorsoScreenPos.X, TorsoScreenPos.Y);
 								local TorsoMagnitude = (TorsoPos - mouseLocation(UIS)).Magnitude;
-								if TorsoScreenPos and TorsoMagnitude < SmallestMagnitude and TorsoMagnitude < HyperEscape.SilentAim.Fov then
-									if HyperEscape.SilentAim.WallCheck ~= true or IsVisible(Torso.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
+								if TorsoScreenPos and TorsoMagnitude < SmallestMagnitude and TorsoMagnitude < HyperEscape.AimBot.Fov then
+									if HyperEscape.AimBot.WallCheck ~= true or IsVisible(Torso.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
 										SmallestMagnitude = TorsoMagnitude;
 										Target = Torso;
 									end
@@ -758,8 +781,8 @@ RunService.RenderStepped:Connect(function()
 								local HeadScreenPos, HeadOnScreen = currentCamera:WorldToViewportPoint(Head.Position);
 								local HeadPos = Vector2.new(HeadScreenPos.X, HeadScreenPos.Y);
 								local HeadMagnitude = (HeadPos - mouseLocation(UIS)).Magnitude;
-								if HeadScreenPos and HeadMagnitude < SmallestMagnitude and HeadMagnitude < HyperEscape.SilentAim.Fov then
-									if HyperEscape.SilentAim.WallCheck ~= true or IsVisible(Head.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
+								if HeadScreenPos and HeadMagnitude < SmallestMagnitude and HeadMagnitude < HyperEscape.AimBot.Fov then
+									if HyperEscape.AimBot.WallCheck ~= true or IsVisible(Head.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
 										SmallestMagnitude = HeadMagnitude;
 										Target = Head;
 									end
