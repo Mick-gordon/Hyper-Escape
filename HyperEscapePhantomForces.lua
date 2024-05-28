@@ -765,14 +765,14 @@ RunService.RenderStepped:Connect(function()
 				local leftLeg = children[2];
 
 				if Head and Torso then
-					if GetTeam(Torso) ~= localTeam() then 
-						for i,HitParts in next, HyperEscape.SilentAim.AimPart do -- Dog Shit Just Wait 
+					if GetTeamColor(Torso) ~= localTeamColor() then 
+						for i,HitParts in next, HyperEscape.SilentAim.AimPart do
 							if  HitParts == "Torso" then
 								local TorsoScreenPos, TorsoOnScreen = currentCamera:WorldToViewportPoint(Torso.Position);		
 								local TorsoPos = Vector2.new(TorsoScreenPos.X, TorsoScreenPos.Y);
 								local TorsoMagnitude = (TorsoPos - mouseLocation(UIS)).Magnitude;
-								if TorsoScreenPos and TorsoMagnitude < SmallestMagnitude and TorsoMagnitude < HyperEscape.AimBot.Fov then
-									if HyperEscape.AimBot.WallCheck ~= true or IsVisible(Torso.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
+								if TorsoScreenPos and TorsoMagnitude < SmallestMagnitude and TorsoMagnitude < HyperEscape.SilentAim.Fov then
+									if HyperEscape.SilentAim.WallCheck ~= true or IsVisible(Torso.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
 										SmallestMagnitude = TorsoMagnitude;
 										Target = Torso;
 									end
@@ -781,8 +781,8 @@ RunService.RenderStepped:Connect(function()
 								local HeadScreenPos, HeadOnScreen = currentCamera:WorldToViewportPoint(Head.Position);
 								local HeadPos = Vector2.new(HeadScreenPos.X, HeadScreenPos.Y);
 								local HeadMagnitude = (HeadPos - mouseLocation(UIS)).Magnitude;
-								if HeadScreenPos and HeadMagnitude < SmallestMagnitude and HeadMagnitude < HyperEscape.AimBot.Fov then
-									if HyperEscape.AimBot.WallCheck ~= true or IsVisible(Head.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
+								if HeadScreenPos and HeadMagnitude < SmallestMagnitude and HeadMagnitude < HyperEscape.SilentAim.Fov then
+									if HyperEscape.SilentAim.WallCheck ~= true or IsVisible(Head.Position, {Head.Parent, localPlayer.Character, game.Workspace.Ignore, currentCamera}) == true then
 										SmallestMagnitude = HeadMagnitude;
 										Target = Head;
 									end
