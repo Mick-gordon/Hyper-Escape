@@ -765,7 +765,7 @@ RunService.RenderStepped:Connect(function()
 				local leftLeg = children[2];
 
 				if Head and Torso then
-					if GetTeamColor(Torso) ~= localTeamColor() then 
+					if GetTeam(Torso) ~= localTeam() then 
 						for i,HitParts in next, HyperEscape.SilentAim.AimPart do
 							if  HitParts == "Torso" then
 								local TorsoScreenPos, TorsoOnScreen = currentCamera:WorldToViewportPoint(Torso.Position);		
