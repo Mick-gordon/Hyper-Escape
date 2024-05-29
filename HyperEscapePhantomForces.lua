@@ -3,6 +3,7 @@ local TracerDefult = {Enabled = false; Color = Color3.fromRGB(255,255,255); Outl
 local HilightDefult = {Enabled = false; FillColor = Color3.fromRGB(255,255,255); OutlineColor = Color3.fromRGB(0,0,0); OutlineTransparency = 0.5; FillTransparency= 0.5; AllWaysShow = false;};
 local BoneDefult = {Enabled = false; Color = Color3.fromRGB(255, 255, 255); Transparency = 1;};
 local HeadDotDefult = {Enabled = false; Color = Color3.fromRGB(255, 0, 0); Transparency = 0; BorderThickness = 1; Size = 0.5;}; -- It Is Anoying Wit Transparency As Drawing Has 1 As Visible
+local TextDefult = {Enabled = false; Color = Color3.fromRGB(255, 255, 255);};
 
 local esp = {
 	settings = {
@@ -13,6 +14,7 @@ local esp = {
 		Hilight = table.clone(HilightDefult);
 		Bones = table.clone(BoneDefult);
 		HeadDot = table.clone(HeadDotDefult);
+		ShowGun = table.clone(TextDefult);
 	};
 };
 
@@ -69,7 +71,8 @@ local HyperEscape = { -- Yes It Is Here AND IT DOSE NOT WORK. Please Wait Untill
 
 		Fov = 360;
 		ShowFov = false;
-
+		Color = Color3.fromRGB(100, 0 ,20);
+		
 		Target = nil;
 
 		iswindowactive = true;
@@ -129,6 +132,7 @@ end
 local FOVSection = SilentAimTab:CreateSector("Fov", "Right");
 FOVSection:CreateToggle("Show Fov", false, function(SFS) HyperEscape.SilentAim.ShowFov = SFS; end);
 FOVSection:CreateSlider("Fov", 0, 360, 1000, 1, function(SF) HyperEscape.SilentAim.Fov = SF; end);
+FOVSection:CreateColorPicker("Fov Color", Color3.fromRGB(100, 0, 20), function(FCA) HyperEscape.SilentAim.Color = FCA; end);
 
 local ESPTab = Window:CreateTab("Visuals");
 local ESPOptionsSection = ESPTab:CreateSector("ESP", "Left");
@@ -136,24 +140,29 @@ ESPOptionsSection:CreateToggle("Enable", false, function(ETCE) esp.settings.Enab
 ESPOptionsSection:CreateToggle("Box", false, function(EBE) esp.settings.Box.Enabled = EBE; end);
 if CanDraw then
 	ESPOptionsSection:CreateToggle("Dynamic Box", false, function(EBDE) esp.settings.Box.Dynamic = EBDE; end);
-	ESPOptionsSection:CreateToggle("Bones", false, function(EBBE) esp.settings.Bones.Enabled = EBBE; end);
 end
 ESPOptionsSection:CreateToggle("Tracer", false, function(ETE) esp.settings.Tracer.Enabled = ETE; end);
+if CanDraw then
+	ESPOptionsSection:CreateToggle("Bones", false, function(EBBE) esp.settings.Bones.Enabled = EBBE; end);
+end
 ESPOptionsSection:CreateToggle("Head Dot", false, function(EHDE) esp.settings.HeadDot.Enabled = EHDE; end);
-ESPOptionsSection:CreateToggle("Hilight", false, function(EHE) esp.settings.Hilight.Enabled = EHE; end);
-ESPOptionsSection:CreateToggle("Allways Show Hilight", false, function(EASH) esp.settings.Hilight.AllWaysShow = EASH; end);
+ESPOptionsSection:CreateToggle("Gun", false, function(ESGE) esp.settings.ShowGun.Enabled = ESGE; end);
+
+local ChamsSection = ESPTab:CreateSector("Chams", "Right");
+ChamsSection:CreateToggle("Hilight", false, function(EHE) esp.settings.Hilight.Enabled = EHE; end);
+ChamsSection:CreateToggle("Allways Show Hilight", false, function(EASH) esp.settings.Hilight.AllWaysShow = EASH; end);
+ChamsSection:CreateColorPicker("Hilight Outline", Color3.fromRGB(255, 255, 255), function(ehf) esp.settings.Hilight.OutlineColor = ehf; end);
+ChamsSection:CreateColorPicker("Hilight Fill", Color3.fromRGB(100, 0, 255), function(ehff) esp.settings.Hilight.FillColor = ehff; end);
+ChamsSection:CreateSlider("Hilight Outline", 0, 50, 100, 1, function(HFF) esp.settings.Hilight.OutlineTransparency = HFF / 100; end);
+ChamsSection:CreateSlider("Hilight Fill", 0, 0, 100, 1, function(HOF) esp.settings.Hilight.FillTransparency = HOF / 100; end);
 
 local ESPSettingssSection = ESPTab:CreateSector("ESP Settings", "Right");
 ESPSettingssSection:CreateToggle("Border", false, function(EOT) esp.settings.Box.Outline = EOT; end);
 ESPSettingssSection:CreateColorPicker("Border Color", Color3.fromRGB(0, 0, 0), function(ebc) esp.settings.Box.OutlineColor = ebc; end);
-ESPSettingssSection:CreateColorPicker("ESP Color", Color3.fromRGB(255, 255, 255), function(eec) esp.settings.Box.Color = eec; end);
+ESPSettingssSection:CreateColorPicker("Box Color", Color3.fromRGB(255, 255, 255), function(eec) esp.settings.Box.Color = eec; end);
 if CanDraw then
 	ESPSettingssSection:CreateColorPicker("Bones Color", Color3.fromRGB(255, 255, 255), function(eBec) esp.settings.Bones.Color = eBec; end);
 end
-ESPSettingssSection:CreateColorPicker("Hilight Outline", Color3.fromRGB(255, 255, 255), function(ehf) esp.settings.Hilight.OutlineColor = ehf; end);
-ESPSettingssSection:CreateColorPicker("Hilight Fill", Color3.fromRGB(100, 0, 255), function(ehff) esp.settings.Hilight.FillColor = ehff; end);
-ESPSettingssSection:CreateSlider("Hilight Outline", 0, 50, 100, 1, function(HFF) esp.settings.Hilight.OutlineTransparency = HFF / 100; end);
-ESPSettingssSection:CreateSlider("Hilight Fill", 0, 0, 100, 1, function(HOF) esp.settings.Hilight.FillTransparency = HOF / 100; end);
 ESPSettingssSection:CreateSlider("Head Dot Size", 0, 50, 100, 1, function(EHS) esp.settings.HeadDot.Size = EHS / 100; end);
 ESPSettingssSection:CreateSlider("Head Dot T", 0, 50, 100, 1, function(EHT) esp.settings.HeadDot.Transparency = EHT / 100; end);
 
@@ -166,14 +175,14 @@ WorldVisualsSection:CreateButton("FPS Boost", function() if game.Workspace.Map t
 
 local ArmChamsSection = ESPTab:CreateSector("Gun Chams", "Left");
 ArmChamsSection:CreateToggle("Enable", false, function(ETCeE) HyperEscape.Visuals.ArmChams.Enable = ETCeE; end);
-ArmChamsSection:CreateColorPicker("Color", Color3.fromRGB(0, 0, 0), function(hebc) HyperEscape.Visuals.ArmChams.Color = hebc; end);
+ArmChamsSection:CreateColorPicker("Color", Color3.fromRGB(100, 0, 255), function(hebc) HyperEscape.Visuals.ArmChams.Color = hebc; end);
 ArmChamsSection:CreateDropDown("Material", {"ForceField", "SmoothPlastic", "Glass", "Neon", "Plastic"}, "ForceField", false, function(GLbfSM) HyperEscape.Visuals.ArmChams.Material = GLbfSM; end);
 ArmChamsSection:CreateSlider("Transparency", 0, 0, 99, 1, function(HdgOF) HyperEscape.Visuals.ArmChams.trans = HdgOF / 100; end);
 ArmChamsSection:CreateSlider("Reflection", 1, 1, 50, 1, function(HjgOF) HyperEscape.Visuals.ArmChams.reflection = HjgOF / 100; end);
 
 local GunChamsSection = ESPTab:CreateSector("Arm Chams", "Left");
 GunChamsSection:CreateToggle("Enable", false, function(ETCgeE) HyperEscape.Visuals.GunChams.Enable = ETCgeE; end);
-GunChamsSection:CreateColorPicker("Color", Color3.fromRGB(0, 0, 0), function(hefbc) HyperEscape.Visuals.GunChams.Color = hefbc; end);
+GunChamsSection:CreateColorPicker("Color", Color3.fromRGB(100, 0, 255), function(hefbc) HyperEscape.Visuals.GunChams.Color = hefbc; end);
 GunChamsSection:CreateDropDown("Material", {"ForceField", "SmoothPlastic", "Glass", "Neon", "Plastic"}, "ForceField", false, function(GLbffSM) HyperEscape.Visuals.GunChams.Material = GLbffSM; end);
 GunChamsSection:CreateSlider("Transparency", 0, 0, 99, 1, function(HfdgOF) HyperEscape.Visuals.GunChams.trans = HfdgOF / 100; end);
 GunChamsSection:CreateSlider("Reflection", 1, 1, 50, 1, function(HjggOF) HyperEscape.Visuals.GunChams.reflection = HjggOF / 100; end);
@@ -356,6 +365,7 @@ function esp:Update()
 				local frustumHeight = math.tan(math.rad(currentCamera.FieldOfView * 0.5)) * 2 * screen.Z ; -- Thank you mickeydev, Join .gg/lunarity for the best paid script hub for fps games made by known and trusted developers. 
 				local size = currentCamera.ViewportSize.Y / frustumHeight * Vector2.new(5,6);
 				local position = Vector2.new(screen.X, screen.Y) - (size / 2 - Vector2.new(0, size.Y) / 20);
+				local bottomTextY = (screen.Y + (size.Y + self.Drawings.GunText.TextBounds.Y + 19) / 2);
 
 				if esp.settings.Box.Enabled and not esp.settings.Box.Dynamic then
 					self.Drawings.BoxLeft.Size = UDim2.fromOffset(size.X, 1);
@@ -420,7 +430,7 @@ function esp:Update()
 					self.Drawings.OutlineBoxLower.Visible = false;
 				end
 				
-				if esp.settings.Box.Enabled and esp.settings.Box.Dynamic  and CanDraw then -- It Is Made But Problem Where Drawings Cant Be Removed :( Gay Ass Niggas
+				if esp.settings.Box.Enabled and esp.settings.Box.Dynamic and CanDraw then -- It Is Made But Problem Where Drawings Cant Be Removed :( Gay Ass Niggas
 					
 					local points = {};
 					local c = 0;
@@ -479,6 +489,19 @@ function esp:Update()
 						self.Drawings.OutlineBox.Visible = false;
 						self.Drawings.Box.Visible = false;
 					end
+				end
+				
+				if esp.settings.ShowGun then
+					local Gun = children[8];
+					if Gun then
+						self.Drawings.GunText.Visible = esp.settings.ShowGun.Enabled;
+						self.Drawings.GunText.Text = string.gsub(tostring(Gun.Name), "External", "");
+						self.Drawings.GunText.Position = UDim2.fromOffset(screen.X, bottomTextY);
+				
+						self.Drawings.GunText.TextColor3 = esp.settings.ShowGun.Color;
+					end
+				else
+					self.Drawings.GunText.Visible = false;
 				end
 				
 				if esp.settings.Tracer.Enabled then
@@ -642,6 +665,7 @@ function esp:Update()
 				self.Drawings.OutlineBoxLower.Visible = false;
 				self.Drawings.OutlineBox.Visible = false;
 				self.Drawings.HeadDot.Visible = false;
+				self.Drawings.GunText.Visible = false;
 				if CanDraw then
 					self.Drawings.OutlineBox.Visible = false;
 					self.Drawings.Box.Visible = false;
@@ -670,6 +694,7 @@ function esp:Update()
 			self.Drawings.OutlineBoxUpper.Visible = false;
 			self.Drawings.OutlineBoxLower.Visible = false;
 			self.Drawings.HeadDot.Visible = false;
+			self.Drawings.GunText.Visible = false;
 			if CanDraw then
 				self.Drawings.OutlineBox.Visible = false;
 				self.Drawings.Box.Visible = false;
@@ -703,6 +728,8 @@ function esp.Create(Character)
 			BoxLower = Instance.new("Frame", Holder);
 			BoxLeft = Instance.new("Frame", Holder);
 			BoxRight = Instance.new("Frame", Holder);
+			
+			GunText = Instance.new("TextLabel", Holder);
 
 			BoneLeftArm = Drawing.new("Line"), {};
 			BoneLeftArmUpper = Drawing.new("Line"), {};
@@ -740,13 +767,20 @@ function esp.Create(Character)
 			BoxRight = Instance.new("Frame", Holder);
 			
 			HeadDot = Instance.new("Frame", Holder);
+			
+			GunText = Instance.new("TextLabel", Holder);
 
 			Tracer = Instance.new("Frame", Holder);
 
 			Hilight = Instance.new("Highlight");
 		};
 	end
-
+	
+	self.Drawings.GunText.BackgroundTransparency = 1;
+	self.Drawings.GunText.TextXAlignment = Enum.TextXAlignment.Center;
+	self.Drawings.GunText.Font = 2;
+	self.Drawings.GunText.TextSize = 12;
+		
 	self.Drawings.OutlineBoxLeft.BorderSizePixel = 1;
 	self.Drawings.OutlineBoxRight.BorderSizePixel = 1;
 	self.Drawings.OutlineBoxUpper.BorderSizePixel = 1;
