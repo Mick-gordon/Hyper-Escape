@@ -494,8 +494,11 @@ function esp:Update()
 				if esp.settings.ShowGun then
 					local Gun = children[8];
 					if Gun then
+						local GunName = string.gsub(tostring(Gun.Name), "External", "");
 						self.Drawings.GunText.Visible = esp.settings.ShowGun.Enabled;
-						self.Drawings.GunText.Text = string.gsub(tostring(Gun.Name), "External", "");
+						if self.Drawings.GunText.Text ~= GunName then
+							self.Drawings.GunText.Text = GunName;
+						end
 						self.Drawings.GunText.Position = UDim2.fromOffset(screen.X, bottomTextY);
 				
 						self.Drawings.GunText.TextColor3 = esp.settings.ShowGun.Color;
@@ -530,7 +533,7 @@ function esp:Update()
 					-- Hilight
 					self.Drawings.Hilight.Adornee = tosro.Parent;
 					self.Drawings.Hilight.Enabled = esp.settings.Hilight.Enabled;
-					self.Drawings.Hilight.Parent = tosro.Parent;
+					self.Drawings.Hilight.Parent = Holder;
 
 
 					if self.Drawings.Hilight.OutlineColor ~= esp.settings.Hilight.OutlineColor then -- + 0.0000001 FPS Or - Idk If That Even Helps
@@ -790,6 +793,20 @@ function esp.Create(Character)
 	self.Drawings.BoxRight.BorderSizePixel = 0;
 	self.Drawings.BoxUpper.BorderSizePixel = 0;
 	self.Drawings.BoxLower.BorderSizePixel = 0;
+	
+	self.Drawings.BoxLeft.Visible = false;
+	self.Drawings.BoxRight.Visible = false;
+	self.Drawings.BoxUpper.Visible = false;
+	self.Drawings.BoxLower.Visible = false;
+	self.Drawings.Hilight.Adornee = nil;
+	self.Drawings.Hilight.Enabled = false;
+	self.Drawings.Tracer.Visible = false;
+	self.Drawings.OutlineBoxLeft.Visible = false;
+	self.Drawings.OutlineBoxRight.Visible = false;
+	self.Drawings.OutlineBoxUpper.Visible = false;
+	self.Drawings.OutlineBoxLower.Visible = false;
+	self.Drawings.HeadDot.Visible = false;
+	self.Drawings.GunText.Visible = false;
 
 	self.Drawings.Tracer.AnchorPoint = Vector2.new(0.5, 0.5);
 	
@@ -930,7 +947,7 @@ RunService.RenderStepped:Connect(function()
 
 	if HyperEscape.AimBot.Enabled and HyperEscape.AimBot.ShowFov then
 		UIStroke.Enabled = true;
-		UIStroke.Color = HyperEscape.AimBot.FovColor;
+		UIStroke.Color = HyperEscape.sil.FovColor;
 
 		local posd = UIS:GetMouseLocation();
 		FOVFFrame.Position = UDim2.new(0, posd.X, 0, posd.Y - 36);
@@ -941,7 +958,7 @@ RunService.RenderStepped:Connect(function()
 
 	if HyperEscape.SilentAim.Enabled and HyperEscape.SilentAim.ShowFov then
 		UIStroke.Enabled = true;
-		UIStroke.Color = HyperEscape.AimBot.FovColor;
+		UIStroke.Color = HyperEscape.SilentAim.Color;
 
 		local posd = UIS:GetMouseLocation();
 		FOVFFrame.Position = UDim2.new(0, posd.X, 0, posd.Y - 36);
