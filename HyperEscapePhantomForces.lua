@@ -1,7 +1,8 @@
 local BoxDefult = {Enabled = false; Dynamic = false; Color = Color3.fromRGB(255,255,255); Outline = true; OutlineColor = Color3.fromRGB(0,0,0)};
 local TracerDefult = {Enabled = false; Color = Color3.fromRGB(255,255,255); Outline = true; OutlineColor = Color3.fromRGB(0,0,0)};
 local HilightDefult = {Enabled = false; FillColor = Color3.fromRGB(255,255,255); OutlineColor = Color3.fromRGB(0,0,0); OutlineTransparency = 0.5; FillTransparency= 0.5; AllWaysShow = false;};
-local BoneDefult = {Enabled = false; Color = Color3.fromRGB(255, 255, 255); Transparency = 1;}
+local BoneDefult = {Enabled = false; Color = Color3.fromRGB(255, 255, 255); Transparency = 1;};
+local HeadDotDefult = {Enabled = false; Color = Color3.fromRGB(255, 0, 0); Transparency = 0; BorderThickness = 1; Size = 0.5;}; -- It Is Anoying Wit Transparency As Drawing Has 1 As Visible
 
 local esp = {
 	settings = {
@@ -11,6 +12,7 @@ local esp = {
 		Tracer = table.clone(TracerDefult);
 		Hilight = table.clone(HilightDefult);
 		Bones = table.clone(BoneDefult);
+		HeadDot = table.clone(HeadDotDefult);
 	};
 };
 
@@ -137,6 +139,7 @@ if CanDraw then
 	ESPOptionsSection:CreateToggle("Bones", false, function(EBBE) esp.settings.Bones.Enabled = EBBE; end);
 end
 ESPOptionsSection:CreateToggle("Tracer", false, function(ETE) esp.settings.Tracer.Enabled = ETE; end);
+ESPOptionsSection:CreateToggle("Head Dot", false, function(EHDE) esp.settings.HeadDot.Enabled = EHDE; end);
 ESPOptionsSection:CreateToggle("Hilight", false, function(EHE) esp.settings.Hilight.Enabled = EHE; end);
 ESPOptionsSection:CreateToggle("Allways Show Hilight", false, function(EASH) esp.settings.Hilight.AllWaysShow = EASH; end);
 
@@ -151,6 +154,8 @@ ESPSettingssSection:CreateColorPicker("Hilight Outline", Color3.fromRGB(255, 255
 ESPSettingssSection:CreateColorPicker("Hilight Fill", Color3.fromRGB(100, 0, 255), function(ehff) esp.settings.Hilight.FillColor = ehff; end);
 ESPSettingssSection:CreateSlider("Hilight Outline", 0, 50, 100, 1, function(HFF) esp.settings.Hilight.OutlineTransparency = HFF / 100; end);
 ESPSettingssSection:CreateSlider("Hilight Fill", 0, 0, 100, 1, function(HOF) esp.settings.Hilight.FillTransparency = HOF / 100; end);
+ESPSettingssSection:CreateSlider("Head Dot Size", 0, 50, 100, 1, function(EHS) esp.settings.HeadDot.Size = EHS / 100; end);
+ESPSettingssSection:CreateSlider("Head Dot T", 0, 50, 100, 1, function(EHT) esp.settings.HeadDot.Transparency = EHT / 100; end);
 
 local WorldVisualsSection = ESPTab:CreateSector("World Visuals", "Right");
 WorldVisualsSection:CreateToggle("Ambience", false, function(VCT) HyperEscape.Visuals.Ambience.Enabled = VCT; end);
@@ -601,6 +606,27 @@ function esp:Update()
 						self.Drawings.BoneRightLegUpper.Visible = false;
 					end
 				end
+				
+				if esp.settings.HeadDot.Enabled then
+					local HeadScreen = currentCamera:WorldToScreenPoint(head.Position);
+					local HeadFrustumHeight = math.tan(math.rad(currentCamera.FieldOfView * 0.5)) * 2 * HeadScreen.Z; 
+					local HeadSize = currentCamera.ViewportSize.Y / HeadFrustumHeight * Vector2.new(esp.settings.HeadDot.Size,esp.settings.HeadDot.Size);
+					local HeadPosition = Vector2.new(HeadScreen.X, HeadScreen.Y) - (HeadSize / 2 - Vector2.new(0, HeadSize.Y) / 20);
+					self.Drawings.HeadDot.Visible = esp.settings.HeadDot.Enabled;
+					
+					self.Drawings.HeadDot.Size = UDim2.fromOffset(HeadSize.X, HeadSize.Y);
+					self.Drawings.HeadDot.Position = UDim2.fromOffset(HeadPosition.X, HeadPosition.Y);
+					
+					self.Drawings.HeadDot.BorderSizePixel = esp.settings.HeadDot.BorderThickness;
+					self.Drawings.HeadDot.BorderColor3 = esp.settings.Box.OutlineColor;
+					self.Drawings.HeadDot.Transparency = esp.settings.HeadDot.Transparency;
+					
+					if self.Drawings.HeadDot.BackgroundColor3 ~= esp.settings.HeadDot.Color then
+						self.Drawings.HeadDot.BackgroundColor3 = esp.settings.HeadDot.Color;
+					end
+				else
+					self.Drawings.HeadDot.Visible = false;
+				end
 
 			else
 				self.Drawings.BoxLeft.Visible = false;
@@ -615,6 +641,7 @@ function esp:Update()
 				self.Drawings.OutlineBoxUpper.Visible = false;
 				self.Drawings.OutlineBoxLower.Visible = false;
 				self.Drawings.OutlineBox.Visible = false;
+				self.Drawings.HeadDot.Visible = false;
 				if CanDraw then
 					self.Drawings.OutlineBox.Visible = false;
 					self.Drawings.Box.Visible = false;
@@ -642,6 +669,7 @@ function esp:Update()
 			self.Drawings.OutlineBoxRight.Visible = false;
 			self.Drawings.OutlineBoxUpper.Visible = false;
 			self.Drawings.OutlineBoxLower.Visible = false;
+			self.Drawings.HeadDot.Visible = false;
 			if CanDraw then
 				self.Drawings.OutlineBox.Visible = false;
 				self.Drawings.Box.Visible = false;
@@ -692,6 +720,8 @@ function esp.Create(Character)
 
 			OutlineBox = Drawing.new("Quad"), {};  -- Some Fucking Reason They Cant Be Removed?????? These Free Executors Are Pissing Me Off.
 			Box = Drawing.new("Quad"), {};
+			
+			HeadDot = Instance.new("Frame", Holder);
 
 			Tracer = Instance.new("Frame", Holder);
 
@@ -708,6 +738,8 @@ function esp.Create(Character)
 			BoxLower = Instance.new("Frame", Holder);
 			BoxLeft = Instance.new("Frame", Holder);
 			BoxRight = Instance.new("Frame", Holder);
+			
+			HeadDot = Instance.new("Frame", Holder);
 
 			Tracer = Instance.new("Frame", Holder);
 
