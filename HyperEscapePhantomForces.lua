@@ -1,7 +1,7 @@
-local BoxDefult = {Enabled = false; Color = Color3.fromRGB(255,255,255); Outline = true; OutlineColor = Color3.fromRGB(0,0,0)};
+local BoxDefult = {Enabled = false; Dynamic = false; Color = Color3.fromRGB(255,255,255); Outline = true; OutlineColor = Color3.fromRGB(0,0,0)};
 local TracerDefult = {Enabled = false; Color = Color3.fromRGB(255,255,255); Outline = true; OutlineColor = Color3.fromRGB(0,0,0)};
 local HilightDefult = {Enabled = false; FillColor = Color3.fromRGB(255,255,255); OutlineColor = Color3.fromRGB(0,0,0); OutlineTransparency = 0.5; FillTransparency= 0.5; AllWaysShow = false;};
-local BoneDefult = {Enabled = true; Color = Color3.fromRGB(255, 255, 255); Transparency = 0;}
+local BoneDefult = {Enabled = false; Color = Color3.fromRGB(255, 255, 255); Transparency = 1;}
 
 local esp = {
 	settings = {
@@ -25,7 +25,7 @@ local HyperEscape = { -- Yes It Is Here AND IT DOSE NOT WORK. Please Wait Untill
 	};
 
 	AimBot = {
-		Enabled = true; 
+		Enabled = false; 
 
 		TeamCheck = false;
 		WallCheck = false;
@@ -103,6 +103,12 @@ local HyperEscape = { -- Yes It Is Here AND IT DOSE NOT WORK. Please Wait Untill
 		};
 	};
 };
+local CanDraw = false;
+if Drawing.new("Quad") and Drawing.new("Line") then
+	CanDraw = true;
+else
+	CanDraw = false;
+end
 
 local DeleteMobLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Mick-gordon/Hyper-Escape/main/DeleteMob%20GUI.lua"))();
 local Window = DeleteMobLib:CreateWindow(Enum.KeyCode.RightShift, "DeleteMob");
@@ -126,6 +132,10 @@ local ESPTab = Window:CreateTab("Visuals");
 local ESPOptionsSection = ESPTab:CreateSector("ESP", "Left");
 ESPOptionsSection:CreateToggle("Enable", false, function(ETCE) esp.settings.Enable = ETCE; end);
 ESPOptionsSection:CreateToggle("Box", false, function(EBE) esp.settings.Box.Enabled = EBE; end);
+if CanDraw then
+	ESPOptionsSection:CreateToggle("Dynamic Box", false, function(EBDE) esp.settings.Box.Dynamic = EBDE; end);
+	ESPOptionsSection:CreateToggle("Bones", false, function(EBBE) esp.settings.Bones.Enabled = EBBE; end);
+end
 ESPOptionsSection:CreateToggle("Tracer", false, function(ETE) esp.settings.Tracer.Enabled = ETE; end);
 ESPOptionsSection:CreateToggle("Hilight", false, function(EHE) esp.settings.Hilight.Enabled = EHE; end);
 ESPOptionsSection:CreateToggle("Allways Show Hilight", false, function(EASH) esp.settings.Hilight.AllWaysShow = EASH; end);
@@ -134,6 +144,9 @@ local ESPSettingssSection = ESPTab:CreateSector("ESP Settings", "Right");
 ESPSettingssSection:CreateToggle("Border", false, function(EOT) esp.settings.Box.Outline = EOT; end);
 ESPSettingssSection:CreateColorPicker("Border Color", Color3.fromRGB(0, 0, 0), function(ebc) esp.settings.Box.OutlineColor = ebc; end);
 ESPSettingssSection:CreateColorPicker("ESP Color", Color3.fromRGB(255, 255, 255), function(eec) esp.settings.Box.Color = eec; end);
+if CanDraw then
+	ESPSettingssSection:CreateColorPicker("Bones Color", Color3.fromRGB(255, 255, 255), function(eBec) esp.settings.Bones.Color = eBec; end);
+end
 ESPSettingssSection:CreateColorPicker("Hilight Outline", Color3.fromRGB(255, 255, 255), function(ehf) esp.settings.Hilight.OutlineColor = ehf; end);
 ESPSettingssSection:CreateColorPicker("Hilight Fill", Color3.fromRGB(100, 0, 255), function(ehff) esp.settings.Hilight.FillColor = ehff; end);
 ESPSettingssSection:CreateSlider("Hilight Outline", 0, 50, 100, 1, function(HFF) esp.settings.Hilight.OutlineTransparency = HFF / 100; end);
@@ -256,6 +269,23 @@ local function IsVisible(pos, ignoreList)
 	return #currentCamera:GetPartsObscuringTarget({game.Workspace.Ignore:FindFirstChild("RefPlayer").Head, pos}, ignoreList) == 0 and true or false;
 end
 
+local function Dist(pointA, pointB) 
+	return math.sqrt(math.pow(pointA.X - pointB.X, 2) + math.pow(pointA.Y - pointB.Y, 2));
+end
+
+local function GetClosest(points, dest)
+	local min  = math.huge;
+	local closest = nil;
+	for _,v in pairs(points) do
+		local dist = Dist(v, dest);
+		if dist < min then
+			min = dist;
+			closest = v;
+		end
+	end
+	return closest;
+end
+
 local function ApplyChams(part, material, color, transparency, decal, reflectance)
 	if part:IsA("BasePart") and part.Transparency < 1 then
 		local Material = Materials[material];
@@ -281,7 +311,7 @@ local function ApplyChams(part, material, color, transparency, decal, reflectanc
 			part.SurfaceAppearance:Destroy();
 		end
 
-		if part:IsA("MeshPart") then
+		if part.ClassName == "MeshPart" then
 			part.TextureID = Texture;
 		end
 
@@ -313,7 +343,7 @@ function esp:Update()
 		local rightLeg = children[3];
 		local leftLeg = children[2];
 		
-		if tosro ~= nil then
+		if tosro ~= nil and head ~= nil then
 			local screen, onScreen = currentCamera:WorldToScreenPoint(tosro.Position); 
 
 			if screen and onScreen and IsAlive() and esp.settings.Enable then 
@@ -322,7 +352,7 @@ function esp:Update()
 				local size = currentCamera.ViewportSize.Y / frustumHeight * Vector2.new(5,6);
 				local position = Vector2.new(screen.X, screen.Y) - (size / 2 - Vector2.new(0, size.Y) / 20);
 
-				if esp.settings.Box.Enabled then
+				if esp.settings.Box.Enabled and not esp.settings.Box.Dynamic then
 					self.Drawings.BoxLeft.Size = UDim2.fromOffset(size.X, 1);
 					self.Drawings.BoxRight.Size = UDim2.fromOffset(size.X, 1);
 					self.Drawings.BoxUpper.Size = UDim2.fromOffset(1, size.Y);
@@ -384,7 +414,68 @@ function esp:Update()
 					self.Drawings.OutlineBoxUpper.Visible = false;
 					self.Drawings.OutlineBoxLower.Visible = false;
 				end
+				
+				if esp.settings.Box.Enabled and esp.settings.Box.Dynamic  and CanDraw then 
+					
+					local points = {};
+					local c = 0;
+					for _,v in pairs(self.Character:GetChildren()) do
+						if v.ClassName == "BasePart" then
+							c = c + 1;
+							local pos = currentCamera:WorldToViewportPoint(v.Position);
+							if v == tosro then
+								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(0, 0, -3)).Position);
+							elseif v == head then
+								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(0, 1.5, 2.4)).Position);
+							elseif v == leftArm then
+								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(-2, 0, 0)).Position);
+							elseif v == rightArm then
+								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(2, 0, 0)).Position);
+							elseif v == rightLeg then
+								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(2, -1.5, 0)).Position);
+							elseif v == leftLeg then
+								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(-2, -1.5, 0)).Position);
+							end
+							points[c] = pos;
+						end
+					end
+					local Left = GetClosest(points, Vector2.new(0, screen.Y));
+					local Right = GetClosest(points, Vector2.new(currentCamera.ViewportSize.X, screen.Y));
+					local Top = GetClosest(points, Vector2.new(screen.X, 0));
+					local Bottom = GetClosest(points, Vector2.new(screen.X, currentCamera.ViewportSize.Y));
+					
+					self.Drawings.OutlineBox.Color = esp.settings.Box.OutlineColor;
+					self.Drawings.OutlineBox.Thickness = 3;
+					self.Drawings.OutlineBox.Transparency = 1;
+					
+					self.Drawings.Box.Color = esp.settings.Box.Color;
+					self.Drawings.Box.Thickness = 1;
+					self.Drawings.Box.Transparency = 1;
+					
+					if Left ~= nil and Right ~= nil and Top ~= nil and Bottom ~= nil then
+						self.Drawings.OutlineBox.PointA = Vector2.new(Right.X, Top.Y);
+						self.Drawings.OutlineBox.PointB = Vector2.new(Left.X, Top.Y);
+						self.Drawings.OutlineBox.PointC = Vector2.new(Left.X, Bottom.Y);
+						self.Drawings.OutlineBox.PointD = Vector2.new(Right.X, Bottom.Y);
+						
+						self.Drawings.Box.PointA = self.Drawings.OutlineBox.PointA;
+						self.Drawings.Box.PointB = self.Drawings.OutlineBox.PointB;
+						self.Drawings.Box.PointC = self.Drawings.OutlineBox.PointC;
+						self.Drawings.Box.PointD = self.Drawings.OutlineBox.PointD;
 
+						self.Drawings.OutlineBox.Visible = esp.settings.Box.Enabled and esp.settings.Box.Dynamic and esp.settings.Box.Outline;
+						self.Drawings.Box.Visible = esp.settings.Box.Enabled and esp.settings.Box.Dynamic;
+					else 
+						self.Drawings.OutlineBox.Visible = false;
+						self.Drawings.Box.Visible = false;
+					end
+				else
+					if CanDraw then
+						self.Drawings.OutlineBox.Visible = false;
+						self.Drawings.Box.Visible = false;
+					end
+				end
+				
 				if esp.settings.Tracer.Enabled then
 					-- Tracer
 					local ScreenVec2 = Vector2.new(screen.X, screen.Y + size.Y / 2 + size.Y / 20);
@@ -414,7 +505,7 @@ function esp:Update()
 					self.Drawings.Hilight.Parent = tosro.Parent;
 
 
-					if self.Drawings.Hilight.OutlineColor ~= esp.settings.Hilight.OutlineColor then
+					if self.Drawings.Hilight.OutlineColor ~= esp.settings.Hilight.OutlineColor then -- + 0.0000001 FPS Or - Idk If That Even Helps
 						self.Drawings.Hilight.OutlineColor = esp.settings.Hilight.OutlineColor;
 					end
 
@@ -437,35 +528,78 @@ function esp:Update()
 					self.Drawings.Hilight.Enabled = false;
 				end
 				
-				if esp.settings.Bones.Enabled then
+				if esp.settings.Bones.Enabled and CanDraw then -- I Am Not Using Frames For This
+
+					local UpperHead = currentCamera:WorldToViewportPoint(head.Position);
+					local UpperTorso = currentCamera:WorldToViewportPoint((tosro.CFrame * CFrame.new(0, 0.8, 0)).Position);
+					local LowerTorso = currentCamera:WorldToViewportPoint((tosro.CFrame * CFrame.new(0, -0.8, 0)).Position);
+					local LeftUpperArm = currentCamera:WorldToViewportPoint((leftArm.CFrame * CFrame.new(0, 0.8, 0)).Position);
+					local LeftLowerArm = currentCamera:WorldToViewportPoint((leftArm.CFrame * CFrame.new(0, -0.8, 0)).Position);
+					local RightUpperArm = currentCamera:WorldToViewportPoint((rightArm.CFrame * CFrame.new(0, 0.8, 0)).Position);
+					local RightLowerArm = currentCamera:WorldToViewportPoint((rightArm.CFrame * CFrame.new(0, -0.8, 0)).Position);
+					local LeftUpperLeg = currentCamera:WorldToViewportPoint((leftLeg.CFrame * CFrame.new(0, 0.8, 0)).Position);
+					local LeftLowerLeg = currentCamera:WorldToViewportPoint((leftLeg.CFrame * CFrame.new(0, -0.8, 0)).Position);
+					local RightUpperLeg = currentCamera:WorldToViewportPoint((rightLeg.CFrame * CFrame.new(0, 0.8, 0)).Position);
+					local RightLowerLeg = currentCamera:WorldToViewportPoint((rightLeg.CFrame * CFrame.new(0, -0.8, 0)).Position);
+
+					self.Drawings.BoneHead.From = Vector2.new(UpperHead.X, UpperHead.Y);
+					self.Drawings.BoneTorso.From = Vector2.new(UpperTorso.X, UpperTorso.Y);
+					self.Drawings.BoneLeftArm.From = Vector2.new(LeftUpperArm.X, LeftUpperArm.Y);
+					self.Drawings.BoneLeftArmUpper.From = Vector2.new(UpperTorso.X, UpperTorso.Y);
+					self.Drawings.BoneRightArm.From = Vector2.new(RightUpperArm.X, RightUpperArm.Y);
+					self.Drawings.BoneRightArmUpper.From = Vector2.new(UpperTorso.X, UpperTorso.Y);
+					self.Drawings.BoneLeftLeg.From = Vector2.new(LeftUpperLeg.X, LeftUpperLeg.Y);
+					self.Drawings.BoneLeftLegUpper.From = Vector2.new(LowerTorso.X, LowerTorso.Y);
+					self.Drawings.BoneRightLeg.From = Vector2.new(RightUpperLeg.X, RightUpperLeg.Y);
+					self.Drawings.BoneRightLegUpper.From = Vector2.new(LowerTorso.X, LowerTorso.Y);
 					
-					local size = currentCamera.ViewportSize.Y / frustumHeight * Vector2.new(5,6);
-					local position = Vector2.new(screen.X, screen.Y) - (size / 2 - Vector2.new(0, size.Y) / 20);
+					self.Drawings.BoneHead.To = Vector2.new(UpperTorso.X, UpperTorso.Y);
+					self.Drawings.BoneTorso.To = Vector2.new(LowerTorso.X, LowerTorso.Y);
+					self.Drawings.BoneLeftArm.To = Vector2.new(LeftLowerArm.X, LeftLowerArm.Y);
+					self.Drawings.BoneLeftArmUpper.To = Vector2.new(LeftUpperArm.X, LeftUpperArm.Y);
+					self.Drawings.BoneRightArm.To = Vector2.new(RightLowerArm.X, RightLowerArm.Y);
+					self.Drawings.BoneRightArmUpper.To = Vector2.new(RightUpperArm.X, RightUpperArm.Y);
+					self.Drawings.BoneLeftLeg.To = Vector2.new(LeftLowerLeg.X, LeftLowerLeg.Y);
+					self.Drawings.BoneLeftLegUpper.To = Vector2.new(LeftUpperLeg.X, LeftUpperLeg.Y);
+					self.Drawings.BoneRightLeg.To = Vector2.new(RightLowerLeg.X, RightLowerLeg.Y);
+					self.Drawings.BoneRightLegUpper.To = Vector2.new(RightUpperLeg.X, RightUpperLeg.Y);
 					
-					self.Drawings.BoneLeftArm.Visible = esp.settings.Box.Enabled;
-					self.Drawings.BoneRightArm.Visible = esp.settings.Box.Enabled;
-					self.Drawings.BoneLeftLeg.Visible = esp.settings.Box.Enabled;
-					self.Drawings.BoneRightLeg.Visible = esp.settings.Box.Enabled;
-					self.Drawings.BoneHead.Visible = esp.settings.Box.Enabled;
-					self.Drawings.BoneTorso.Visible = esp.settings.Box.Enabled;
+					self.Drawings.BoneLeftArm.Visible = esp.settings.Bones.Enabled;
+					self.Drawings.BoneRightArm.Visible = esp.settings.Bones.Enabled;
+					self.Drawings.BoneLeftLeg.Visible = esp.settings.Bones.Enabled;
+					self.Drawings.BoneRightLeg.Visible = esp.settings.Bones.Enabled;
+					self.Drawings.BoneHead.Visible = esp.settings.Bones.Enabled;
+					self.Drawings.BoneTorso.Visible = esp.settings.Bones.Enabled;
+					self.Drawings.BoneLeftArmUpper.Visible = esp.settings.Bones.Enabled;
+					self.Drawings.BoneRightArmUpper.Visible = esp.settings.Bones.Enabled;
+					self.Drawings.BoneLeftLegUpper.Visible = esp.settings.Bones.Enabled;
+					self.Drawings.BoneRightLegUpper.Visible = esp.settings.Bones.Enabled;
 					
-					self.Drawings.BoneLeftArm.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.BoneRightArm.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.BoneLeftLeg.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.BoneRightLeg.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.BoneHead.BackgroundColor3 = esp.settings.Box.Color;
-					self.Drawings.BoneTorso.BackgroundColor3 = esp.settings.Box.Color;
-					
-		
-					
-					
+					if self.Drawings.BoneLeftArm.Color ~= esp.settings.Bones.Color then
+						self.Drawings.BoneLeftArm.Color = esp.settings.Bones.Color;
+						self.Drawings.BoneRightArm.Color = esp.settings.Bones.Color;
+						self.Drawings.BoneLeftLeg.Color = esp.settings.Bones.Color;
+						self.Drawings.BoneRightLeg.Color = esp.settings.Bones.Color;
+						self.Drawings.BoneHead.Color = esp.settings.Bones.Color;
+						self.Drawings.BoneTorso.Color = esp.settings.Bones.Color;
+						self.Drawings.BoneLeftArmUpper.Color = esp.settings.Bones.Color;
+						self.Drawings.BoneRightArmUpper.Color = esp.settings.Bones.Color;
+						self.Drawings.BoneLeftLegUpper.Color = esp.settings.Bones.Color;
+						self.Drawings.BoneRightLegUpper.Color = esp.settings.Bones.Color;
+					end
 				else
-					self.Drawings.BoneLeftArm.Visible = false; -- In Next Update Please Wait
-					self.Drawings.BoneRightArm.Visible = false;
-					self.Drawings.BoneLeftLeg.Visible = false;
-					self.Drawings.BoneRightLeg.Visible = false;
-					self.Drawings.BoneHead.Visible = false;
-					self.Drawings.BoneTorso.Visible = false;
+					if CanDraw then
+						self.Drawings.BoneLeftArm.Visible = false;
+						self.Drawings.BoneRightArm.Visible = false;
+						self.Drawings.BoneLeftLeg.Visible = false;
+						self.Drawings.BoneRightLeg.Visible = false;
+						self.Drawings.BoneHead.Visible = false;
+						self.Drawings.BoneTorso.Visible = false;
+						self.Drawings.BoneLeftArmUpper.Visible = false;
+						self.Drawings.BoneRightArmUpper.Visible = false;
+						self.Drawings.BoneLeftLegUpper.Visible = false;
+						self.Drawings.BoneRightLegUpper.Visible = false;
+					end
 				end
 
 			else
@@ -480,6 +614,21 @@ function esp:Update()
 				self.Drawings.OutlineBoxRight.Visible = false;
 				self.Drawings.OutlineBoxUpper.Visible = false;
 				self.Drawings.OutlineBoxLower.Visible = false;
+				self.Drawings.OutlineBox.Visible = false;
+				if CanDraw then
+					self.Drawings.OutlineBox.Visible = false;
+					self.Drawings.Box.Visible = false;
+					self.Drawings.BoneLeftArm.Visible = false;
+					self.Drawings.BoneRightArm.Visible = false;
+					self.Drawings.BoneLeftLeg.Visible = false;
+					self.Drawings.BoneRightLeg.Visible = false;
+					self.Drawings.BoneHead.Visible = false;
+					self.Drawings.BoneTorso.Visible = false;
+					self.Drawings.BoneLeftArmUpper.Visible = false;
+					self.Drawings.BoneRightArmUpper.Visible = false;
+					self.Drawings.BoneLeftLegUpper.Visible = false;
+					self.Drawings.BoneRightLegUpper.Visible = false;
+				end
 			end
 		else
 			self.Drawings.BoxLeft.Visible = false;
@@ -493,6 +642,20 @@ function esp:Update()
 			self.Drawings.OutlineBoxRight.Visible = false;
 			self.Drawings.OutlineBoxUpper.Visible = false;
 			self.Drawings.OutlineBoxLower.Visible = false;
+			if CanDraw then
+				self.Drawings.OutlineBox.Visible = false;
+				self.Drawings.Box.Visible = false;
+				self.Drawings.BoneLeftArm.Visible = false;
+				self.Drawings.BoneRightArm.Visible = false;
+				self.Drawings.BoneLeftLeg.Visible = false;
+				self.Drawings.BoneRightLeg.Visible = false;
+				self.Drawings.BoneHead.Visible = false;
+				self.Drawings.BoneTorso.Visible = false;
+				self.Drawings.BoneLeftArmUpper.Visible = false;
+				self.Drawings.BoneRightArmUpper.Visible = false;
+				self.Drawings.BoneLeftLegUpper.Visible = false;
+				self.Drawings.BoneRightLegUpper.Visible = false;
+			end
 		end
 	end
 end
@@ -500,29 +663,57 @@ end
 function esp.Create(Character)
 	local self = setmetatable({}, esp.cache);
 	self.Character = Character;
-	self.Drawings = {
-		OutlineBoxLeft = Instance.new("Frame", Holder);
-		OutlineBoxRight = Instance.new("Frame", Holder);
-		OutlineBoxUpper = Instance.new("Frame", Holder);
-		OutlineBoxLower = Instance.new("Frame", Holder);
+	
+	if CanDraw then
+		self.Drawings = {
+			OutlineBoxLeft = Instance.new("Frame", Holder);
+			OutlineBoxRight = Instance.new("Frame", Holder);
+			OutlineBoxUpper = Instance.new("Frame", Holder);
+			OutlineBoxLower = Instance.new("Frame", Holder);
 
-		BoxUpper = Instance.new("Frame", Holder);
-		BoxLower = Instance.new("Frame", Holder);
-		BoxLeft = Instance.new("Frame", Holder);
-		BoxRight = Instance.new("Frame", Holder);
-		
-		BoneLeftArm = Instance.new("Frame", Holder);
-		BoneRightArm = Instance.new("Frame", Holder);
-		BoneLeftLeg = Instance.new("Frame", Holder);
-		BoneRightLeg = Instance.new("Frame", Holder);
-		BoneHead = Instance.new("Frame", Holder);
-		BoneTorso = Instance.new("Frame", Holder);
-		
+			BoxUpper = Instance.new("Frame", Holder);
+			BoxLower = Instance.new("Frame", Holder);
+			BoxLeft = Instance.new("Frame", Holder);
+			BoxRight = Instance.new("Frame", Holder);
 
-		Tracer = Instance.new("Frame", Holder);
+			BoneLeftArm = Drawing.new("Line"), {};
+			BoneLeftArmUpper = Drawing.new("Line"), {};
+			BoneRightArm = Drawing.new("Line"), {};
+			BoneRightArmUpper = Drawing.new("Line"), {};
+			BoneLeftLeg = Drawing.new("Line"), {};
+			BoneLeftLegUpper = Drawing.new("Line"), {};
+			BoneRightLeg = Drawing.new("Line"), {};
+			BoneRightLegUpper = Drawing.new("Line"), {};
+			BoneHead = Drawing.new("Line"), {};
+			BoneHeadUpper = Drawing.new("Line"), {};
+			BoneTorso = Drawing.new("Line"), {};
+			BoneTorsoUpper = Drawing.new("Line"), {};	
 
-		Hilight = Instance.new("Highlight");
-	};
+
+			OutlineBox = Drawing.new("Quad"), {};  -- Some Fucking Reason They Cant Be Removed?????? These Free Executors Are Pissing Me Off.
+			Box = Drawing.new("Quad"), {};
+
+			Tracer = Instance.new("Frame", Holder);
+
+			Hilight = Instance.new("Highlight");
+		};
+	else
+		self.Drawings = {
+			OutlineBoxLeft = Instance.new("Frame", Holder);
+			OutlineBoxRight = Instance.new("Frame", Holder);
+			OutlineBoxUpper = Instance.new("Frame", Holder);
+			OutlineBoxLower = Instance.new("Frame", Holder);
+
+			BoxUpper = Instance.new("Frame", Holder);
+			BoxLower = Instance.new("Frame", Holder);
+			BoxLeft = Instance.new("Frame", Holder);
+			BoxRight = Instance.new("Frame", Holder);
+
+			Tracer = Instance.new("Frame", Holder);
+
+			Hilight = Instance.new("Highlight");
+		};
+	end
 
 	self.Drawings.OutlineBoxLeft.BorderSizePixel = 1;
 	self.Drawings.OutlineBoxRight.BorderSizePixel = 1;
@@ -535,7 +726,7 @@ function esp.Create(Character)
 	self.Drawings.BoxLower.BorderSizePixel = 0;
 
 	self.Drawings.Tracer.AnchorPoint = Vector2.new(0.5, 0.5);
-
+	
 	self.Connection = RunService.RenderStepped:Connect(function()
 		self:Update();
 	end)
@@ -546,6 +737,21 @@ end
 
 function esp:Remove()
 	self.Connection:Disconnect();
+	if CanDraw then
+		self.Drawings.BoneLeftArm:Remove();
+		self.Drawings.BoneRightArm:Remove();
+		self.Drawings.BoneLeftLeg:Remove();
+		self.Drawings.BoneRightLeg:Remove();
+		self.Drawings.BoneHead:Remove();
+		self.Drawings.BoneTorso:Remove();
+		self.Drawings.BoneLeftArmUpper:Remove();
+		self.Drawings.BoneRightArmUpper:Remove();
+		self.Drawings.BoneLeftLegUpper:Remove();
+		self.Drawings.BoneRightLegUpper:Remove();
+		self.Drawings.OutlineBox:Remove();
+		self.Drawings.Box:Remove();	
+	end
+	
 	for _,Drawings in next, self.Drawings do
 		if typeof(Drawings) ~= "table" then
 			Drawings:Remove();
@@ -652,9 +858,7 @@ RunService.RenderStepped:Connect(function()
 		if target  then
 			local screenpoint = currentCamera:WorldToViewportPoint(target.Position);
 			local targetPos = Vector2.new(screenpoint.X, screenpoint.Y);
-			if mousemoverel then
-				mousemoverel((targetPos.X - localPlayer:GetMouse().X) / 5, (targetPos.Y - localPlayer:GetMouse().Y) / 5)
-			end
+			mousemoverel((targetPos.X - localPlayer:GetMouse().X) / 5, (targetPos.Y - localPlayer:GetMouse().Y) / 5)
 		end
 	end
 
@@ -851,3 +1055,4 @@ coroutine.wrap(function()
 		end)
 	end
 end)()
+
