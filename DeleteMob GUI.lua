@@ -779,13 +779,24 @@ local library = {
 						ColorPicker.selector.BackgroundColor3 = Color3.fromRGB(255,255,255);
 						ColorPicker.selector.BorderColor3 = library.theme.Border;
 						ColorPicker.selector.Text = "";
+						
+						ColorPicker.gradient = Instance.new("UIGradient", ColorPicker.selector);
+						ColorPicker.gradient.Color = ColorSequence.new({ 
+							ColorSequenceKeypoint.new(0, Color3.new(1,0,0)), 
+							ColorSequenceKeypoint.new(0.17, Color3.new(1,0,1)), 
+							ColorSequenceKeypoint.new(0.33,Color3.new(0,0,1)), 
+							ColorSequenceKeypoint.new(0.5,Color3.new(0,1,1)), 
+							ColorSequenceKeypoint.new(0.67, Color3.new(0,1,0)), 
+							ColorSequenceKeypoint.new(0.83, Color3.new(1,1,0)), 
+							ColorSequenceKeypoint.new(1, Color3.new(1,0,0))
+						})
 
 						ColorPicker.pointer = Instance.new("Frame", ColorPicker.selector);
 						ColorPicker.pointer.ZIndex = 101;
-						ColorPicker.pointer.BackgroundColor3 = Color3.fromRGB(40, 40, 40);
+						ColorPicker.pointer.BackgroundColor3 = library.theme.Border;
 						ColorPicker.pointer.Position = UDim2.new(0,0,0,0);
 						ColorPicker.pointer.Size = UDim2.new(0,2,0,10);
-						ColorPicker.pointer.BorderColor3 = Color3.fromRGB(255, 255, 255);
+						ColorPicker.pointer.BorderColor3 = library.theme.BackGround;
 
 						if ColorPicker.flag and ColorPicker.flag ~= "" then
 							library.flags[ColorPicker.flag] = ColorPicker.default;
