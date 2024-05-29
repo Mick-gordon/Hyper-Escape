@@ -415,28 +415,28 @@ function esp:Update()
 					self.Drawings.OutlineBoxLower.Visible = false;
 				end
 				
-				if esp.settings.Box.Enabled and esp.settings.Box.Dynamic  and CanDraw then 
+				if esp.settings.Box.Enabled and esp.settings.Box.Dynamic  and CanDraw then -- It Is Made But Problem Where Drawings Cant Be Removed :( Gay Ass Niggas
 					
 					local points = {};
 					local c = 0;
 					for _,v in pairs(self.Character:GetChildren()) do
-						if v.ClassName == "BasePart" then
+						if v:IsA("BasePart") then
 							c = c + 1;
-							local pos = currentCamera:WorldToViewportPoint(v.Position);
+							local p = currentCamera:WorldToViewportPoint(v.Position);
 							if v == tosro then
-								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(0, 0, -3)).Position);
+								p = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(0, 0, -3)).Position);
 							elseif v == head then
-								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(0, 1.5, 2.4)).Position);
+								p = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(0, 1.5, 2.4)).Position);
 							elseif v == leftArm then
-								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(-2, 0, 0)).Position);
+								p = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(-2, 0, 0)).Position);
 							elseif v == rightArm then
-								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(2, 0, 0)).Position);
+								p = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(2, 0, 0)).Position);
 							elseif v == rightLeg then
-								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(2, -1.5, 0)).Position);
+								p = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(2, -1.5, 0)).Position);
 							elseif v == leftLeg then
-								pos = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(-2, -1.5, 0)).Position);
+								p = currentCamera:WorldToViewportPoint((v.CFrame * CFrame.new(-2, -1.5, 0)).Position);
 							end
-							points[c] = pos;
+							points[c] = p;
 						end
 					end
 					local Left = GetClosest(points, Vector2.new(0, screen.Y));
