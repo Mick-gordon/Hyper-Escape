@@ -206,7 +206,8 @@ else
 			end)
 
 			window.Tabs = { };
-
+			window.OpenedColorPickers = { };
+			
 			function window:UpdateKeyBind(Key)
 				window.keybind = Key;
 			end
@@ -805,11 +806,11 @@ else
 
 					function Sector:CreateColorPicker(Text, Defult, CallBack, Flag) -- I Know This Is Shit But I Will Make A Better One Later.
 						local ColorPicker = { };
-						ColorPicker.text = Text or "";
-						ColorPicker.default = Defult or Color3.fromRGB(255, 255, 255);
+
 						ColorPicker.callback = CallBack or function() end;
-						ColorPicker.flag = Flag or Text or "";
-						ColorPicker.color = Defult or Color3.fromRGB(255, 255, 255);
+						ColorPicker.default = Defult or Color3.fromRGB(255, 255, 255);
+						ColorPicker.value = ColorPicker.default;
+						ColorPicker.flag = Flag or (Text or "");
 
 						ColorPicker.MainBack = Instance.new("TextButton", Sector.Items);
 						ColorPicker.MainBack.BackgroundColor3 = library.theme.BackGround;
@@ -819,9 +820,15 @@ else
 
 						ColorPicker.UiCorner = Instance.new("UICorner", ColorPicker.MainBack);
 						ColorPicker.UiCorner.CornerRadius = UDim.new(0, 8);
+						
+						ColorPicker.Indicator = Instance.new("Frame", ColorPicker.MainBack);
+						ColorPicker.Indicator.Position = UDim2.fromScale(0.875, 0.229);
+						ColorPicker.Indicator.Size = UDim2.fromOffset(18, 18);
+						ColorPicker.Indicator.BackgroundColor3 = ColorPicker.default;
+						ColorPicker.Indicator.BorderSizePixel = 0;
 
 						ColorPicker.TextLabel = Instance.new("TextLabel", ColorPicker.MainBack);
-						ColorPicker.TextLabel.Text = ColorPicker.text;
+						ColorPicker.TextLabel.Text = Text;
 						ColorPicker.TextLabel.BackgroundTransparency = 1;
 						ColorPicker.TextLabel.TextColor3 = library.theme.TextColor;
 						ColorPicker.TextLabel.TextSize = library.theme.TextSize;
@@ -830,88 +837,158 @@ else
 						ColorPicker.TextLabel.Position = UDim2.fromScale(0.046, 0);
 						ColorPicker.TextLabel.TextXAlignment = Enum.TextXAlignment.Left;
 
-						ColorPicker.TextR = Instance.new("TextBox", ColorPicker.MainBack);
-						ColorPicker.TextR.Position = UDim2.fromScale(0.525, 0.229);
-						ColorPicker.TextR.Size = UDim2.fromOffset(36, 18);
-						ColorPicker.TextR.BackgroundColor3 = library.theme.Toggle;
-						ColorPicker.TextR.BorderColor3 = library.theme.Border;
-						ColorPicker.TextR.Text = math.floor(ColorPicker.default.R) * 255;
-						ColorPicker.TextR.Font = library.theme.Font;
-						ColorPicker.TextR.TextSize = library.theme.TextSize;
-						ColorPicker.TextR.TextColor3 = library.theme.TextColor;
+						ColorPicker.MainPicker = Instance.new("TextButton", ColorPicker.MainBack);
+						ColorPicker.MainPicker.Name = "picker";
+						ColorPicker.MainPicker.ZIndex = 100;
+						ColorPicker.MainPicker.Visible = false;
+						ColorPicker.MainPicker.AutoButtonColor = false;
+						ColorPicker.MainPicker.Text = "";
+						ColorPicker.MainPicker.Size = UDim2.fromOffset(180, 196);
+						ColorPicker.MainPicker.BorderSizePixel = 0;
+						ColorPicker.MainPicker.BackgroundColor3 = Color3.fromRGB(40, 40, 40);
+						ColorPicker.MainPicker.Rotation = 0.000000000000001;
+						ColorPicker.MainPicker.Position = UDim2.fromOffset(-ColorPicker.MainPicker.AbsoluteSize.X + ColorPicker.MainBack.AbsoluteSize.X, 17);
+						window.OpenedColorPickers[ColorPicker.MainPicker] = false;
+						
+						ColorPicker.hue = Instance.new("ImageLabel", ColorPicker.MainPicker);
+						ColorPicker.hue.ZIndex = 101;
+						ColorPicker.hue.Position = UDim2.new(0,3,0,3);
+						ColorPicker.hue.Size = UDim2.new(0,172,0,172);
+						ColorPicker.hue.Image = "rbxassetid://4155801252";
+						ColorPicker.hue.ScaleType = Enum.ScaleType.Stretch;
+						ColorPicker.hue.BackgroundColor3 = Color3.new(1,0,0);
+						ColorPicker.hue.BorderColor3 = library.theme.Border;
+						
+						ColorPicker.hueselectorpointer = Instance.new("ImageLabel", ColorPicker.MainPicker);
+						ColorPicker.hueselectorpointer.ZIndex = 101;
+						ColorPicker.hueselectorpointer.BackgroundTransparency = 1;
+						ColorPicker.hueselectorpointer.BorderSizePixel = 0;
+						ColorPicker.hueselectorpointer.Position = UDim2.new(0, 0, 0, 0);
+						ColorPicker.hueselectorpointer.Size = UDim2.new(0, 7, 0, 7);
+						ColorPicker.hueselectorpointer.Image = "rbxassetid://6885856475";
+						
+						ColorPicker.selector = Instance.new("TextLabel", ColorPicker.MainPicker);
+						ColorPicker.selector.ZIndex = 100;
+						ColorPicker.selector.Position = UDim2.new(0,3,0,181);
+						ColorPicker.selector.Size = UDim2.new(0,173,0,10);
+						ColorPicker.selector.BackgroundColor3 = Color3.fromRGB(255,255,255);
+						ColorPicker.selector.BorderColor3 = library.theme.Border;
+						ColorPicker.selector.Text = "";
+						
+						ColorPicker.gradient = Instance.new("UIGradient", ColorPicker.selector);
+						ColorPicker.gradient.Color = ColorSequence.new({ 
+							ColorSequenceKeypoint.new(0, Color3.new(1,0,0)), 
+							ColorSequenceKeypoint.new(0.17, Color3.new(1,0,1)), 
+							ColorSequenceKeypoint.new(0.33,Color3.new(0,0,1)), 
+							ColorSequenceKeypoint.new(0.5,Color3.new(0,1,1)), 
+							ColorSequenceKeypoint.new(0.67, Color3.new(0,1,0)), 
+							ColorSequenceKeypoint.new(0.83, Color3.new(1,1,0)), 
+							ColorSequenceKeypoint.new(1, Color3.new(1,0,0))
+						})
 
-						ColorPicker.TextG = Instance.new("TextBox", ColorPicker.MainBack);
-						ColorPicker.TextG.Position = UDim2.fromScale(0.675, 0.229);
-						ColorPicker.TextG.Size = UDim2.fromOffset(36, 18);
-						ColorPicker.TextG.BackgroundColor3 = library.theme.Toggle;
-						ColorPicker.TextG.BorderColor3 = library.theme.Border;
-						ColorPicker.TextG.Text = math.floor(ColorPicker.default.G) * 255;
-						ColorPicker.TextG.Font = library.theme.Font;
-						ColorPicker.TextG.TextSize = library.theme.TextSize;
-						ColorPicker.TextG.TextColor3 = library.theme.TextColor;
-
-						ColorPicker.TextB = Instance.new("TextBox", ColorPicker.MainBack);
-						ColorPicker.TextB.Position = UDim2.fromScale(0.821, 0.229);
-						ColorPicker.TextB.Size = UDim2.fromOffset(36, 18);
-						ColorPicker.TextB.BackgroundColor3 = library.theme.Toggle;
-						ColorPicker.TextB.BorderColor3 = library.theme.Border;
-						ColorPicker.TextB.Text = math.floor(ColorPicker.default.B) * 255;
-						ColorPicker.TextB.Font = library.theme.Font;
-						ColorPicker.TextB.TextSize = library.theme.TextSize;
-						ColorPicker.TextB.TextColor3 = library.theme.TextColor;
-
+						ColorPicker.pointer = Instance.new("Frame", ColorPicker.selector);
+						ColorPicker.pointer.ZIndex = 101;
+						ColorPicker.pointer.BackgroundColor3 = library.theme.Border;
+						ColorPicker.pointer.Position = UDim2.new(0,0,0,0);
+						ColorPicker.pointer.Size = UDim2.new(0,2,0,10);
+						ColorPicker.pointer.BorderColor3 = library.theme.BackGround;
 
 						if ColorPicker.flag and ColorPicker.flag ~= "" then
-							library.flags[ColorPicker.flag] = ColorPicker.default or "";
+							library.flags[ColorPicker.flag] = ColorPicker.default;
 						end
 
-						function ColorPicker:Set(R, G, B)
-							ColorPicker.color = Color3.fromRGB(tonumber(R), tonumber(G), tonumber(B));
-							ColorPicker.TextR.Text = tonumber(R);
-							ColorPicker.TextG.Text = tonumber(G);
-							ColorPicker.TextB.Text = tonumber(B);
+						function ColorPicker:RefreshHue()
+							local x = (game.Players.LocalPlayer:GetMouse().X - ColorPicker.hue.AbsolutePosition.X) / ColorPicker.hue.AbsoluteSize.X;
+							local y = (game.Players.LocalPlayer:GetMouse().Y - ColorPicker.hue.AbsolutePosition.Y) / ColorPicker.hue.AbsoluteSize.Y;
+							ColorPicker.hueselectorpointer:TweenPosition(UDim2.new(math.clamp(x * ColorPicker.hue.AbsoluteSize.X, 0.5, 0.952 * ColorPicker.hue.AbsoluteSize.X) / ColorPicker.hue.AbsoluteSize.X, 0, math.clamp(y * ColorPicker.hue.AbsoluteSize.Y, 0.5, 0.885 * ColorPicker.hue.AbsoluteSize.Y) / ColorPicker.hue.AbsoluteSize.Y, 0), Enum.EasingDirection.In, Enum.EasingStyle.Sine, 0.05);
+							ColorPicker:Set(Color3.fromHSV(ColorPicker.color, math.clamp(x * ColorPicker.hue.AbsoluteSize.X, 0.5, 1 * ColorPicker.hue.AbsoluteSize.X) / ColorPicker.hue.AbsoluteSize.X, 1 - (math.clamp(y * ColorPicker.hue.AbsoluteSize.Y, 0.5, 1 * ColorPicker.hue.AbsoluteSize.Y) / ColorPicker.hue.AbsoluteSize.Y)));
+						end
 
+						function ColorPicker:RefreshSelector()
+							local pos = math.clamp((game.Players.LocalPlayer:GetMouse().X - ColorPicker.hue.AbsolutePosition.X) / ColorPicker.hue.AbsoluteSize.X, 0, 1);
+							ColorPicker.color = 1 - pos;
+							ColorPicker.pointer:TweenPosition(UDim2.new(pos, 0, 0, 0), Enum.EasingDirection.In, Enum.EasingStyle.Sine, 0.05);
+							ColorPicker.hue.BackgroundColor3 = Color3.fromHSV(1 - pos, 1, 1);
+
+							local x = (ColorPicker.hueselectorpointer.AbsolutePosition.X - ColorPicker.hue.AbsolutePosition.X) / ColorPicker.hue.AbsoluteSize.X;
+							local y = (ColorPicker.hueselectorpointer.AbsolutePosition.Y - ColorPicker.hue.AbsolutePosition.Y) / ColorPicker.hue.AbsoluteSize.Y;
+							ColorPicker:Set(Color3.fromHSV(ColorPicker.color, math.clamp(x * ColorPicker.hue.AbsoluteSize.X, 0.5, 1 * ColorPicker.hue.AbsoluteSize.X) / ColorPicker.hue.AbsoluteSize.X, 1 - (math.clamp(y * ColorPicker.hue.AbsoluteSize.Y, 0.5, 1 * ColorPicker.hue.AbsoluteSize.Y) / ColorPicker.hue.AbsoluteSize.Y)));
+						end
+
+						function ColorPicker:Set(value)
+							local color = Color3.new(math.clamp(value.r, 0, 1), math.clamp(value.g, 0, 1), math.clamp(value.b, 0, 1));
+							ColorPicker.value = color;
 							if ColorPicker.flag and ColorPicker.flag ~= "" then
-								library.flags[ColorPicker.flag] = ColorPicker.color;
+								library.flags[ColorPicker.flag] = color;
 							end
-							pcall(ColorPicker.callback, Color3.fromRGB(math.floor(tonumber(R)), math.floor(tonumber(G)), math.floor(tonumber(B))));
+							local clr = Color3.new(math.clamp(color.R / 1.7, 0, 1), math.clamp(color.G / 1.7, 0, 1), math.clamp(color.B / 1.7, 0, 1));
+							ColorPicker.Indicator.BackgroundColor3 = color;
+							pcall(ColorPicker.callback, color);
 						end
 
-						function ColorPicker:Get()
-							return ColorPicker.color;
+						function ColorPicker:Get(value)
+							return ColorPicker.value;
+						end
+						ColorPicker:Set(ColorPicker.default);
+
+						local dragging_selector = false;
+						local dragging_hue = false;
+
+						ColorPicker.selector.InputBegan:Connect(function(input)
+							if input.UserInputType == Enum.UserInputType.MouseButton1 then
+								dragging_selector = true;
+								ColorPicker:RefreshSelector();
+							end
+						end)
+
+						ColorPicker.selector.InputEnded:Connect(function(input)
+							if input.UserInputType == Enum.UserInputType.MouseButton1 then
+								dragging_selector = false;
+								ColorPicker:RefreshSelector();
+							end
+						end)
+
+						ColorPicker.hue.InputBegan:Connect(function(input)
+							if input.UserInputType == Enum.UserInputType.MouseButton1 then
+								dragging_hue = true;
+								ColorPicker:RefreshHue();
+							end
+						end)
+
+						ColorPicker.hue.InputEnded:Connect(function(input)
+							if input.UserInputType == Enum.UserInputType.MouseButton1 then
+								dragging_hue = false;
+								ColorPicker:RefreshHue();
+							end
+						end)
+
+						game:GetService("UserInputService").InputChanged:Connect(function(input)
+							if dragging_selector and input.UserInputType == Enum.UserInputType.MouseMovement then
+								ColorPicker:RefreshSelector();
+							end
+							if dragging_hue and input.UserInputType == Enum.UserInputType.MouseMovement then
+								ColorPicker:RefreshHue();
+							end
+						end)
+
+						local inputBegan = function(input)
+							if input.UserInputType == Enum.UserInputType.MouseButton1 then
+								for i,v in pairs(window.OpenedColorPickers) do
+									if v and i ~= ColorPicker.MainPicker then
+										i.Visible = false;
+										window.OpenedColorPickers[i] = false;
+									end
+								end
+
+								ColorPicker.MainPicker.Visible = not ColorPicker.MainPicker.Visible;
+								window.OpenedColorPickers[ColorPicker.MainPicker] = ColorPicker.MainPicker.Visible;
+							end
 						end
 
-						ColorPicker.TextR.FocusLost:Connect(function()
-							if ColorPicker.TextR.Text == "" then
-								ColorPicker.TextR.Text = 0
-							end
-							if tonumber(ColorPicker.TextR.Text) and tonumber(ColorPicker.TextR.Text) > 256  then
-								ColorPicker.TextR.Text = 255;
-							end
-							ColorPicker:Set(tonumber(ColorPicker.TextR.Text), tonumber(ColorPicker.TextG.Text), tonumber(ColorPicker.TextB.Text));
-						end)
-
-						ColorPicker.TextG.FocusLost:Connect(function()
-							if ColorPicker.TextG.Text == "" then
-								ColorPicker.TextG.Text = 0
-							end
-							if tonumber(ColorPicker.TextG.Text) and tonumber(ColorPicker.TextG.Text) > 256  then
-								ColorPicker.TextG.Text = 255;
-							end
-							ColorPicker:Set(tonumber(ColorPicker.TextR.Text), tonumber(ColorPicker.TextG.Text), tonumber(ColorPicker.TextB.Text));
-						end)
-
-						ColorPicker.TextB.FocusLost:Connect(function()
-							if ColorPicker.TextB.Text == "" then
-								ColorPicker.TextB.Text = 0
-							end
-							if tonumber(ColorPicker.TextB.Text) and tonumber(ColorPicker.TextB.Text) > 256  then
-								ColorPicker.TextB.Text = 255;
-							end
-							ColorPicker:Set(tonumber(ColorPicker.TextR.Text), tonumber(ColorPicker.TextG.Text), tonumber(ColorPicker.TextB.Text));
-						end)
-
-
+						ColorPicker.MainBack.InputBegan:Connect(inputBegan);
+						ColorPicker.MainPicker.InputBegan:Connect(inputBegan);
+						ColorPicker.MainPicker.InputBegan:Connect(inputBegan);
+						
 						Sector:FixSize();
 						table.insert(library.items, ColorPicker);
 						return ColorPicker;
@@ -1167,137 +1244,136 @@ else
 					local ConfigSystem = { };
 
 					ConfigSystem.configFolder = window.name;
+					
+					pcall(function()
+						if isfolder and makefolder and listfiles and writefile and readfile and delfile then
 
-					if isfolder and makefolder and listfiles and writefile and readfile and delfile then
-						if (not isfolder(window.name)) then
-							makefolder(window.name);
-						end
-
-						if (not isfolder(ConfigSystem.configFolder)) then
-							makefolder(ConfigSystem.configFolder);
-						end
-
-						ConfigSystem.sector = tab:CreateSector("Configs", side or "left");
-
-						local ConfigName = ConfigSystem.sector:CreateTextBox("Config Name", "", ConfigName, function() end, "");
-						local default = tostring(listfiles(ConfigSystem.configFolder)[1] or ""):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", "");
-						local Config = ConfigSystem.sector:CreateDropDown("Configs", {}, default, false, function() end, "");
-						for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
-							if v:find(".txt") then
-								Config:Add(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+							if (not isfolder(ConfigSystem.configFolder)) then
+								makefolder(ConfigSystem.configFolder)
 							end
-						end
 
-						ConfigSystem.Create = ConfigSystem.sector:CreateButton("Create", function()
+							ConfigSystem.sector = tab:CreateSector("Configs", side or "left");
+
+							local ConfigName = ConfigSystem.sector:CreateTextBox("Config Name", "", ConfigName, function() end, "");
+							local default = tostring(listfiles(ConfigSystem.configFolder)[1] or ""):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", "");
+							local Config = ConfigSystem.sector:CreateDropDown("Configs", {}, default, false, function() end, "");
 							for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
-								Config:Remove(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+								if v:find(".txt") then
+									Config:Add(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+								end
 							end
 
-							if ConfigName:Get() and ConfigName:Get() ~= "" then
-								local config = {};
+							ConfigSystem.Create = ConfigSystem.sector:CreateButton("Create", function()
+								for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
+									Config:Remove(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+								end
 
-								for i,v in pairs(library.flags) do
-									if (v ~= nil and v ~= "") then
-										if (typeof(v) == "Color3") then
-											config[i] = { v.R, v.G, v.B };
-										elseif (tostring(v):find("Enum.KeyCode")) then
-											config[i] = v.Name
-										elseif (typeof(v) == "table") then
-											config[i] = { v };
-										else
-											config[i] = v;
+								if ConfigName:Get() and ConfigName:Get() ~= "" then
+									local config = {};
+
+									for i,v in pairs(library.flags) do
+										if (v ~= nil and v ~= "") then
+											if (typeof(v) == "Color3") then
+												config[i] = { v.R, v.G, v.B };
+											elseif (tostring(v):find("Enum.KeyCode")) then
+												config[i] = v.Name
+											elseif (typeof(v) == "table") then
+												config[i] = { v };
+											else
+												config[i] = v;
+											end
+										end
+									end
+
+									writefile(ConfigSystem.configFolder .. "/" .. ConfigName:Get() .. ".txt", httpservice:JSONEncode(config));
+
+									for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
+										if v:find(".txt") then
+											Config:Add(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
 										end
 									end
 								end
+							end)
 
-								writefile(ConfigSystem.configFolder .. "/" .. ConfigName:Get() .. ".txt", httpservice:JSONEncode(config));
+							ConfigSystem.Save = ConfigSystem.sector:CreateButton("Save", function()
+								local config = {}
+								if Config:Get() and Config:Get() ~= "" then
+									for i,v in pairs(library.flags) do
+										if (v ~= nil and v ~= "") then
+											if (typeof(v) == "Color3") then
+												config[i] = { v.R, v.G, v.B };
+											elseif (tostring(v):find("Enum.KeyCode")) then
+												config[i] = "Enum.KeyCode." .. v.Name;
+											elseif (typeof(v) == "table") then
+												config[i] = { v };
+											else
+												config[i] = v;
+											end
+										end
+									end
+
+									writefile(ConfigSystem.configFolder .. "/" .. ConfigName:Get() .. ".txt", httpservice:JSONEncode(config))
+								end
+							end)
+
+							ConfigSystem.Load = ConfigSystem.sector:CreateButton("Load", function()
+								local Success = pcall(readfile, ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt");
+								if (Success) then
+									pcall(function() 
+										local ReadConfig = httpservice:JSONDecode(readfile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt"));
+										local NewConfig = {};
+
+										for i,v in pairs(ReadConfig) do
+											if (typeof(v) == "table") then
+												if (typeof(v[1]) == "number") then
+													NewConfig[i] = Color3.new(v[1], v[2], v[3]);
+												elseif (typeof(v[1]) == "table") then
+													NewConfig[i] = v[1];
+												end
+											elseif (tostring(v):find("Enum.KeyCode.")) then
+												NewConfig[i] = Enum.KeyCode[tostring(v):gsub("Enum.KeyCode.", "")];
+											else
+												NewConfig[i] = v;
+											end
+										end
+
+										library.flags = NewConfig;
+
+										for i,v in pairs(library.flags) do
+											for i2,v2 in pairs(library.items) do
+												if (i ~= nil and i ~= "" and i ~= "Configs_Name" and i ~= "Configs" and v2.flag ~= nil) then
+													if (v2.flag == i) then
+														pcall(function() 
+															v2:Set(v);
+														end)
+													end
+												end
+											end
+										end
+									end)
+								end
+							end)
+
+							ConfigSystem.Delete = ConfigSystem.sector:CreateButton("Delete", function()
+								for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
+									Config:Remove(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+								end
+
+								if (not Config:Get() or Config:Get() == "") then return end
+								if (not isfile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt")) then return; end;
+								delfile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt");
 
 								for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
 									if v:find(".txt") then
 										Config:Add(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
-									end
-								end
-							end
-						end)
-
-						ConfigSystem.Save = ConfigSystem.sector:CreateButton("Save", function()
-							local config = {}
-							if Config:Get() and Config:Get() ~= "" then
-								for i,v in pairs(library.flags) do
-									if (v ~= nil and v ~= "") then
-										if (typeof(v) == "Color3") then
-											config[i] = { v.R, v.G, v.B };
-										elseif (tostring(v):find("Enum.KeyCode")) then
-											config[i] = "Enum.KeyCode." .. v.Name;
-										elseif (typeof(v) == "table") then
-											config[i] = { v };
-										else
-											config[i] = v;
-										end
-									end
-								end
-
-								writefile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt", httpservice:JSONEncode(config));
-							end
-						end)
-
-						ConfigSystem.Load = ConfigSystem.sector:CreateButton("Load", function()
-							local Success = pcall(readfile, ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt");
-							if (Success) then
-								pcall(function() 
-									local ReadConfig = httpservice:JSONDecode(readfile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt"));
-									local NewConfig = {};
-
-									for i,v in pairs(ReadConfig) do
-										if (typeof(v) == "table") then
-											if (typeof(v[1]) == "number") then
-												NewConfig[i] = Color3.new(v[1], v[2], v[3]);
-											elseif (typeof(v[1]) == "table") then
-												NewConfig[i] = v[1];
-											end
-										elseif (tostring(v):find("Enum.KeyCode.")) then
-											NewConfig[i] = Enum.KeyCode[tostring(v):gsub("Enum.KeyCode.", "")];
-										else
-											NewConfig[i] = v;
-										end
-									end
-
-									library.flags = NewConfig;
-
-									for i,v in pairs(library.flags) do
-										for i2,v2 in pairs(library.items) do
-											if (i ~= nil and i ~= "" and i ~= "Configs_Name" and i ~= "Configs" and v2.flag ~= nil) then
-												if (v2.flag == i) then
-													pcall(function() 
-														v2:Set(v);
-													end)
-												end
-											end
-										end
-									end
-								end)
-							end
-						end)
-
-						ConfigSystem.Delete = ConfigSystem.sector:CreateButton("Delete", function()
-							for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
-								Config:Remove(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
-							end
-
-							if (not Config:Get() or Config:Get() == "") then return end
-							if (not isfile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt")) then return; end;
-							delfile(ConfigSystem.configFolder .. "/" .. Config:Get() .. ".txt");
-
-							for i,v in pairs(listfiles(ConfigSystem.configFolder)) do
-								if v:find(".txt") then
-									Config:Add(tostring(v):gsub(ConfigSystem.configFolder .. "\\", ""):gsub(".txt", ""));
+									end;
 								end;
-							end;
-						end);
-					else
-						ConfigSystem.sector = tab:CreateSector("Configs", side or "left");
-						ConfigSystem.sector:CreateLable("Your Executor Is Not Supported");
-					end
+							end);
+						else
+							ConfigSystem.sector = tab:CreateSector("Configs", side or "left");
+							ConfigSystem.sector:CreateLable("Your Executor Is Not Supported");
+						end
+					end)
 
 					return ConfigSystem;
 				end
@@ -1824,19 +1900,19 @@ else
 				if HyperEscape.AimBot.StickyAim then
 					if HyperEscape.AimBot.Target ~= nil then
 
-						if not IsAlive(HyperEscape.AimBot.Target) then
+						if not IsAlive(HyperEscape.AimBot.Target) then -- Yes I Know This Aim Bot Sucks
 							local target = CameraGetClosestToMouse()
 							HyperEscape.AimBot.Target = target;
-							HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * HyperEscape.AimBot.PredictionAmmount) or Vector3.new()))});
+							HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * HyperEscape.AimBot.PredictionAmmount) or Vector3.new()))});
 							HyperEscape.AimBot.CameraTween:Play();
 						end
-						HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * HyperEscape.AimBot.PredictionAmmount) or Vector3.new()))});
+						HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position, HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and HyperEscape.AimBot.Target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * HyperEscape.AimBot.PredictionAmmount) or Vector3.new()))});
 						HyperEscape.AimBot.CameraTween:Play();
 					end
 				else
 					local target = CameraGetClosestToMouse();
 					if target ~= nil then
-						HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position,  target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * HyperEscape.AimBot.PredictionAmmount) or Vector3.new()))});
+						HyperEscape.AimBot.CameraTween = TweenService:Create(CurrentCamera, TweenInfo.new(HyperEscape.AimBot.Smoothing, Enum.EasingStyle.Sine, Enum.EasingDirection.Out), {CFrame = CFrame.new(CurrentCamera.CFrame.Position,  target.Character[HyperEscape.AimBot.AimPart].Position + (HyperEscape.AimBot.Prediction and target.Character[HyperEscape.AimBot.AimPart].Velocity * (localPlayer:GetNetworkPing() * HyperEscape.AimBot.PredictionAmmount) or Vector3.new()))});
 						HyperEscape.AimBot.CameraTween:Play();
 
 					elseif HyperEscape.AimBot.CameraTween ~= nil then
