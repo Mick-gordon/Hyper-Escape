@@ -174,12 +174,12 @@ local library = {
 				tab.Window.BackgroundTransparency = 1;
 				tab.Window.Visible = false;
 				tab.Window.Size = UDim2.fromOffset(650, 450);
-				tab.Window.Position = UDim2.fromScale(0.188, 0);
+				tab.Window.Position = UDim2.fromOffset(150, 0);
 				tab.Window.ScrollBarThickness = 0;
 
 				tab.Left = Instance.new("Frame", tab.Window);
 				tab.Left.Size = UDim2.fromOffset(100, 428);
-				tab.Left.Position = UDim2.fromScale(0.185, 0.02);
+				tab.Left.Position = UDim2.fromOffset(120, 18);
 				tab.Left.BackgroundTransparency = 1;
 
 				tab.UiListLayout = Instance.new("UIListLayout", tab.Left);
@@ -189,7 +189,7 @@ local library = {
 
 				tab.Right = Instance.new("Frame", tab.Window);
 				tab.Right.Size = UDim2.fromOffset(100, 428);
-				tab.Right.Position = UDim2.fromScale(0.662, 0.02);
+				tab.Right.Position = UDim2.fromOffset(430, 18);
 				tab.Right.BackgroundTransparency = 1;
 
 				tab.UiListLayout1 = Instance.new("UIListLayout", tab.Right);
