@@ -279,10 +279,8 @@ local library = {
 						for i,v in pairs(tab.SectorsRight) do
 							sizeright = sizeright + v.Main.AbsoluteSize.Y;
 						end
-						local Size = (sizeleft + sizeright) / 2
-						tab.Window.CanvasSize = (sizeleft > sizeright and UDim2.fromOffset(650, sizeright + (#tab.SectorsRight - 1) + 100) or UDim2.fromOffset(650, sizeright + (#tab.SectorsRight - 1) + 100))
+						tab.Window.CanvasSize = (sizeleft > sizeright and UDim2.fromOffset(650, sizeleft + 100) or UDim2.fromOffset(650, sizeright + 100))
 					end
-
 					function Sector:CreateToggle(Text, Defult, Callback, Flag)
 						local Toggle = { };
 						Toggle.text = Text or "";
