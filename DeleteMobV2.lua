@@ -41,10 +41,14 @@ else
 		};
 
 		esp = {
+			Enabled = false;
+			TeamCheck = false;
+			
+			MaxDistance = 4000;
+			
 			CharacterSize = Vector2.new(5,6);
+			
 			Box = {
-				TeamCheck = false;
-
 				Box = false;
 				Name = false;
 				Distance = false;
@@ -58,7 +62,6 @@ else
 			};
 
 			Tracer = {
-				TeamCheck = false;
 				TeamColor = false;
 
 				Tracer = false;
@@ -68,8 +71,7 @@ else
 				OutlineColor = Color3.fromRGB(0, 0, 0);
 			};
 
-			Hilights = { -- TODO Arsenal 
-				TeamCheck = false;
+			Hilights = { -- TODO: Arsenal 
 
 				Hilights = false;
 
@@ -269,12 +271,12 @@ else
 				tab.Window.BackgroundTransparency = 1;
 				tab.Window.Visible = false;
 				tab.Window.Size = UDim2.fromOffset(650, 450);
-				tab.Window.Position = UDim2.fromScale(0.188, 0);
+				tab.Window.Position = UDim2.fromOffset(150, 0);
 				tab.Window.ScrollBarThickness = 0;
 
 				tab.Left = Instance.new("Frame", tab.Window);
 				tab.Left.Size = UDim2.fromOffset(100, 428);
-				tab.Left.Position = UDim2.fromScale(0.185, 0.02);
+				tab.Left.Position = UDim2.fromOffset(120, 18);
 				tab.Left.BackgroundTransparency = 1;
 
 				tab.UiListLayout = Instance.new("UIListLayout", tab.Left);
@@ -284,7 +286,7 @@ else
 
 				tab.Right = Instance.new("Frame", tab.Window);
 				tab.Right.Size = UDim2.fromOffset(100, 428);
-				tab.Right.Position = UDim2.fromScale(0.662, 0.02);
+				tab.Right.Position = UDim2.fromOffset(430, 18);
 				tab.Right.BackgroundTransparency = 1;
 
 				tab.UiListLayout1 = Instance.new("UIListLayout", tab.Right);
@@ -374,6 +376,7 @@ else
 						for i,v in pairs(tab.SectorsRight) do
 							sizeright = sizeright + v.Main.AbsoluteSize.Y;
 						end
+						tab.Window.CanvasSize = (sizeleft > sizeright and UDim2.fromOffset(650, sizeleft + 100) or UDim2.fromOffset(650, sizeright + 100))
 					end
 
 					function Sector:CreateToggle(Text, Defult, Callback, Flag)
@@ -1420,7 +1423,8 @@ else
 
 	local ESPTab = Window:CreateTab("ESP");
 	local EnableSector = ESPTab:CreateSector("ESP", "Left");
-	EnableSector:CreateToggle("Team Check", HyperEscape.esp.Box.TeamCheck, function(ETC) HyperEscape.esp.Box.TeamCheck = ETC; HyperEscape.esp.Tracer.TeamCheck = ETC; HyperEscape.esp.Hilights.TeamCheck = ETC end);
+	EnableSector:CreateToggle("Enable", HyperEscape.esp.Enabled, function(EE) HyperEscape.esp.Enabled = EE; end);
+	EnableSector:CreateToggle("Team Check", HyperEscape.esp.Box.TeamCheck, function(ETC) HyperEscape.esp.TeamCheck = ETC; end);
 	EnableSector:CreateToggle("Box", HyperEscape.esp.Box.Box, function(EB) HyperEscape.esp.Box.Box = EB; end);
 	EnableSector:CreateToggle("Tracer", HyperEscape.esp.Tracer.Tracer, function(ET) HyperEscape.esp.Tracer.Tracer = ET; end);
 	EnableSector:CreateToggle("Health", HyperEscape.esp.Box.Health, function(EH) HyperEscape.esp.Box.Health = EH; end);
@@ -1433,6 +1437,7 @@ else
 	end
 
 	local ESPSettingsSecor = ESPTab:CreateSector("Settings", "Right");
+	ESPSettingsSecor:CreateSlider("Max Distance", 0, HyperEscape.esp.MaxDistance, 4000, 1, function(EMD) HyperEscape.esp.MaxDistance = EMD; end);
 	ESPSettingsSecor:CreateToggle("Outlines", HyperEscape.esp.Box.Outline, function(ESO) HyperEscape.esp.Box.Outline = ESO; HyperEscape.esp.Tracer.Outline = ESO; end);
 	ESPSettingsSecor:CreateColorPicker("Outline Color", HyperEscape.esp.Box.OutlineColor, function(EOC) HyperEscape.esp.Box.OutlineColor = EOC; HyperEscape.esp.Tracer.OutlineColor = EOC; end);
 	ESPSettingsSecor:CreateColorPicker("ESP Color", HyperEscape.esp.Box.Color, function(EEC) HyperEscape.esp.Box.Color = EEC; HyperEscape.esp.Tracer.Color = EEC; end);
@@ -1624,83 +1629,178 @@ else
 		Hilight.Enabled = false;
 
 		local co = coroutine.create(function()
-			game:GetService("RunService").Heartbeat:Connect(function()
-				if IsAlive(Player) then
+			game:GetService("RunService").RenderStepped:Connect(function()
+				if IsAlive(Player) and (HyperEscape.esp.Box.Box or HyperEscape.esp.Box.HealthBar or HyperEscape.esp.Box.Name or HyperEscape.esp.Box.Health or HyperEscape.esp.Tracer.Tracer or HyperEscape.esp.Hilights.Hilights) then
 					local screen, onScreen = CurrentCamera:WorldToScreenPoint(Player.Character.HumanoidRootPart.Position); 
 					local frustumHeight = math.tan(math.rad(CurrentCamera.FieldOfView * 0.5)) * 2 * screen.Z ; -- Thank you mickeydev, Join .gg/lunarity for the best paid script hub for fps games made by known and trusted developers. 
 					local size = CurrentCamera.ViewportSize.Y / frustumHeight * HyperEscape.esp.CharacterSize;
 					local position = Vector2.new(screen.X, screen.Y) - (size / 2 - Vector2.new(0, size.Y) / 20);
 
-					if onScreen then	
-						-- Box
+					if onScreen and (HyperEscape.esp.TeamCheck ~= true  or GetTeam(Player) ~= GetTeam(localPlayer)) and HyperEscape.esp.Enabled then	
+						local DistanceNumb = math.floor(0.5+(CurrentCamera.CFrame.Position - Player.Character.HumanoidRootPart.Position).magnitude);
+						if HyperEscape.esp.MaxDistance > DistanceNumb then
+							-- Box
 
-						if HyperEscape.esp.Box.TeamCheck ~= true or GetTeam(Player) ~= GetTeam(localPlayer) then
+							if HyperEscape.esp.Box.Box then
 
-							local health = (IsArsenal and players[Player.Character.Name].NRPBS["Health"].Value or Player.Character.Humanoid.Health);
-							local healthScale = (IsArsenal and health / players[Player.Character.Name].NRPBS["MaxHealth"].Value or health / Player.Character.Humanoid.MaxHealth);
-							local healthSizeY = size.Y * healthScale;
+								LeftOutline.Visible = HyperEscape.esp.Box.Box and HyperEscape.esp.Box.Outline;
+								RightOutline.Visible =  HyperEscape.esp.Box.Box and HyperEscape.esp.Box.Outline;
+								TopOutline.Visible =  HyperEscape.esp.Box.Box and HyperEscape.esp.Box.Outline;
+								BottomOutline.Visible =  HyperEscape.esp.Box.Box and HyperEscape.esp.Box.Outline;
 
-							LeftOutline.Visible = HyperEscape.esp.Box.Box and HyperEscape.esp.Box.Outline;
-							RightOutline.Visible =  HyperEscape.esp.Box.Box and HyperEscape.esp.Box.Outline;
-							TopOutline.Visible =  HyperEscape.esp.Box.Box and HyperEscape.esp.Box.Outline;
-							BottomOutline.Visible =  HyperEscape.esp.Box.Box and HyperEscape.esp.Box.Outline;
-							HealthBackground.Visible = HyperEscape.esp.Box.HealthBar;
+								Left.Position = UDim2.fromOffset(position.X, position.Y);
+								Right.Position = UDim2.fromOffset(position.X, position.Y + size.Y - 1);
+								Top.Position = UDim2.fromOffset(position.X, position.Y);
+								Bottom.Position = UDim2.fromOffset(position.X + size.X - 1, position.Y);
 
-							Left.Visible = HyperEscape.esp.Box.Box;
-							Right.Visible =  HyperEscape.esp.Box.Box;
-							Top.Visible =  HyperEscape.esp.Box.Box;
-							Bottom.Visible =  HyperEscape.esp.Box.Box;
-							HealthBar.Visible = HyperEscape.esp.Box.HealthBar;
-							Name.Visible = HyperEscape.esp.Box.Name;
-							Distance.Visible = HyperEscape.esp.Box.Distance and not HyperEscape.esp.Box.Name;
-							Health.Visible = HyperEscape.esp.Box.Health;
+								LeftOutline.Position = Left.Position;
+								RightOutline.Position =  Right.Position;
+								TopOutline.Position =  Top.Position;
+								BottomOutline.Position =  Bottom.Position;
 
-							Left.Size = UDim2.fromOffset(size.X, 1);
-							Right.Size = UDim2.fromOffset(size.X, 1);
-							Top.Size = UDim2.fromOffset(1, size.Y);
-							Bottom.Size = UDim2.fromOffset(1, size.Y);
+								Left.Visible = HyperEscape.esp.Box.Box;
+								Right.Visible =  HyperEscape.esp.Box.Box;
+								Top.Visible =  HyperEscape.esp.Box.Box;
+								Bottom.Visible =  HyperEscape.esp.Box.Box;
 
-							LeftOutline.Size = Left.Size;
-							RightOutline.Size = Right.Size;
-							TopOutline.Size = Top.Size;
-							BottomOutline.Size = Bottom.Size;
-							HealthBackground.Size = UDim2.fromOffset(4, size.Y);
-							HealthBar.Size = UDim2.fromOffset(2, -healthSizeY)
+								Left.Size = UDim2.fromOffset(size.X, 1);
+								Right.Size = UDim2.fromOffset(size.X, 1);
+								Top.Size = UDim2.fromOffset(1, size.Y);
+								Bottom.Size = UDim2.fromOffset(1, size.Y);
 
-							Left.Position = UDim2.fromOffset(position.X, position.Y);
-							Right.Position = UDim2.fromOffset(position.X, position.Y + size.Y - 1);
-							Top.Position = UDim2.fromOffset(position.X, position.Y);
-							Bottom.Position = UDim2.fromOffset(position.X + size.X - 1, position.Y);
-							Name.Position = UDim2.fromOffset(screen.X, screen.Y - (size.Y + Name.TextBounds.Y + 14) / 2);
-							Distance.Position = UDim2.fromOffset(screen.X, screen.Y - (size.Y + Name.TextBounds.Y + 19) / 2);
-							HealthBackground.Position = UDim2.fromOffset(position.X - 8, position.Y); 
-							HealthBar.Position = UDim2.fromOffset(position.x - 7, position.y + size.Y)
-							Health.Position = (HyperEscape.esp.Box.HealthBar and UDim2.fromOffset(position.X - 25, position.y + size.Y + -healthSizeY) or UDim2.fromOffset(position.X - 25, position.Y + size.Y));
+								LeftOutline.Size = Left.Size;
+								RightOutline.Size = Right.Size;
+								TopOutline.Size = Top.Size;
+								BottomOutline.Size = Bottom.Size;
 
-							LeftOutline.Position = Left.Position;
-							RightOutline.Position =  Right.Position;
-							TopOutline.Position =  Top.Position;
-							BottomOutline.Position =  Bottom.Position;
+								LeftOutline.BorderColor3 = HyperEscape.esp.Box.OutlineColor;
+								RightOutline.BorderColor3 =  HyperEscape.esp.Box.OutlineColor;
+								TopOutline.BorderColor3 =  HyperEscape.esp.Box.OutlineColor;
+								BottomOutline.BorderColor3 =  HyperEscape.esp.Box.OutlineColor;
 
-							LeftOutline.BorderColor3 = HyperEscape.esp.Box.OutlineColor;
-							RightOutline.BorderColor3 =  HyperEscape.esp.Box.OutlineColor;
-							TopOutline.BorderColor3 =  HyperEscape.esp.Box.OutlineColor;
-							BottomOutline.BorderColor3 =  HyperEscape.esp.Box.OutlineColor;
-							HealthBackground.BackgroundColor3 = HyperEscape.esp.Box.OutlineColor;
-							HealthBackground.BorderColor3 = HyperEscape.esp.Box.OutlineColor;
+								Left.BackgroundColor3 = HyperEscape.esp.Box.Color;
+								Right.BackgroundColor3 = HyperEscape.esp.Box.Color;
+								Top.BackgroundColor3 = HyperEscape.esp.Box.Color;
+								Bottom.BackgroundColor3 = HyperEscape.esp.Box.Color;
+								LeftOutline.BackgroundColor3 = HyperEscape.esp.Box.Color;
+								RightOutline.BackgroundColor3 = HyperEscape.esp.Box.Color;
+								TopOutline.BackgroundColor3 = HyperEscape.esp.Box.Color;
+								BottomOutline.BackgroundColor3 = HyperEscape.esp.Box.Color;
+							else
+								LeftOutline.Visible = false;
+								RightOutline.Visible =  false;
+								TopOutline.Visible =  false;
+								BottomOutline.Visible =  false;
+								Left.Visible = false;
+								Right.Visible =  false;
+								Top.Visible =  false;
+								Bottom.Visible =  false;
+							end
 
-							Left.BackgroundColor3 = HyperEscape.esp.Box.Color;
-							Right.BackgroundColor3 = HyperEscape.esp.Box.Color;
-							Top.BackgroundColor3 = HyperEscape.esp.Box.Color;
-							Bottom.BackgroundColor3 = HyperEscape.esp.Box.Color;
-							LeftOutline.BackgroundColor3 = HyperEscape.esp.Box.Color;
-							RightOutline.BackgroundColor3 = HyperEscape.esp.Box.Color;
-							TopOutline.BackgroundColor3 = HyperEscape.esp.Box.Color;
-							BottomOutline.BackgroundColor3 = HyperEscape.esp.Box.Color;
+							if HyperEscape.esp.Box.HealthBar then
 
-							Distance.Text = math.floor(0.5+(CurrentCamera.CFrame.Position - Player.Character.HumanoidRootPart.Position).magnitude);
-							Name.Text = (HyperEscape.esp.Box.Name and HyperEscape.esp.Box.Distance and Player.Name .. " (" .. math.floor(0.5+(CurrentCamera.CFrame.Position - Player.Character.HumanoidRootPart.Position).magnitude) .. ")" or Player.Name);
-							Health.Text = (IsArsenal and math.floor(players[Player.Character.Name].NRPBS["Health"].Value) or math.floor(Player.Character.Humanoid.Health));
+								local health = (IsArsenal and players[Player.Character.Name].NRPBS["Health"].Value or Player.Character.Humanoid.Health);
+								local healthScale = (IsArsenal and health / players[Player.Character.Name].NRPBS["MaxHealth"].Value or health / Player.Character.Humanoid.MaxHealth);
+								local healthSizeY = size.Y * healthScale;
+
+								HealthBackground.Visible = HyperEscape.esp.Box.HealthBar;
+								HealthBar.Visible = HyperEscape.esp.Box.HealthBar;
+
+								HealthBackground.Size = UDim2.fromOffset(4, size.Y);
+								HealthBar.Size = UDim2.fromOffset(2, -healthSizeY);
+
+								HealthBackground.Position = UDim2.fromOffset(position.X - 8, position.Y); 
+								HealthBar.Position = UDim2.fromOffset(position.x - 7, position.y + size.Y);
+
+								HealthBackground.BackgroundColor3 = HyperEscape.esp.Box.OutlineColor;
+								HealthBackground.BorderColor3 = HyperEscape.esp.Box.OutlineColor;
+							else
+								HealthBackground.Visible = false;
+								HealthBar.Visible = false;
+							end
+
+							if HyperEscape.esp.Box.Health then
+
+								local health = (IsArsenal and players[Player.Character.Name].NRPBS["Health"].Value or Player.Character.Humanoid.Health);
+								local healthScale = (IsArsenal and health / players[Player.Character.Name].NRPBS["MaxHealth"].Value or health / Player.Character.Humanoid.MaxHealth);
+								local healthSizeY = size.Y * healthScale;
+
+								Health.Visible = HyperEscape.esp.Box.Health;
+
+								Health.Position = (HyperEscape.esp.Box.HealthBar and UDim2.fromOffset(position.X - 25, position.y + size.Y + -healthSizeY) or UDim2.fromOffset(position.X - 25, position.Y + size.Y));
+
+								Health.Text = (IsArsenal and math.floor(players[Player.Character.Name].NRPBS["Health"].Value) or math.floor(Player.Character.Humanoid.Health));
+							else
+								Health.Visible = false;
+							end
+
+							-- Distance
+
+							if HyperEscape.esp.Box.Distance or HyperEscape.esp.Box.Name then
+
+								Name.Visible = HyperEscape.esp.Box.Name;
+								Distance.Visible = HyperEscape.esp.Box.Distance and not HyperEscape.esp.Box.Name;
+
+								Name.Position = UDim2.fromOffset(screen.X, screen.Y - (size.Y + Name.TextBounds.Y + 14) / 2);
+								Distance.Position = UDim2.fromOffset(screen.X, screen.Y - (size.Y + Name.TextBounds.Y + 14) / 2);
+
+								Distance.Text = math.floor(0.5+(CurrentCamera.CFrame.Position - Player.Character.HumanoidRootPart.Position).magnitude);
+								Name.Text = (HyperEscape.esp.Box.Name and HyperEscape.esp.Box.Distance and Player.Name .. " [" .. math.floor(0.5+(CurrentCamera.CFrame.Position - Player.Character.HumanoidRootPart.Position).magnitude / 3.5714285714) .. "]" or Player.Name);
+
+							else
+								Name.Visible = false;
+								Distance.Visible = false;
+							end
+
+							-- Tracer
+
+							if HyperEscape.esp.Tracer.Tracer then
+
+								local ScreenVec2 = Vector2.new(screen.X, screen.Y + size.Y / 2 + size.Y / 20);
+								local Origin = Vector2.new(CurrentCamera.ViewportSize.X/2, CurrentCamera.ViewportSize.Y - 1);
+								local TracerPosition = (Origin + ScreenVec2) / 2;
+
+								TracerOutline.Visible = HyperEscape.esp.Tracer.Outline and HyperEscape.esp.Tracer.Tracer;
+								Tracer.Visible = HyperEscape.esp.Tracer.Tracer;
+
+								Tracer.Rotation = math.deg(math.atan2(ScreenVec2.Y - Origin.Y, ScreenVec2.X - Origin.X));
+								Tracer.Position = UDim2.new(0, TracerPosition.X, 0, TracerPosition.Y);
+								Tracer.Size = UDim2.fromOffset((Origin - ScreenVec2).Magnitude, 1);
+
+								TracerOutline.Rotation = Tracer.Rotation;
+								TracerOutline.Position = Tracer.Position;
+								TracerOutline.Size = Tracer.Size;
+
+								TracerOutline.BorderColor3 = HyperEscape.esp.Tracer.OutlineColor;
+								Tracer.BackgroundColor3 = HyperEscape.esp.Tracer.Color;
+
+							else
+								TracerOutline.Visible = false;
+								Tracer.Visible = false;
+							end
+
+							-- Hilight 
+
+							if HyperEscape.esp.Hilights.Hilights then
+
+								Hilight.Enabled = HyperEscape.esp.Hilights.Hilights;
+
+								if not IsArsenal then
+									Hilight.Adornee = Player.Character;
+								end
+
+								Hilight.OutlineColor = HyperEscape.esp.Hilights.OutlineColor;
+								Hilight.FillColor = HyperEscape.esp.Hilights.FillColor;
+
+								Hilight.FillTransparency = HyperEscape.esp.Hilights.FillTransparency;
+								Hilight.OutlineTransparency = HyperEscape.esp.Hilights.OutlineTransparency;
+
+								Hilight.DepthMode = (HyperEscape.esp.Hilights.AllWaysVisible and "AlwaysOnTop" or not HyperEscape.esp.Hilights.AllWaysVisible and "Occluded");
+							else
+								Hilight.Enabled = false;
+								Hilight.Adornee = nil;
+							end
+
 						else
 							LeftOutline.Visible = false;
 							RightOutline.Visible =  false;
@@ -1710,61 +1810,14 @@ else
 							Right.Visible =  false;
 							Top.Visible =  false;
 							Bottom.Visible =  false;
+							TracerOutline.Visible = false;
+							Tracer.Visible = false;
 							Name.Visible = false;
 							Distance.Visible = false;
 							HealthBackground.Visible = false;
 							HealthBar.Visible = false;
-							Health.Visible = false;
+							Health.Visible = false;	
 						end
-
-						-- Tracer
-
-						if HyperEscape.esp.Tracer.TeamCheck ~= true or GetTeam(Player) ~= GetTeam(localPlayer) then
-
-							local ScreenVec2 = Vector2.new(screen.X, screen.Y + size.Y / 2 + size.Y / 20);
-							local Origin = Vector2.new(CurrentCamera.ViewportSize.X/2, CurrentCamera.ViewportSize.Y - 1);
-							local TracerPosition = (Origin + ScreenVec2) / 2;
-
-							TracerOutline.Visible = HyperEscape.esp.Tracer.Outline and HyperEscape.esp.Tracer.Tracer;
-							Tracer.Visible = HyperEscape.esp.Tracer.Tracer;
-
-							Tracer.Rotation = math.deg(math.atan2(ScreenVec2.Y - Origin.Y, ScreenVec2.X - Origin.X));
-							Tracer.Position = UDim2.new(0, TracerPosition.X, 0, TracerPosition.Y);
-							Tracer.Size = UDim2.fromOffset((Origin - ScreenVec2).Magnitude, 1);
-
-							TracerOutline.Rotation = Tracer.Rotation;
-							TracerOutline.Position = Tracer.Position;
-							TracerOutline.Size = Tracer.Size;
-
-							TracerOutline.BorderColor3 = HyperEscape.esp.Tracer.OutlineColor;
-							Tracer.BackgroundColor3 = HyperEscape.esp.Tracer.Color;
-						else
-							TracerOutline.Visible = false;
-							Tracer.Visible = false;
-						end
-
-						-- Hilight 
-
-						if HyperEscape.esp.Hilights.TeamCheck ~= true or GetTeam(Player) ~= GetTeam(localPlayer) then
-							
-							Hilight.Enabled = HyperEscape.esp.Hilights.Hilights;
-							
-							if not IsArsenal then
-								Hilight.Adornee = Player.Character;
-							end
-
-							Hilight.OutlineColor = HyperEscape.esp.Hilights.OutlineColor;
-							Hilight.FillColor = HyperEscape.esp.Hilights.FillColor;
-
-							Hilight.FillTransparency = HyperEscape.esp.Hilights.FillTransparency;
-							Hilight.OutlineTransparency = HyperEscape.esp.Hilights.OutlineTransparency;
-
-							Hilight.DepthMode = (HyperEscape.esp.Hilights.AllWaysVisible and "AlwaysOnTop" or not HyperEscape.esp.Hilights.AllWaysVisible and "Occluded");
-						else
-							Hilight.Enabled = false;
-							Hilight.Adornee = nil;
-						end
-
 					else
 						LeftOutline.Visible = false;
 						RightOutline.Visible =  false;
