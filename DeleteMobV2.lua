@@ -1817,6 +1817,8 @@ else
 							HealthBackground.Visible = false;
 							HealthBar.Visible = false;
 							Health.Visible = false;	
+							Hilight.Enabled = false;
+							Hilight.Adornee = nil;
 						end
 					else
 						LeftOutline.Visible = false;
@@ -1834,6 +1836,8 @@ else
 						HealthBackground.Visible = false;
 						HealthBar.Visible = false;
 						Health.Visible = false;	
+						Hilight.Enabled = false;
+						Hilight.Adornee = nil;
 					end
 
 				else
@@ -1852,6 +1856,7 @@ else
 					HealthBackground.Visible = false;
 					HealthBar.Visible = false;
 					Health.Visible = false;
+					Hilight.Enabled = false;
 					Hilight.Adornee = nil;
 				end
 			end)
