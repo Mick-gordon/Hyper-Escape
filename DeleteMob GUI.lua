@@ -263,11 +263,6 @@ local library = {
 					Sector.Name.TextSize = library.theme.TextSize;
 					Sector.Name.TextYAlignment = Enum.TextYAlignment.Bottom;
 
-					Sector.Divider = Instance.new("Frame", Sector.Items);
-					Sector.Divider.Size = UDim2.fromOffset(230, 2);
-					Sector.Divider.BorderSizePixel = 0;
-					Sector.Divider.BackgroundColor3 = library.theme.BackGround;
-
 					table.insert(Sector.side:lower() == "left" and tab.SectorsLeft or tab.SectorsRight, Sector);
 
 					function Sector:FixSize()
