@@ -3,7 +3,7 @@ local library = {
 			items = { };
 		}
 
-		local StarterGUI = game.Players.LocalPlayer.PlayerGui;
+		local StarterGUI = game:GetService("Players").LocalPlayer.PlayerGui;
 		local CoreGui = game:FindFirstChild("CoreGui");
 		local textservice = game:GetService("TextService");
 		local httpservice = game:GetService("HttpService");
